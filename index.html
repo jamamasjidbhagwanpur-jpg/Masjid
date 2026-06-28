@@ -1186,7 +1186,7 @@ function createSheet() {
       <select class="inp" id="fm-r">
         <option>Aam Member</option><option>Committee Member</option><option>Khaas Daniyaal</option>
         <option>Muezzin</option><option>Treasurer</option><option>Secretary</option>
-        <option>President</option><option>Mutawalli</option><option>Naib Imam</option><option>Imam</option>
+        <option>President</option><option>Vice President</option><option>Mutawalli</option><option>Naib Imam</option><option>Imam</option>
       </select></div>
     <div class="fg"><label class="lbl">Maahana Chanda (₹)</label><input class="inp" type="number" id="fm-d" placeholder="200"/></div>
     <div class="fg full"><label class="lbl">Address</label><input class="inp" id="fm-a" placeholder="Mohalla, Gali..."/></div>
@@ -1369,7 +1369,7 @@ let members,transactions,announces,students,teachers,meetings,chanda,fees,attend
 let txF={type:'',cat:''};
 
 const avColors=['#1a5c36','#1d4ed8','#7c3aed','#b45309','#0e7490','#b91c1c','#be185d','#2e7d52','#0e6e3a','#4338ca'];
-const roleMap={'Imam':'bp','Naib Imam':'bp','Mutawalli':'bt','President':'bb','Secretary':'bb',
+const roleMap={'Imam':'bp','Naib Imam':'bp','Mutawalli':'bt','President':'bb','Vice President':'bb','Secretary':'bb',
   'Treasurer':'bg','Committee Member':'ba','Muezzin':'ba','Khaas Daniyaal':'bgold','Aam Member':'bgray'};
 const hierDefs=[
   {role:'Imam',color:'#6d28d9',indent:0,desc:'Dini Rahbar'},
@@ -2546,6 +2546,44 @@ function initSettingsGS(){
 
 
 // ===== BOOT =====
+// Pre-seed members on very first load
+(function(){
+  if(localStorage.getItem(K+'members')!==null)return; // already has data
+  const seed=[
+    // Office Bearers
+    {id:1001,name:'Md. Jawed Sahab',role:'President',phone:'9431285685',due:0,address:'',status:'Active',joinDate:''},
+    {id:1002,name:'Faiz Khan Sahab',role:'Committee Member',phone:'9507060579',due:0,address:'',status:'Active',joinDate:''},
+    {id:1003,name:'Md. Athar Sahab (Raja Sahab)',role:'Secretary',phone:'7462925625',due:0,address:'',status:'Active',joinDate:''},
+    {id:1004,name:'Anwar Hussain Sahab',role:'Committee Member',phone:'9934962187',due:0,address:'Naib Secretary',status:'Active',joinDate:''},
+    {id:1005,name:'Md. Izhar Sahab',role:'Treasurer',phone:'9934892242',due:0,address:'',status:'Active',joinDate:''},
+    {id:1006,name:'Md. Meraj',role:'Treasurer',phone:'9470659224',due:0,address:'',status:'Active',joinDate:''},
+    {id:1007,name:'Md. Amir',role:'Treasurer',phone:'7739097937',due:0,address:'',status:'Active',joinDate:''},
+    // Committee Members
+    {id:1008,name:'Firoz Sahab',role:'Committee Member',phone:'9473212580',due:0,address:'',status:'Active',joinDate:''},
+    {id:1009,name:'Tufail Sahab',role:'Committee Member',phone:'8340524022',due:0,address:'',status:'Active',joinDate:''},
+    {id:1010,name:'Mehtab Sahab',role:'Committee Member',phone:'9955658246',due:0,address:'',status:'Active',joinDate:''},
+    {id:1011,name:'Abdul Jabbar Sahab',role:'Committee Member',phone:'9560559441',due:0,address:'',status:'Active',joinDate:''},
+    {id:1012,name:'Taha Sahab',role:'Committee Member',phone:'8541929644',due:0,address:'',status:'Active',joinDate:''},
+    {id:1013,name:'Raja',role:'Committee Member',phone:'9304553175',due:0,address:'',status:'Active',joinDate:''},
+    {id:1014,name:'Seraj Khan (Mast Sahab)',role:'Committee Member',phone:'9162359023',due:0,address:'',status:'Active',joinDate:''},
+    {id:1015,name:'Sufiyan',role:'Committee Member',phone:'8877837719',due:0,address:'',status:'Active',joinDate:''},
+    {id:1016,name:'Md. Aftab',role:'Committee Member',phone:'8340247591',due:0,address:'',status:'Active',joinDate:''},
+    {id:1017,name:'Wasim',role:'Committee Member',phone:'9523628344',due:0,address:'',status:'Active',joinDate:''},
+    {id:1018,name:'Md. Aslam Sahab',role:'Committee Member',phone:'9060941313',due:0,address:'',status:'Active',joinDate:''},
+    {id:1019,name:'Khurshid',role:'Committee Member',phone:'9801225716',due:0,address:'',status:'Active',joinDate:''},
+    {id:1020,name:'Md. Imtiyaz',role:'Committee Member',phone:'9113438027',due:0,address:'',status:'Active',joinDate:''},
+    {id:1021,name:'Md. Danish',role:'Committee Member',phone:'7488633761',due:0,address:'',status:'Active',joinDate:''},
+    {id:1022,name:'Mokhtar Sahab',role:'Committee Member',phone:'9576859835',due:0,address:'',status:'Active',joinDate:''},
+    {id:1023,name:'Chand',role:'Committee Member',phone:'6200046605',due:0,address:'',status:'Active',joinDate:''},
+    {id:1024,name:'Babloo',role:'Committee Member',phone:'7091877589',due:0,address:'',status:'Active',joinDate:''},
+    {id:1025,name:'Md. Ali',role:'Committee Member',phone:'9406348980',due:0,address:'',status:'Active',joinDate:''},
+    {id:1026,name:'Wasim (Raja)',role:'Committee Member',phone:'8709403679',due:0,address:'',status:'Active',joinDate:''},
+    {id:1027,name:'Sarwar Ahmad',role:'Committee Member',phone:'9199732926',due:0,address:'Number verify karen',status:'Active',joinDate:''},
+    {id:1028,name:'Md. Aluddin',role:'Committee Member',phone:'8409123644',due:0,address:'',status:'Active',joinDate:''},
+  ];
+  S.set('members',seed);
+})();
+
 // PWA Manifest inject
 const manifestData={name:'Jama Masjid Bhagwanpur',short_name:'Masjid MGT',
   description:'Jama Masjid Bhagwanpur Management System',start_url:'.',
