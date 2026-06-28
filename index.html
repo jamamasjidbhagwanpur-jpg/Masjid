@@ -1,0 +1,2568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>🕌 Jama Masjid Bhagwanpur</title>
+<meta name="description" content="Jama Masjid Bhagwanpur Management System"/>
+<meta name="theme-color" content="#0f3d25"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Masjid MGT"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f3d25'/%3E%3Ctext y='.9em' font-size='80' x='10'%3E🕌%3C/text%3E%3C/svg%3E"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;background:#f0f2ee}
+:root{
+--g1:#1a5c36;--g2:#0f3d25;--g3:#e5f5ec;--g4:#b8e0c9;
+--gold:#a07c0a;--gold-lt:#fdf6dc;--gold-bd:#d4b84a;
+--red:#b91c1c;--red-lt:#fee2e2;--blue:#1d4ed8;--blue-lt:#dbeafe;
+--amber:#b45309;--amber-lt:#fef3c7;--purple:#6d28d9;--purple-lt:#ede9fe;
+--teal:#0e7490;--teal-lt:#ccfbf1;--sidebar:228px;--topbar:56px;
+--r:8px;--rl:12px;--rxl:16px;
+--sh:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+--sh-md:0 4px 16px rgba(0,0,0,.09);--sh-lg:0 12px 48px rgba(0,0,0,.18);}
+
+/* LOGIN */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;
+  overflow:hidden;position:relative;background:#040d1a}
+/* Animated night sky */
+.ls-sky{position:absolute;inset:0;z-index:0;
+  background:linear-gradient(180deg,#020812 0%,#050f22 25%,#0a1a35 50%,#0d2240 70%,#0b1e35 85%,#061528 100%)}
+/* Stars layer */
+.ls-stars{position:absolute;inset:0;overflow:hidden;z-index:1}
+.ls-star{position:absolute;background:#fff;border-radius:50%;
+  animation:twinkle var(--d,3s) ease-in-out infinite var(--dl,0s)}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:1;transform:scale(1.5)}}
+/* Shooting star */
+.ls-shoot{position:absolute;top:18%;left:-10%;width:120px;height:1.5px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,220,.9),transparent);
+  animation:shoot 6s ease-in-out infinite 3s;border-radius:2px}
+@keyframes shoot{0%{transform:translateX(0) translateY(0) rotate(-15deg);opacity:0}
+  5%{opacity:1}20%{transform:translateX(110vw) translateY(40px) rotate(-15deg);opacity:0}
+  100%{transform:translateX(110vw) translateY(40px) rotate(-15deg);opacity:0}}
+/* Golden glow from Makkah */
+.ls-glow{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:900px;height:400px;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 100%,rgba(200,155,30,.22) 0%,rgba(180,120,15,.12) 30%,transparent 65%)}
+/* Overlay for depth */
+.ls-overlay{position:absolute;inset:0;z-index:3;
+  background:linear-gradient(to top,rgba(4,13,26,.75) 0%,rgba(4,13,26,.15) 35%,transparent 60%)}
+/* Login card */
+.lc{background:rgba(255,255,255,.96);backdrop-filter:blur(16px);
+  border-radius:var(--rxl);padding:38px 34px;width:374px;
+  box-shadow:0 32px 100px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.12);
+  position:relative;z-index:10;animation:su .55s cubic-bezier(.16,1,.3,1)}
+@keyframes su{from{opacity:0;transform:translateY(28px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.lc-badge{background:linear-gradient(135deg,#1a5c36,#2e7d52);color:#fff;border-radius:20px;
+  padding:4px 14px;font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  display:inline-block;margin-bottom:14px;box-shadow:0 2px 10px rgba(26,92,54,.4)}
+.lc-h{font-family:'DM Serif Display',serif;font-size:26px;color:#0d1f12;line-height:1.25}
+.lc-ar{font-size:15px;color:#1a5c36;font-family:'DM Serif Display',serif;margin:2px 0 4px;direction:rtl}
+.lc-sub{font-size:12px;color:#999;margin-bottom:24px;letter-spacing:.2px}
+.fl{display:block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#666;margin-bottom:5px}
+.fi{width:100%;padding:10px 13px;border:1.5px solid #e5e7eb;border-radius:var(--r);
+  font-size:14px;font-family:inherit;outline:none;transition:all .2s;color:#111;background:#fff}
+.fi:focus{border-color:var(--g1);box-shadow:0 0 0 3px rgba(26,92,54,.1)}.fmb{margin-bottom:14px}
+.btn-lg{width:100%;padding:12px;background:linear-gradient(135deg,#1a5c36,#0f3d25);color:#fff;border:none;
+  border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px;
+  transition:all .2s;letter-spacing:.2px;box-shadow:0 4px 14px rgba(15,61,37,.4)}
+.btn-lg:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(15,61,37,.5)}
+.btn-lg:active{transform:translateY(0)}
+#lErr{color:#b91c1c;font-size:13px;text-align:center;margin-top:10px;display:none;
+  background:#fef2f2;border-radius:var(--r);padding:8px;border:1px solid #fecaca}
+.lc-hint{text-align:center;font-size:11.5px;color:#bbb;margin-top:12px}
+.lc-hint b{color:var(--g1);font-weight:700}
+.lc-div{height:1px;background:linear-gradient(to right,transparent,#e5e7eb,transparent);margin:20px 0}
+
+
+/* APP */
+#appShell{display:none;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);background:var(--g2);display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:30;
+  box-shadow:3px 0 24px rgba(0,0,0,.2)}
+.sb-top{padding:18px 14px 14px;border-bottom:1px solid rgba(255,255,255,.07)}
+.sb-logo{font-size:24px;margin-bottom:5px}
+.sb-title{font-family:'DM Serif Display',serif;font-size:13.5px;color:#fff;line-height:1.35}
+.sb-city{font-size:9.5px;color:rgba(255,255,255,.38);margin-top:2px;letter-spacing:.4px}
+.sb-nav{flex:1;padding:8px}
+.sb-sec{font-size:9px;text-transform:uppercase;letter-spacing:1.4px;color:rgba(255,255,255,.27);
+  padding:11px 8px 4px;font-weight:700}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r);
+  color:rgba(255,255,255,.58);cursor:pointer;margin-bottom:1px;font-size:12.5px;
+  font-weight:500;transition:all .15s;user-select:none}
+.ni:hover{background:rgba(255,255,255,.07);color:#fff}
+.ni.active{background:var(--g1);color:#fff;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.ni-ic{width:18px;text-align:center;font-size:13px;flex-shrink:0}
+.sb-ft{padding:8px 8px 10px;border-top:1px solid rgba(255,255,255,.07)}
+.btn-lo{display:flex;align-items:center;gap:7px;width:100%;padding:7px 10px;
+  color:rgba(255,255,255,.48);background:none;border:none;cursor:pointer;border-radius:var(--r);
+  font-size:12px;font-family:inherit;transition:all .15s}
+.btn-lo:hover{background:rgba(255,255,255,.07);color:#fff}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);display:flex;flex-direction:column;min-height:100vh}
+
+/* TOPBAR */
+.topbar{height:var(--topbar);background:#fff;border-bottom:1px solid #eaecef;
+  display:flex;align-items:center;justify-content:space-between;padding:0 22px;
+  position:sticky;top:0;z-index:20;box-shadow:var(--sh)}
+.tb-l h2{font-size:16px;font-weight:800;color:#111}
+.tb-l p{font-size:10px;color:#bbb;margin-top:1px}
+.tb-r{display:flex;align-items:center;gap:10px}
+.pill{border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700}
+.pill-gold{background:var(--gold-lt);color:var(--gold);border:1px solid var(--gold-bd)}
+.pill-green{background:var(--g3);color:var(--g1)}
+
+/* CONTENT */
+.content{flex:1;padding:20px}
+.pg{display:none}.pg.active{display:block}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px;margin-bottom:16px}
+.mc{background:#fff;border-radius:var(--rl);border:1px solid #eee;padding:15px 17px;
+  box-shadow:var(--sh);position:relative;overflow:hidden}
+.mc::after{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:3px 0 0 3px}
+.mc.cg::after{background:var(--g1)}.mc.cgold::after{background:var(--gold)}
+.mc.cb::after{background:var(--blue)}.mc.cr::after{background:var(--red)}
+.mc.cp::after{background:var(--purple)}.mc.ct::after{background:var(--teal)}
+.mc.cam::after{background:var(--amber)}
+.mc-i{font-size:18px;margin-bottom:5px}
+.mc-v{font-size:21px;font-weight:800;color:#111;font-family:'DM Serif Display',serif;line-height:1}
+.mc-l{font-size:10.5px;color:#aaa;margin-top:3px;font-weight:500}
+
+/* CARD */
+.card{background:#fff;border-radius:var(--rl);border:1px solid #eee;box-shadow:var(--sh);margin-bottom:14px}
+.ch{padding:12px 17px;border-bottom:1px solid #f5f5f5;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ct{font-size:13px;font-weight:700;color:#222}
+.cb{padding:17px}
+
+/* TABLES */
+.twrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead th{background:#f9fafb;padding:8px 12px;text-align:left;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#999;
+  border-bottom:1px solid #eee;white-space:nowrap}
+tbody td{padding:9px 12px;border-bottom:1px solid #f5f5f5;font-size:13px;color:#333;vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#fafafa}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;
+  font-size:10px;font-weight:700;white-space:nowrap}
+.bg{background:#dcfce7;color:#166534}.br{background:#fee2e2;color:#991b1b}
+.bb{background:#dbeafe;color:#1e40af}.ba{background:#fef3c7;color:#92400e}
+.bp{background:#ede9fe;color:#5b21b6}.bt{background:#ccfbf1;color:#134e4a}
+.bgold{background:#fef9c3;color:#713f12}.bgray{background:#f3f4f6;color:#6b7280}
+.bpk{background:#fce7f3;color:#9d174d}
+
+/* BUTTONS */
+.btn{padding:6px 13px;border-radius:var(--r);border:1px solid transparent;
+  font-size:12.5px;font-weight:600;cursor:pointer;display:inline-flex;
+  align-items:center;gap:5px;font-family:inherit;transition:all .15s;white-space:nowrap}
+.btn-sm{padding:4px 10px;font-size:11.5px}.btn-xs{padding:2px 7px;font-size:11px}
+.btn-pr{background:var(--g1);color:#fff;border-color:var(--g1)}.btn-pr:hover{background:var(--g2)}
+.btn-dr{background:var(--red);color:#fff;border-color:var(--red)}
+.btn-gh{background:#fff;color:#444;border-color:#ddd}.btn-gh:hover{background:#f9fafb}
+.btn-wa{background:#25d366;color:#fff;border-color:#25d366}.btn-wa:hover{background:#1ebe5d}
+.btn-gl{background:var(--gold);color:#fff;border-color:var(--gold)}
+
+/* FORMS */
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.fg{display:flex;flex-direction:column;gap:4px}.fg.full{grid-column:1/-1}
+.lbl{font-size:11px;font-weight:700;color:#555;letter-spacing:.2px}
+.inp{padding:8px 11px;border:1.5px solid #e5e7eb;border-radius:var(--r);
+  font-size:13px;font-family:inherit;color:#111;outline:none;transition:border-color .2s;width:100%;background:#fff}
+.inp:focus{border-color:var(--g1)}select.inp{cursor:pointer}textarea.inp{resize:vertical}
+
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.52);
+  z-index:200;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
+.mo.open{display:flex}
+.mbox{background:#fff;border-radius:var(--rxl);width:510px;max-width:100%;
+  box-shadow:var(--sh-lg);animation:mi .22s ease}
+@keyframes mi{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.mhd{padding:15px 18px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between}
+.mtl{font-size:15px;font-weight:700;color:#111}
+.mcl{background:none;border:none;font-size:22px;cursor:pointer;color:#ccc;line-height:1;padding:0 2px}
+.mcl:hover{color:#666}
+.mbd{padding:18px}.mft{padding:12px 18px;border-top:1px solid #f0f0f0;display:flex;justify-content:flex-end;gap:8px}
+
+/* MISC */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sec-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.sec-t{font-size:15px;font-weight:800;color:#111}
+.srow{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid #f3f3f3;flex-wrap:wrap}
+.tabs{display:flex;border-bottom:2px solid #e5e7eb;margin-bottom:16px;overflow-x:auto}
+.tab{padding:8px 16px;font-size:12.5px;font-weight:600;color:#bbb;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;white-space:nowrap}
+.tab.active{color:var(--g1);border-bottom-color:var(--g1)}
+.prg{height:5px;background:#f0f0f0;border-radius:3px;overflow:hidden}
+.prg-b{height:100%;background:var(--g1);border-radius:3px;transition:width .3s}
+.av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:10.5px;font-weight:700;flex-shrink:0;color:#fff}
+.wa-box{background:#e8f5e9;border:1px solid #a5d6a7;border-radius:var(--r);
+  padding:13px;font-family:'Courier New',monospace;font-size:11.5px;
+  white-space:pre-wrap;color:#1b5e20;max-height:280px;overflow-y:auto;line-height:1.65}
+.ann-c{border:1px solid #eee;border-radius:var(--rl);padding:13px 15px;margin-bottom:10px;background:#fff}
+.ann-t{font-size:14px;font-weight:700;color:#111}
+.ann-m{font-size:11px;color:#ccc;margin-top:2px}
+.ann-b{font-size:13px;color:#555;margin-top:7px;line-height:1.65}
+.hier-row{display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:var(--r);margin-bottom:3px}
+.hier-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.nm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.nm-tile{background:#f9fafb;border:1px solid #eee;border-radius:var(--rl);padding:13px;text-align:center}
+.nm-ar{font-family:'DM Serif Display',serif;font-size:17px;color:var(--g1)}
+.nm-ur{font-size:10px;color:#ccc;margin-top:1px}
+.nm-t{font-size:20px;font-weight:800;color:#111;margin:5px 0 2px}
+.nm-j{font-size:10px;color:#aaa}
+.empty{text-align:center;padding:28px;color:#bbb;font-size:13px}
+.mt8{margin-top:8px}.mb14{margin-bottom:14px}.mb8{margin-bottom:8px}
+
+@media(max-width:800px){
+  .sidebar{width:52px}.sb-title,.sb-city,.sb-sec,.ni span:not(.ni-ic),.sb-ft span{display:none}
+  .ni{justify-content:center;padding:10px}.main{margin-left:52px}
+  .fg2,.g2{grid-template-columns:1fr}.fg3{grid-template-columns:1fr 1fr}
+  .content{padding:12px}.metrics{grid-template-columns:repeat(2,1fr)}
+  .nm-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="ls-sky"></div>
+  <div class="ls-stars" id="ls-stars"></div>
+  <div class="ls-shoot"></div>
+  <div class="ls-glow"></div>
+
+  <!-- MAKKAH NIGHT SCENE SVG -->
+  <svg style="position:absolute;bottom:0;left:0;width:100%;z-index:4;pointer-events:none" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="gMinar" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#c8a84b"/><stop offset="60%" stop-color="#9a7330"/><stop offset="100%" stop-color="#5a3e10"/>
+      </linearGradient>
+      <linearGradient id="gBld" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1e2d3d"/><stop offset="100%" stop-color="#0d1520"/>
+      </linearGradient>
+      <radialGradient id="gGlow" cx="50%" cy="100%" r="60%">
+        <stop offset="0%" stop-color="#c8a020" stop-opacity=".32"/><stop offset="40%" stop-color="#a07010" stop-opacity=".1"/><stop offset="100%" stop-color="#000" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="gMoon" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fff8e1"/><stop offset="40%" stop-color="#ffeaa0" stop-opacity=".6"/><stop offset="100%" stop-color="#ffd060" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="blur4"><feGaussianBlur stdDeviation="4"/></filter>
+      <filter id="blur8"><feGaussianBlur stdDeviation="8"/></filter>
+      <filter id="blur2"><feGaussianBlur stdDeviation="2"/></filter>
+    </defs>
+
+    <!-- Ground base and glow -->
+    <ellipse cx="600" cy="420" rx="700" ry="180" fill="url(#gGlow)"/>
+    <rect x="0" y="355" width="1200" height="65" fill="#08111e"/>
+
+    <!-- Far buildings -->
+    <rect x="30" y="280" width="80" height="80" fill="#0a1520" rx="1"/>
+    <rect x="140" y="265" width="55" height="95" fill="#0b1625" rx="1"/>
+    <rect x="220" y="255" width="70" height="105" fill="#0a1520" rx="1"/>
+    <rect x="1020" y="265" width="65" height="95" fill="#0b1625" rx="1"/>
+    <rect x="1100" y="255" width="75" height="105" fill="#0a1520" rx="1"/>
+
+    <!-- Abraj clock tower -->
+    <rect x="428" y="195" width="74" height="175" fill="url(#gBld)" rx="2"/>
+    <rect x="420" y="240" width="90" height="130" fill="#0e1d2c" rx="2"/>
+    <rect x="438" y="205" width="54" height="54" fill="#1a3050" rx="3"/>
+    <circle cx="465" cy="232" r="22" fill="#0a1525" stroke="#c8a84b" stroke-width="1.5"/>
+    <circle cx="465" cy="232" r="17" fill="#0d2040"/>
+    <line x1="465" y1="232" x2="465" y2="218" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="465" y1="232" x2="475" y2="238" stroke="#fff" stroke-width="1" stroke-linecap="round"/>
+    <polygon points="450,195 480,195 468,168 462,168" fill="#c8a84b"/>
+    <rect x="463" y="155" width="5" height="15" fill="#c8a84b"/>
+    <circle cx="465" cy="152" r="7" fill="#c8a84b"/>
+    <circle cx="468.5" cy="152" r="5.5" fill="#040d1a"/>
+    <rect x="435" y="270" width="8" height="11" fill="#ffd06040" rx="1"/>
+    <rect x="450" y="270" width="8" height="11" fill="#ffd06040" rx="1"/>
+    <rect x="465" y="270" width="8" height="11" fill="#ffd06040" rx="1"/>
+    <rect x="480" y="270" width="8" height="11" fill="#ffd06040" rx="1"/>
+    <rect x="435" y="295" width="8" height="11" fill="#ffd06040" rx="1"/>
+    <rect x="450" y="295" width="8" height="11" fill="#ffd06040" rx="1"/>
+    <rect x="465" y="295" width="8" height="11" fill="#ffd06040" rx="1"/>
+    <rect x="480" y="295" width="8" height="11" fill="#ffd06040" rx="1"/>
+    <ellipse cx="465" cy="370" rx="52" ry="15" fill="#c8900a" fill-opacity=".2" filter="url(#blur8)"/>
+
+    <!-- Main Masjid structure -->
+    <rect x="200" y="285" width="800" height="90" fill="#0e1e30" rx="2"/>
+    <rect x="208" y="275" width="784" height="18" fill="#12263a" rx="1"/>
+
+    <!-- Main dome -->
+    <rect x="524" y="235" width="152" height="65" fill="#14263c" rx="2"/>
+    <path d="M524 238 Q562 182 600 174 Q638 182 676 238 Z" fill="#1e3e5e"/>
+    <ellipse cx="600" cy="238" rx="76" ry="22" fill="#1a3550"/>
+    <rect x="597" y="152" width="6" height="24" fill="#c8a84b"/>
+    <circle cx="600" cy="149" r="9" fill="#c8a84b"/>
+    <circle cx="604.5" cy="149" r="7" fill="#08111e"/>
+    <ellipse cx="600" cy="240" rx="78" ry="10" fill="#4a7fa0" fill-opacity=".18" filter="url(#blur4)"/>
+
+    <!-- Side domes -->
+    <path d="M454 272 Q472 250 492 246 Q512 250 530 272 Z" fill="#1a3550"/>
+    <ellipse cx="492" cy="272" rx="38" ry="13" fill="#162e48"/>
+    <rect x="490" y="238" width="4" height="10" fill="#c8a84b"/>
+    <circle cx="492" cy="236" r="5" fill="#c8a84b"/>
+    <circle cx="494.5" cy="236" r="4" fill="#08111e"/>
+
+    <path d="M670 272 Q688 250 708 246 Q728 250 746 272 Z" fill="#1a3550"/>
+    <ellipse cx="708" cy="272" rx="38" ry="13" fill="#162e48"/>
+    <rect x="706" y="238" width="4" height="10" fill="#c8a84b"/>
+    <circle cx="708" cy="236" r="5" fill="#c8a84b"/>
+    <circle cx="710.5" cy="236" r="4" fill="#08111e"/>
+
+    <!-- Small domes -->
+    <path d="M292 283 Q302 268 314 265 Q326 268 336 283 Z" fill="#1a3352"/>
+    <ellipse cx="314" cy="283" rx="22" ry="8" fill="#142540"/>
+    <rect x="312.5" y="260" width="3" height="8" fill="#c8a84b"/>
+    <circle cx="314" cy="258" r="4" fill="#c8a84b"/>
+    <circle cx="316" cy="258" r="3" fill="#08111e"/>
+
+    <path d="M864 283 Q874 268 886 265 Q898 268 908 283 Z" fill="#1a3352"/>
+    <ellipse cx="886" cy="283" rx="22" ry="8" fill="#142540"/>
+    <rect x="884.5" y="260" width="3" height="8" fill="#c8a84b"/>
+    <circle cx="886" cy="258" r="4" fill="#c8a84b"/>
+    <circle cx="888" cy="258" r="3" fill="#08111e"/>
+
+    <!-- Minarets — Left Far -->
+    <rect x="218" y="140" width="20" height="160" fill="url(#gMinar)" rx="2"/>
+    <rect x="212" y="245" width="32" height="11" fill="#a07830" rx="1"/>
+    <rect x="212" y="207" width="32" height="9" fill="#a07830" rx="1"/>
+    <ellipse cx="228" cy="140" rx="13" ry="5" fill="#b89040"/>
+    <path d="M221 140 Q228 120 228 116 Q228 120 235 140 Z" fill="#c8a84b"/>
+    <rect x="226.5" y="104" width="3" height="14" fill="#c8a84b"/>
+    <circle cx="228" cy="102" r="5" fill="#c8a84b"/>
+    <circle cx="230.3" cy="102" r="4" fill="#040d1a"/>
+    <rect x="225" y="155" width="6" height="8" fill="#ffeaa044" rx="1"/>
+    <rect x="225" y="180" width="6" height="8" fill="#ffeaa044" rx="1"/>
+    <rect x="225" y="220" width="6" height="8" fill="#ffeaa044" rx="1"/>
+
+    <!-- Minarets — Right Far -->
+    <rect x="962" y="140" width="20" height="160" fill="url(#gMinar)" rx="2"/>
+    <rect x="956" y="245" width="32" height="11" fill="#a07830" rx="1"/>
+    <rect x="956" y="207" width="32" height="9" fill="#a07830" rx="1"/>
+    <ellipse cx="972" cy="140" rx="13" ry="5" fill="#b89040"/>
+    <path d="M965 140 Q972 120 972 116 Q972 120 979 140 Z" fill="#c8a84b"/>
+    <rect x="970.5" y="104" width="3" height="14" fill="#c8a84b"/>
+    <circle cx="972" cy="102" r="5" fill="#c8a84b"/>
+    <circle cx="974.3" cy="102" r="4" fill="#040d1a"/>
+    <rect x="969" y="155" width="6" height="8" fill="#ffeaa044" rx="1"/>
+    <rect x="969" y="180" width="6" height="8" fill="#ffeaa044" rx="1"/>
+    <rect x="969" y="220" width="6" height="8" fill="#ffeaa044" rx="1"/>
+
+    <!-- Minarets — Left Near (taller) -->
+    <rect x="298" y="105" width="24" height="195" fill="url(#gMinar)" rx="2"/>
+    <rect x="291" y="225" width="38" height="13" fill="#906820" rx="1"/>
+    <rect x="291" y="180" width="38" height="10" fill="#906820" rx="1"/>
+    <rect x="293" y="142" width="34" height="9" fill="#906820" rx="1"/>
+    <ellipse cx="310" cy="105" rx="16" ry="6" fill="#b89040"/>
+    <path d="M301 105 Q310 80 310 76 Q310 80 319 105 Z" fill="#c8a84b"/>
+    <rect x="308.5" y="62" width="3" height="16" fill="#c8a84b"/>
+    <circle cx="310" cy="59" r="6" fill="#c8a84b"/>
+    <circle cx="312.5" cy="59" r="5" fill="#040d1a"/>
+    <ellipse cx="310" cy="300" rx="16" ry="5" fill="#c8900a" fill-opacity=".28" filter="url(#blur4)"/>
+    <rect x="306.5" y="122" width="7" height="10" fill="#ffeaa055" rx="1"/>
+    <rect x="306.5" y="156" width="7" height="10" fill="#ffeaa055" rx="1"/>
+    <rect x="306.5" y="196" width="7" height="10" fill="#ffeaa055" rx="1"/>
+    <rect x="306.5" y="240" width="7" height="10" fill="#ffeaa055" rx="1"/>
+
+    <!-- Minarets — Right Near -->
+    <rect x="878" y="105" width="24" height="195" fill="url(#gMinar)" rx="2"/>
+    <rect x="871" y="225" width="38" height="13" fill="#906820" rx="1"/>
+    <rect x="871" y="180" width="38" height="10" fill="#906820" rx="1"/>
+    <rect x="873" y="142" width="34" height="9" fill="#906820" rx="1"/>
+    <ellipse cx="890" cy="105" rx="16" ry="6" fill="#b89040"/>
+    <path d="M881 105 Q890 80 890 76 Q890 80 899 105 Z" fill="#c8a84b"/>
+    <rect x="888.5" y="62" width="3" height="16" fill="#c8a84b"/>
+    <circle cx="890" cy="59" r="6" fill="#c8a84b"/>
+    <circle cx="892.5" cy="59" r="5" fill="#040d1a"/>
+    <ellipse cx="890" cy="300" rx="16" ry="5" fill="#c8900a" fill-opacity=".28" filter="url(#blur4)"/>
+    <rect x="886.5" y="122" width="7" height="10" fill="#ffeaa055" rx="1"/>
+    <rect x="886.5" y="156" width="7" height="10" fill="#ffeaa055" rx="1"/>
+    <rect x="886.5" y="196" width="7" height="10" fill="#ffeaa055" rx="1"/>
+    <rect x="886.5" y="240" width="7" height="10" fill="#ffeaa055" rx="1"/>
+
+    <!-- KAABA -->
+    <ellipse cx="600" cy="375" rx="85" ry="18" fill="#c8900a" fill-opacity=".25" filter="url(#blur8)"/>
+    <rect x="553" y="293" width="95" height="85" fill="#0a0a0a" rx="1"/>
+    <rect x="553" y="323" width="95" height="13" fill="#1a1005"/>
+    <rect x="555" y="325" width="91" height="9" fill="none" stroke="#c8a84b" stroke-width="0.8" rx="1"/>
+    <rect x="589" y="333" width="22" height="45" fill="#c8a030" rx="1"/>
+    <rect x="591" y="335" width="18" height="41" fill="url(#gMinar)" rx="1"/>
+    <rect x="551" y="290" width="97" height="5" fill="#c8a84b" rx="1"/>
+    <line x1="553" y1="293" x2="547" y2="302" stroke="#1a1005" stroke-width="1"/>
+    <line x1="547" y1="302" x2="547" y2="378" stroke="#1a1005" stroke-width="1"/>
+    <rect x="543" y="300" width="11" height="78" fill="#8a6010" rx="1"/>
+
+    <!-- Archways -->
+    <path d="M222 353 L240 315 Q250 300 260 315 L278 353 Z" fill="#0d1e30"/>
+    <path d="M275 353 L293 315 Q303 300 313 315 L331 353 Z" fill="#0d1e30"/>
+    <path d="M870 353 L888 315 Q898 300 908 315 L926 353 Z" fill="#0d1e30"/>
+    <path d="M923 353 L941 315 Q951 300 961 315 L979 353 Z" fill="#0d1e30"/>
+
+    <!-- Pilgrims glow + dots -->
+    <ellipse cx="600" cy="388" rx="280" ry="16" fill="#c8900a" fill-opacity=".07" filter="url(#blur8)"/>
+    <circle cx="545" cy="380" r="2" fill="rgba(255,255,255,.4)"/>
+    <circle cx="560" cy="384" r="1.5" fill="rgba(255,255,255,.35)"/>
+    <circle cx="575" cy="379" r="2" fill="rgba(255,255,255,.4)"/>
+    <circle cx="618" cy="382" r="2" fill="rgba(255,255,255,.4)"/>
+    <circle cx="635" cy="378" r="1.5" fill="rgba(255,255,255,.35)"/>
+    <circle cx="650" cy="383" r="2" fill="rgba(255,255,255,.4)"/>
+
+    <!-- MOON (top right) -->
+    <circle cx="1020" cy="62" r="32" fill="url(#gMoon)" filter="url(#blur2)"/>
+    <circle cx="1020" cy="62" r="26" fill="#fdf8e8"/>
+    <circle cx="1034" cy="55" r="21" fill="#040d1a"/>
+    <polygon points="1060,44 1062.5,51 1070,51 1064,55.5 1066.5,62.5 1060,58 1053.5,62.5 1056,55.5 1050,51 1057.5,51" fill="#fdf0b0" opacity=".9"/>
+  </svg>
+
+  <div class="ls-overlay"></div>
+
+  <div class="lc">
+    <div class="lc-badge">🕌 Masjid Management System</div>
+    <h1 class="lc-h">Jama Masjid<br/>Bhagwanpur</h1>
+    <div class="lc-ar">جامع مسجد بھگوانپور</div>
+    <p class="lc-sub">مظفرپور، بہار &nbsp;•&nbsp; Muzaffarpur, Bihar</p>
+    <div class="fmb">
+      <label class="fl">Username</label>
+      <input class="fi" value="admin" readonly style="background:#f9fafb;color:#999"/>
+    </div>
+    <div class="fmb">
+      <label class="fl">Password / پاس ورڈ</label>
+      <input class="fi" type="password" id="lPass" placeholder="Password darj karen..." onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="btn-lg" onclick="doLogin()">🔐 Login Karen</button>
+    <div id="lErr">❌ Galat password. Dobara try karen.</div>
+    <p class="lc-hint">Default: <b>masjid@2024</b></p>
+  </div>
+</div>
+
+<script>
+// Generate random stars
+(function(){
+  const c=document.getElementById('ls-stars');
+  if(!c)return;
+  for(let i=0;i<120;i++){
+    const s=document.createElement('div');
+    const sz=Math.random()<0.15?2.5:Math.random()<0.4?1.8:1.2;
+    s.className='ls-star';
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*75}%;left:${Math.random()*100}%;--d:${2+Math.random()*4}s;--dl:-${Math.random()*5}s;opacity:${0.2+Math.random()*0.5}`;
+    c.appendChild(s);
+  }
+})();
+</script>
+
+
+<!-- APP SHELL -->
+<div id="appShell">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-top">
+    <div class="sb-logo">🕌</div>
+    <div class="sb-title">Jama Masjid Bhagwanpur</div>
+    <div class="sb-city">Muzaffarpur, Bihar</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sec">Main Menu</div>
+    <div class="ni active" onclick="goPage('dashboard',this)"><span class="ni-ic">📊</span><span>Dashboard</span></div>
+    <div class="ni" onclick="goPage('members',this)"><span class="ni-ic">👥</span><span>Members</span></div>
+    <div class="ni" onclick="goPage('committee',this)"><span class="ni-ic">🏛️</span><span>Committee</span></div>
+    <div class="sb-sec">Maliyat / Finance</div>
+    <div class="ni" onclick="goPage('accounts',this)"><span class="ni-ic">📒</span><span>Accounts</span></div>
+    <div class="ni" onclick="goPage('chanda',this)"><span class="ni-ic">💰</span><span>Chanda</span></div>
+    <div class="sb-sec">Operations</div>
+    <div class="ni" onclick="goPage('namaz',this)"><span class="ni-ic">🕐</span><span>Namaz Timings</span></div>
+    <div class="ni" onclick="goPage('maktab',this)"><span class="ni-ic">📚</span><span>Maktab</span></div>
+    <div class="ni" onclick="goPage('announcements',this)"><span class="ni-ic">📢</span><span>Announcements</span></div>
+    <div class="sb-sec">Tools</div>
+    <div class="ni" onclick="goPage('whatsapp',this)"><span class="ni-ic">💬</span><span>WhatsApp</span></div>
+    <div class="ni" onclick="goPage('settings',this)"><span class="ni-ic">⚙️</span><span>Settings</span></div>
+  </nav>
+  <div class="sb-ft">
+    <button class="btn-lo" onclick="doLogout()">🚪 <span>Logout</span></button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+  <div class="topbar">
+    <div class="tb-l">
+      <h2 id="pgTitle">Dashboard</h2>
+      <p>جامع مسجد بھگوانپور، مظفرپور</p>
+    </div>
+    <div class="tb-r">
+      <span id="tbDate" style="font-size:11px;color:#bbb"></span>
+      <span class="pill pill-gold">👑 Admin</span>
+      <button class="btn btn-gh btn-sm" onclick="doLogout()" style="border-color:#ddd;color:#666">🚪 Logout</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+  <!-- ===== DASHBOARD ===== -->
+  <div class="pg active" id="pg-dashboard">
+    <div class="metrics" id="dash-metrics"></div>
+    <div class="g2">
+      <div class="card">
+        <div class="ch"><span class="ct">🕐 Aaj Ki Namaz</span><span class="badge bb" id="dash-loc">Muzaffarpur</span></div>
+        <div class="cb"><div class="nm-grid" id="dash-namaz"></div></div>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="ct">📋 Akhiri Transactions</span></div>
+        <div id="dash-tx"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">📢 Latest Announcements</span></div>
+      <div class="cb" id="dash-ann"></div>
+    </div>
+  </div>
+
+  <!-- ===== MEMBERS ===== -->
+  <div class="pg" id="pg-members">
+    <div class="sec-h">
+      <span class="sec-t">👥 Members / ممبران</span>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <button class="btn btn-wa btn-sm" onclick="exportWA('members')">📤 WA Export</button>
+        <button class="btn btn-pr btn-sm" onclick="openM('m-member')">+ Add Member</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="srow">
+        <input class="inp" style="flex:1;min-width:160px" placeholder="🔍 Naam ya phone se dhundhen..." oninput="filterMembers(this.value)"/>
+        <select class="inp" style="width:180px" onchange="filterMRole(this.value)">
+          <option value="">Sab Roles</option>
+          <option>Imam</option><option>Naib Imam</option><option>Mutawalli</option>
+          <option>President</option><option>Secretary</option><option>Treasurer</option>
+          <option>Committee Member</option><option>Muezzin</option>
+          <option>Khaas Daniyaal</option><option>Aam Member</option>
+        </select>
+      </div>
+      <div class="twrap">
+        <table><thead><tr><th>#</th><th>Naam</th><th>Ohda</th><th>Phone</th><th>Chanda/Mo</th><th>Address</th><th>Status</th><th>Amal</th></tr></thead>
+        <tbody id="members-tb"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== COMMITTEE ===== -->
+  <div class="pg" id="pg-committee">
+    <div class="sec-h">
+      <span class="sec-t">🏛️ Committee & Hierarchy</span>
+      <button class="btn btn-wa btn-sm" onclick="exportWA('committee')">📤 WA Export</button>
+    </div>
+    <div class="g2 mb14">
+      <div class="card">
+        <div class="ch"><span class="ct">Masjid Hierarchy / ڈھانچہ</span></div>
+        <div class="cb" id="hier-bd"></div>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="ct">Committee Members</span></div>
+        <div class="twrap"><table><thead><tr><th>Naam</th><th>Ohda</th><th>Phone</th></tr></thead>
+        <tbody id="comm-tb"></tbody></table></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">📝 Meeting Minutes</span>
+        <button class="btn btn-pr btn-sm" onclick="openM('m-meeting')">+ Add Meeting</button>
+      </div>
+      <div class="cb" id="meeting-bd"></div>
+    </div>
+  </div>
+
+  <!-- ===== ACCOUNTS ===== -->
+  <div class="pg" id="pg-accounts">
+    <div class="sec-h">
+      <span class="sec-t">📒 Accounts / حساب کتاب</span>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <button class="btn btn-wa btn-sm" onclick="exportWA('accounts')">📤 WA Report</button>
+        <button class="btn btn-pr btn-sm" onclick="openM('m-tx')">+ Transaction</button>
+      </div>
+    </div>
+    <div class="metrics" style="grid-template-columns:repeat(3,1fr)">
+      <div class="mc cg"><div class="mc-i">📈</div><div class="mc-v" id="a-in">₹0</div><div class="mc-l">Kul Amdani</div></div>
+      <div class="mc cr"><div class="mc-i">📉</div><div class="mc-v" id="a-out">₹0</div><div class="mc-l">Kul Kharch</div></div>
+      <div class="mc cgold"><div class="mc-i">💼</div><div class="mc-v" id="a-bal">₹0</div><div class="mc-l">Net Balance</div></div>
+    </div>
+    <div class="card">
+      <div class="srow">
+        <select class="inp" style="width:160px" onchange="setTxF('type',this.value)"><option value="">Sab Qism</option><option value="in">📈 Amdani</option><option value="out">📉 Kharch</option></select>
+        <select class="inp" style="width:190px" onchange="setTxF('cat',this.value)">
+          <option value="">Sab Categories</option>
+          <option>Chanda</option><option>Jumu'ah Collection</option><option>Eid Collection</option>
+          <option>Donation</option><option>Maktab Fee</option><option>Bijli Bill</option>
+          <option>Paani Bill</option><option>Maintenance</option><option>Imam Tankhwa</option>
+          <option>Muezzin Tankhwa</option><option>Teacher Tankhwa</option>
+          <option>Safaai</option><option>Construction</option><option>Other</option>
+        </select>
+      </div>
+      <div class="twrap">
+        <table><thead><tr><th>Tarikh</th><th>Category</th><th>Notes</th><th>Qism</th><th>Raqam</th><th>Amal</th></tr></thead>
+        <tbody id="tx-tb"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHANDA ===== -->
+  <div class="pg" id="pg-chanda">
+    <div class="sec-h">
+      <span class="sec-t">💰 Chanda Tracking / چندہ</span>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="showChandaTab('ct-general',this)">🕌 General Chanda</div>
+      <div class="tab" onclick="showChandaTab('ct-taraweeh',this)">🌙 Taraweeh Nazrana</div>
+      <div class="tab" onclick="showChandaTab('ct-qabristan',this)">🪦 Qabristan</div>
+    </div>
+
+    <!-- ── GENERAL CHANDA ── -->
+    <div id="ct-general">
+      <div class="sec-h" style="margin-bottom:10px">
+        <select class="inp" style="width:200px" id="chandaMonth" onchange="renderChanda()">
+          <option>March 2026</option><option>February 2026</option><option>January 2026</option>
+          <option>December 2025</option><option>November 2025</option><option>October 2025</option>
+          <option>September 2025</option><option>August 2025</option>
+        </select>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <span style="font-size:12px;color:#aaa;align-self:center" id="chandaSummary"></span>
+          <button class="btn btn-wa btn-sm" onclick="exportWA('chanda')">📤 WA Reminder</button>
+          <button class="btn btn-pr btn-sm" onclick="openM('m-chanda')">+ Jama Karen</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="twrap">
+          <table><thead><tr><th>#</th><th>Member</th><th>Ohda</th><th>Due/Mo</th><th>Ada Kiya</th><th>Baaki</th><th>Status</th><th>Amal</th></tr></thead>
+          <tbody id="chanda-tb"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TARAWEEH NAZRANA ── -->
+    <div id="ct-taraweeh" style="display:none">
+      <div class="sec-h" style="margin-bottom:10px">
+        <select class="inp" style="width:200px" id="twYear" onchange="renderTaraweeh()">
+          <option>Ramzan 2026</option><option>Ramzan 2025</option><option>Ramzan 2024</option>
+        </select>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <span style="font-size:12px;color:#aaa;align-self:center" id="twSummary"></span>
+          <button class="btn btn-wa btn-sm" onclick="exportWA('taraweeh')">📤 WA Reminder</button>
+          <button class="btn btn-pr btn-sm" onclick="openM('m-tw-member')">+ Member Add</button>
+          <button class="btn btn-gh btn-sm" onclick="openM('m-tw-collect')">💰 Nazrana Jama</button>
+        </div>
+      </div>
+
+      <!-- Taraweeh Members List -->
+      <div class="card mb14">
+        <div class="ch">
+          <span class="ct">🌙 Taraweeh Nazrana Members</span>
+          <span style="font-size:11px;color:#aaa">Limited members — alag list</span>
+        </div>
+        <div class="twrap">
+          <table><thead><tr><th>#</th><th>Naam</th><th>Phone</th><th>Nazrana (₹)</th><th>Ada Kiya</th><th>Baaki</th><th>Status</th><th>Amal</th></tr></thead>
+          <tbody id="tw-tb"></tbody></table>
+        </div>
+      </div>
+
+      <!-- Summary card -->
+      <div class="card">
+        <div class="ch"><span class="ct">📊 Taraweeh Summary</span></div>
+        <div class="cb">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px" id="tw-summary-grid">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── QABRISTAN ── -->
+    <div id="ct-qabristan" style="display:none">
+      <div class="sec-h" style="margin-bottom:10px">
+        <select class="inp" style="width:200px" id="qbMonth" onchange="renderQabristan()">
+          <option>March 2026</option><option>February 2026</option><option>January 2026</option>
+          <option>December 2025</option><option>November 2025</option><option>October 2025</option>
+          <option>September 2025</option><option>August 2025</option>
+        </select>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <span style="font-size:12px;color:#aaa;align-self:center" id="qbSummary"></span>
+          <button class="btn btn-wa btn-sm" onclick="exportWA('qabristan')">📤 WA Report</button>
+          <button class="btn btn-pr btn-sm" onclick="openM('m-qb-tx')">+ Amdani/Kharch</button>
+        </div>
+      </div>
+
+      <!-- Summary metrics -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:14px" id="qb-metrics"></div>
+
+      <!-- Transactions -->
+      <div class="card mb14">
+        <div class="ch">
+          <span class="ct">🪦 Qabristan — Hisab Kitab</span>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-gh btn-xs" onclick="setQbF('all')" id="qbf-all" style="background:var(--blue-lt);color:var(--blue);border-color:var(--blue)">Sab</button>
+            <button class="btn btn-gh btn-xs" onclick="setQbF('in')" id="qbf-in">📈 Amdani</button>
+            <button class="btn btn-gh btn-xs" onclick="setQbF('out')" id="qbf-out">📉 Kharch</button>
+          </div>
+        </div>
+        <div class="twrap">
+          <table><thead><tr><th>Tarikh</th><th>Qism</th><th>Category</th><th>Notes</th><th>Raqam</th><th>Amal</th></tr></thead>
+          <tbody id="qb-tb"></tbody></table>
+        </div>
+      </div>
+
+      <!-- Chanda members for qabristan -->
+      <div class="card">
+        <div class="ch">
+          <span class="ct">👥 Qabristan Chanda Members</span>
+          <button class="btn btn-pr btn-sm" onclick="openM('m-qb-member')">+ Member Add</button>
+        </div>
+        <div class="twrap">
+          <table><thead><tr><th>#</th><th>Naam</th><th>Phone</th><th>Due/Mo</th><th>Ada</th><th>Baaki</th><th>Status</th><th>Amal</th></tr></thead>
+          <tbody id="qb-member-tb"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pg" id="pg-namaz">
+    <div class="sec-h">
+      <span class="sec-t">🕐 Namaz Timings / نماز اوقات</span>
+      <button class="btn btn-wa btn-sm" onclick="exportWA('namaz')">📤 Share Timings</button>
+    </div>
+    <div class="card mb14">
+      <div class="ch"><span class="ct">Namaz Timings — Edit Karen</span>
+        <button class="btn btn-pr btn-sm" onclick="saveNamaz()">💾 Save Timings</button>
+      </div>
+      <div class="cb"><div class="nm-grid" id="namaz-edit"></div></div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">Imam / Muezzin Schedule</span></div>
+      <div class="twrap"><table><thead><tr><th>Mauqa</th><th>Imam</th><th>Muezzin</th><th>Waqt</th></tr></thead>
+      <tbody>
+        <tr><td>Jumu'ah (Weekly)</td><td>Imam Sahab</td><td>Muezzin Sahab</td><td>1:30 PM</td></tr>
+        <tr><td>Eid ul Fitr</td><td>Imam Sahab</td><td>Muezzin Sahab</td><td>7:00 AM</td></tr>
+        <tr><td>Eid ul Adha</td><td>Naib Imam</td><td>Muezzin Sahab</td><td>7:00 AM</td></tr>
+        <tr><td>Taraweeh (Ramzan)</td><td>Imam Sahab</td><td>—</td><td>Isha ke baad</td></tr>
+        <tr><td>Tahajjud</td><td>Imam Sahab</td><td>—</td><td>3:00 AM</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ===== MAKTAB ===== -->
+  <div class="pg" id="pg-maktab">
+    <div class="sec-h"><span class="sec-t">📚 Maktab / مکتب</span></div>
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('ts',this)">Students / طلبہ</div>
+      <div class="tab" onclick="showTab('tt',this)">Teachers / اساتذہ</div>
+      <div class="tab" onclick="showTab('ta',this)">Attendance / حاضری</div>
+      <div class="tab" onclick="showTab('tf',this)">Fees / فیس</div>
+    </div>
+    <!-- Students -->
+    <div id="ts">
+      <div class="sec-h">
+        <input class="inp" style="width:200px" placeholder="Student dhundhen..." oninput="filterStudents(this.value)"/>
+        <div style="display:flex;gap:7px">
+          <button class="btn btn-wa btn-sm" onclick="exportWA('students')">📤 WA</button>
+          <button class="btn btn-pr btn-sm" onclick="openM('m-student')">+ Add Student</button>
+        </div>
+      </div>
+      <div class="card"><div class="twrap">
+        <table><thead><tr><th>#</th><th>Naam</th><th>Walid</th><th>Phone</th><th>Class</th><th>Fee/Mo</th><th>Amal</th></tr></thead>
+        <tbody id="student-tb"></tbody></table>
+      </div></div>
+    </div>
+    <!-- Teachers -->
+    <div id="tt" style="display:none">
+      <div class="sec-h"><span></span>
+        <button class="btn btn-pr btn-sm" onclick="openM('m-teacher')">+ Add Ustaad</button>
+      </div>
+      <div class="card"><div class="twrap">
+        <table><thead><tr><th>#</th><th>Naam</th><th>Subject</th><th>Phone</th><th>Tankhwa/Mo</th><th>Amal</th></tr></thead>
+        <tbody id="teacher-tb"></tbody></table>
+      </div></div>
+    </div>
+    <!-- Attendance -->
+    <div id="ta" style="display:none">
+      <div class="card">
+        <div class="ch">
+          <span class="ct">Haazri Darj Karen</span>
+          <div style="display:flex;gap:7px;flex-wrap:wrap">
+            <input type="date" class="inp" style="width:155px" id="attDate"/>
+            <button class="btn btn-pr btn-sm" onclick="saveAtt()">💾 Save</button>
+            <button class="btn btn-wa btn-sm" onclick="exportWA('attendance')">📤 WA</button>
+          </div>
+        </div>
+        <div class="cb" id="att-bd"></div>
+      </div>
+    </div>
+    <!-- Fees -->
+    <div id="tf" style="display:none">
+      <div class="sec-h">
+        <select class="inp" style="width:200px" id="feesMonth" onchange="renderFees()">
+          <option>March 2026</option><option>February 2026</option><option>January 2026</option><option>December 2025</option>
+        </select>
+        <div style="display:flex;gap:7px">
+          <button class="btn btn-wa btn-sm" onclick="exportWA('fees')">📤 WA</button>
+          <button class="btn btn-pr btn-sm" onclick="openM('m-fee')">+ Fee Jama</button>
+        </div>
+      </div>
+      <div class="card"><div class="twrap">
+        <table><thead><tr><th>#</th><th>Student</th><th>Class</th><th>Monthly Fee</th><th>Ada</th><th>Baaki</th><th>Status</th></tr></thead>
+        <tbody id="fees-tb"></tbody></table>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- ===== ANNOUNCEMENTS ===== -->
+  <div class="pg" id="pg-announcements">
+    <div class="sec-h">
+      <span class="sec-t">📢 Announcements / اعلانات</span>
+      <button class="btn btn-pr btn-sm" onclick="openM('m-ann')">+ Naya Ilaan</button>
+    </div>
+    <div id="ann-list"></div>
+  </div>
+
+  <!-- ===== WHATSAPP ===== -->
+  <div class="pg" id="pg-whatsapp">
+    <div class="sec-h"><span class="sec-t">💬 WhatsApp Broadcast</span></div>
+    <div class="tabs" style="margin-bottom:16px">
+      <div class="tab active" onclick="showWATab('wa-compose',this)">✏️ Message Compose</div>
+      <div class="tab" onclick="showWATab('wa-templates',this)">📝 Templates Edit</div>
+    </div>
+
+    <!-- Compose Tab -->
+    <div id="wa-compose">
+    <div class="g2">
+      <div class="card">
+        <div class="ch"><span class="ct">Message Compose / پیغام</span></div>
+        <div class="cb">
+          <div class="fg mb14">
+            <label class="lbl">Template Select Karen</label>
+            <select class="inp" onchange="loadTemplate(this.value)">
+              <option value="">— Custom Message —</option>
+              <option value="chanda">💰 Chanda Reminder</option>
+              <option value="namaz">🕐 Namaz Timings</option>
+              <option value="juma">⭐ Jumu'ah Reminder</option>
+              <option value="meeting">📅 Meeting Notice</option>
+              <option value="eid">🌙 Eid Mubarak</option>
+              <option value="fee">📚 Fee Reminder</option>
+              <option value="ramzan">🌙 Ramzan Mubarak</option>
+            </select>
+          </div>
+          <div class="fg mb14">
+            <label class="lbl">Message / پیغام (Edit kar sakte hain)</label>
+            <textarea class="inp" rows="11" id="waMsg" placeholder="Template select karen ya khud likhein..." oninput="updateWAPreview()"></textarea>
+          </div>
+          <div class="fg mb14">
+            <label class="lbl">Number (Optional — 91XXXXXXXXXX)</label>
+            <input class="inp" id="waNum" placeholder="Direct message ke liye number..."/>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-wa" onclick="sendWA()">📤 WhatsApp Bhejen</button>
+            <button class="btn btn-gh" onclick="copyWAMsg()" style="background:#f0f9ff;border-color:#bae6fd;color:#0369a1;font-weight:700">📋 Copy Karen</button>
+            <button class="btn btn-gh" onclick="document.getElementById('waMsg').value='';updateWAPreview()" style="font-size:11px">🗑️ Clear</button>
+          </div>
+          <p style="font-size:11px;color:#aaa;margin-top:8px">💡 Copy ke baad WhatsApp kholen → New Message ya Channel → Paste (Ctrl+V)</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="ct">Preview</span></div>
+        <div class="cb">
+          <div class="wa-box" id="waPreview">Koi message nahi...</div>
+          <div style="margin-top:16px">
+            <div class="lbl" style="margin-bottom:8px">⚡ Quick Export Buttons</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <button class="btn btn-wa btn-sm" style="justify-content:flex-start" onclick="exportWA('members')">👥 Members List</button>
+              <button class="btn btn-wa btn-sm" style="justify-content:flex-start" onclick="exportWA('accounts')">📒 Accounts Summary</button>
+              <button class="btn btn-wa btn-sm" style="justify-content:flex-start" onclick="exportWA('chanda')">💰 Chanda Report</button>
+              <button class="btn btn-wa btn-sm" style="justify-content:flex-start" onclick="exportWA('namaz')">🕐 Namaz Timings</button>
+              <button class="btn btn-wa btn-sm" style="justify-content:flex-start" onclick="exportWA('students')">📚 Students List</button>
+              <button class="btn btn-wa btn-sm" style="justify-content:flex-start" onclick="exportWA('committee')">🏛️ Committee List</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <!-- Templates Edit Tab -->
+    <div id="wa-templates" style="display:none">
+      <div class="card" style="margin-bottom:14px">
+        <div class="ch">
+          <span class="ct">📝 Template Edit Karen</span>
+          <span style="font-size:11px;color:#aaa">Har template apni marzi se badal saken</span>
+        </div>
+        <div class="cb">
+          <div class="fg" style="margin-bottom:12px">
+            <label class="lbl">Kaun Sa Template Edit Karna Hai?</label>
+            <select class="inp" id="tpl-sel" onchange="loadTplEdit(this.value)">
+              <option value="">— Template Chunen —</option>
+              <option value="tpl_chanda">💰 Chanda Reminder</option>
+              <option value="tpl_namaz">🕐 Namaz Timings</option>
+              <option value="tpl_juma">⭐ Jumu'ah Reminder</option>
+              <option value="tpl_meeting">📅 Meeting Notice</option>
+              <option value="tpl_eid">🌙 Eid Mubarak</option>
+              <option value="tpl_fee">📚 Maktab Fee</option>
+              <option value="tpl_ramzan">🌙 Ramzan Mubarak</option>
+            </select>
+          </div>
+          <div id="tpl-edit-area" style="display:none">
+            <div class="fg" style="margin-bottom:10px">
+              <label class="lbl">Template Content (Edit Karen)</label>
+              <textarea class="inp" id="tpl-text" rows="12" placeholder="Template yahan dikhega..."></textarea>
+              <p style="font-size:11px;color:#aaa;margin-top:4px">💡 *text* = bold in WhatsApp. \n = new line. Aap jo bhi likhein wahi jayega.</p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-pr btn-sm" onclick="saveTplEdit()">💾 Save Template</button>
+              <button class="btn btn-gh btn-sm" onclick="resetTplEdit()">↺ Default Par Wapas</button>
+              <button class="btn btn-wa btn-sm" onclick="useTpl()">📤 Isko Use Karen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="ct">💡 Tips — Template Kaise Edit Karen</span></div>
+        <div class="cb">
+          <table style="width:100%;font-size:13px;border-collapse:collapse">
+            <tr style="background:#f9fafb"><td style="padding:7px 10px;font-weight:700;width:140px">*Bold Text*</td><td style="padding:7px 10px;color:#555">Asterisk ke beech text bold hota hai WhatsApp mein</td></tr>
+            <tr><td style="padding:7px 10px;font-weight:700">_Italic_</td><td style="padding:7px 10px;color:#555">Underscore se italic hota hai</td></tr>
+            <tr style="background:#f9fafb"><td style="padding:7px 10px;font-weight:700">─────</td><td style="padding:7px 10px;color:#555">Line separator ke liye yeh characters use karen</td></tr>
+            <tr><td style="padding:7px 10px;font-weight:700">Emoji 🕌💰📢</td><td style="padding:7px 10px;color:#555">Copy-paste karo kisi bhi emoji site se</td></tr>
+            <tr style="background:#f9fafb"><td style="padding:7px 10px;font-weight:700">Save Button</td><td style="padding:7px 10px;color:#555">Save karne ke baad template permanently save ho jata hai</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SETTINGS ===== -->
+  <div class="pg" id="pg-settings">
+    <div class="sec-h"><span class="sec-t">⚙️ Settings</span></div>
+    <div class="g2">
+      <div class="card mb14">
+        <div class="ch"><span class="ct">🏢 Masjid Info</span></div>
+        <div class="cb">
+          <table style="width:100%;font-size:13px;border-collapse:collapse">
+            <tr><td style="color:#aaa;padding:5px 0;width:140px">Naam</td><td style="font-weight:700">Jama Masjid Bhagwanpur</td></tr>
+            <tr><td style="color:#aaa;padding:5px 0">Jagah</td><td style="font-weight:700">Bhagwanpur, Muzaffarpur, Bihar</td></tr>
+            <tr><td style="color:#aaa;padding:5px 0">Version</td><td style="font-weight:700">v3.0 — 2026 (PWA + Excel)</td></tr>
+            <tr><td style="color:#aaa;padding:5px 0">Storage</td><td style="font-weight:700">Browser + Excel Export + Google Sheets</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card mb14">
+        <div class="ch"><span class="ct">🔐 Password Change</span></div>
+        <div class="cb">
+          <div class="fg mb14"><label class="lbl">Purana Password</label><input type="password" class="inp" id="op"/></div>
+          <div class="fg mb14"><label class="lbl">Naya Password</label><input type="password" class="inp" id="np"/></div>
+          <div class="fg mb14"><label class="lbl">Confirm Password</label><input type="password" class="inp" id="cp"/></div>
+          <button class="btn btn-pr btn-sm" onclick="changePass()">🔑 Password Badlen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Excel Export + Import Card -->
+    <div class="card mb14">
+      <div class="ch">
+        <div>
+          <span class="ct">📊 Excel Backup & Restore</span>
+          <div style="font-size:11px;color:#aaa;margin-top:2px">Export: data save karo | Import: wapas load karo</div>
+        </div>
+        <span class="badge bg">Free • Offline</span>
+      </div>
+      <div class="cb">
+        <div class="tabs" style="margin-bottom:14px">
+          <div class="tab active" onclick="showXLTab('xl-export',this)">📥 Export (Download)</div>
+          <div class="tab" onclick="showXLTab('xl-import',this)">📤 Import (Restore)</div>
+          <div class="tab" onclick="showXLTab('xl-how',this)">❓ Kaise Kaam Karta Hai</div>
+        </div>
+        <!-- Export -->
+        <div id="xl-export">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px;margin-bottom:12px">
+            <button class="btn" onclick="exportExcel('all')" style="justify-content:flex-start;background:#f0fdf4;border:1.5px solid #86efac;color:#166534;font-weight:700;grid-column:1/-1">📥 Full Backup — Sab Kuch (Recommended)</button>
+            <button class="btn btn-gh btn-sm" onclick="exportExcel('members')" style="justify-content:flex-start">👥 Members</button>
+            <button class="btn btn-gh btn-sm" onclick="exportExcel('transactions')" style="justify-content:flex-start">📒 Accounts</button>
+            <button class="btn btn-gh btn-sm" onclick="exportExcel('chanda')" style="justify-content:flex-start">💰 Chanda</button>
+            <button class="btn btn-gh btn-sm" onclick="exportExcel('students')" style="justify-content:flex-start">📚 Students</button>
+            <button class="btn btn-gh btn-sm" onclick="exportExcel('fees')" style="justify-content:flex-start">🧾 Fees</button>
+          </div>
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--r);padding:10px 12px;font-size:12px;color:#166534">
+            💡 <b>Full Backup</b> mein ek .xlsx file milegi — Members, Accounts, Chanda, Students, Fees sab alag sheets mein. Har maah backup zaroor len!
+          </div>
+        </div>
+        <!-- Import -->
+        <div id="xl-import" style="display:none">
+          <div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:var(--r);padding:11px;font-size:12px;color:#92400e;margin-bottom:12px">
+            ⚠️ <b>Dhyan den:</b> Import karne se existing data replace hoga. Pehle ek fresh export karke rakh len!
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="background:#f9fafb;border:1px solid #eee;border-radius:var(--r);padding:12px">
+              <div style="font-size:12.5px;font-weight:700;margin-bottom:4px">👥 Members Import</div>
+              <div style="font-size:11px;color:#aaa;margin-bottom:7px">Column: #, Naam, Ohda, Phone, Chanda/Mo, Address, Status</div>
+              <input type="file" accept=".xlsx,.xls" onchange="importExcel('members',this)" style="font-size:12px;width:100%"/>
+            </div>
+            <div style="background:#f9fafb;border:1px solid #eee;border-radius:var(--r);padding:12px">
+              <div style="font-size:12.5px;font-weight:700;margin-bottom:4px">📒 Accounts Import</div>
+              <div style="font-size:11px;color:#aaa;margin-bottom:7px">Column: #, Tarikh, Qism, Category, Notes, Raqam</div>
+              <input type="file" accept=".xlsx,.xls" onchange="importExcel('transactions',this)" style="font-size:12px;width:100%"/>
+            </div>
+            <div style="background:#f9fafb;border:1px solid #eee;border-radius:var(--r);padding:12px">
+              <div style="font-size:12.5px;font-weight:700;margin-bottom:4px">📚 Students Import</div>
+              <div style="font-size:11px;color:#aaa;margin-bottom:7px">Column: #, Naam, Walid, Phone, Class, Fee/Mo</div>
+              <input type="file" accept=".xlsx,.xls" onchange="importExcel('students',this)" style="font-size:12px;width:100%"/>
+            </div>
+          </div>
+          <div id="import-status" style="margin-top:12px;font-size:13px;display:none"></div>
+        </div>
+        <!-- How it works -->
+        <div id="xl-how" style="display:none">
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:13px">
+            <div style="background:#f0f9ff;border-radius:var(--r);padding:12px;border:1px solid #bae6fd">
+              <b style="color:#0369a1">📥 Export kya hai?</b><br/>
+              <span style="font-size:12px;color:#555">"Full Backup" dabao → system sara data ek Excel file mein likhta hai → file phone/laptop pe download hoti hai. Google Drive, WhatsApp, ya USB pe rakh sako.</span>
+            </div>
+            <div style="background:#f0fdf4;border-radius:var(--r);padding:12px;border:1px solid #86efac">
+              <b style="color:#166534">📤 Import kya hai?</b><br/>
+              <span style="font-size:12px;color:#555">Phone badla ya browser clear hua? Import tab mein pehle ki backup file upload karo → system wapas wahi data load kar leta hai. Bilkul "Restore" jaisa!</span>
+            </div>
+            <div style="background:#fef9c3;border-radius:var(--r);padding:12px;border:1px solid #fde047">
+              <b style="color:#713f12">⚡ Monthly Routine — Yahi karo:</b><br/>
+              <span style="font-size:12px;color:#555">
+                1️⃣ Har maah 1 baar "Full Backup" download karen<br/>
+                2️⃣ File naam: Masjid_March2026.xlsx rakhen<br/>
+                3️⃣ Google Drive ya apne aap WhatsApp pe bhej den<br/>
+                4️⃣ Zaroorat pade to Import se restore karen
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Google Sheets Card -->
+    <div class="card mb14">
+      <div class="ch">
+        <div>
+          <span class="ct">🟢 Google Sheets Sync</span>
+          <div style="font-size:11px;color:#aaa;margin-top:2px">Data automatically Google Sheet mein save hoga — online accessible</div>
+        </div>
+        <span class="badge ba">Setup Required</span>
+      </div>
+      <div class="cb">
+        <div class="tabs" style="margin-bottom:12px">
+          <div class="tab active" onclick="showGSTab('gs-setup',this)">🔧 Setup</div>
+          <div class="tab" onclick="showGSTab('gs-sync',this)">🔄 Sync</div>
+          <div class="tab" onclick="showGSTab('gs-guide',this)">📖 Guide</div>
+        </div>
+
+        <!-- Setup Tab -->
+        <div id="gs-setup">
+          <div class="fg mb14">
+            <label class="lbl">Google Apps Script Web App URL</label>
+            <input class="inp" id="gs-url" placeholder="https://script.google.com/macros/s/YOUR_ID/exec" value=""/>
+            <p style="font-size:11px;color:#aaa;margin-top:4px">Yeh URL Google Apps Script se milti hai. Guide tab mein step-by-step dekhen.</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-pr btn-sm" onclick="saveGSUrl()">💾 URL Save Karen</button>
+            <button class="btn btn-gh btn-sm" onclick="testGS()">🧪 Test Connection</button>
+          </div>
+          <div id="gs-status" style="margin-top:10px;font-size:12px"></div>
+        </div>
+
+        <!-- Sync Tab -->
+        <div id="gs-sync" style="display:none">
+          <div id="gs-url-warn" style="background:#fef3c7;border:1px solid #fcd34d;border-radius:var(--r);padding:10px;font-size:12px;color:#92400e;margin-bottom:12px;display:none">
+            ⚠️ Pehle Setup tab mein Google Apps Script URL save karen!
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+            <button class="btn btn-pr" onclick="syncToSheets('members')">📤 Members Upload</button>
+            <button class="btn btn-pr" onclick="syncToSheets('transactions')">📤 Accounts Upload</button>
+            <button class="btn btn-pr" onclick="syncToSheets('chanda')">📤 Chanda Upload</button>
+            <button class="btn btn-pr" onclick="syncToSheets('students')">📤 Students Upload</button>
+            <button class="btn btn-pr" onclick="syncToSheets('all')" style="grid-column:1/-1;background:#0f3d25">🔄 Sab Sync Karen (Full)</button>
+          </div>
+          <div id="sync-log" style="background:#f9fafb;border:1px solid #eee;border-radius:var(--r);padding:10px;font-size:11.5px;color:#555;min-height:60px;font-family:monospace">
+            Sync log yahan dikhega...
+          </div>
+        </div>
+
+        <!-- Guide Tab -->
+        <div id="gs-guide" style="display:none">
+          <div style="font-size:13px;line-height:1.8;color:#333">
+            <div style="background:#e0f2fe;border-radius:var(--r);padding:12px;margin-bottom:12px;font-size:12px">
+              🎯 <b>Kya hoga:</b> Aapka data automatically Google Sheets mein save hoga. Koi bhi committee member kabhi bhi phone se dekh sakta hai.
+            </div>
+            <b>Step 1:</b> <a href="https://script.google.com" target="_blank" style="color:var(--blue)">script.google.com</a> kholein (Google account se login karen)<br/>
+            <b>Step 2:</b> "New Project" click karen<br/>
+            <b>Step 3:</b> Neeche diya hua code paste karen aur Save karen<br/>
+            <b>Step 4:</b> "Deploy" → "New Deployment" → "Web App" → "Anyone" → Deploy<br/>
+            <b>Step 5:</b> Jo URL mile, woh upar "Setup" tab mein paste karen<br/><br/>
+            <div style="background:#1e293b;border-radius:var(--r);padding:12px;font-family:monospace;font-size:11px;color:#e2e8f0;overflow-x:auto">
+<pre style="margin:0;white-space:pre-wrap">function doPost(e) {
+  const data = JSON.parse(e.postData.contents);
+  const ss = SpreadsheetApp.openById(data.sheetId || createSheet());
+  const sheet = ss.getSheetByName(data.tab) || ss.insertSheet(data.tab);
+  if(data.clear) sheet.clearContents();
+  if(data.headers) sheet.getRange(1,1,1,data.headers.length).setValues([data.headers]);
+  if(data.rows && data.rows.length) {
+    const last = sheet.getLastRow();
+    sheet.getRange(last+1,1,data.rows.length,data.rows[0].length).setValues(data.rows);
+  }
+  return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
+}
+function createSheet() {
+  const ss = SpreadsheetApp.create("Jama Masjid Bhagwanpur — Data");
+  return ss.getId();
+}</pre>
+            </div>
+            <div style="margin-top:10px;background:#fef9c3;border-radius:var(--r);padding:10px;font-size:12px;color:#713f12">
+              ⚠️ <b>Note:</b> "Sheet ID" apni Google Sheet ke URL se milega (docs.google.com/spreadsheets/d/<b>SHEET_ID</b>/edit). Isko Google Apps Script mein openById() mein daalein.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PWA Install Card -->
+    <div class="card mb14">
+      <div class="ch">
+        <div>
+          <span class="ct">📱 Mobile App Install (PWA)</span>
+          <div style="font-size:11px;color:#aaa;margin-top:2px">Bilkul app jaisa — Home Screen pe icon</div>
+        </div>
+        <span class="badge bg">Free</span>
+      </div>
+      <div class="cb">
+        <div id="pwa-installed" style="display:none;background:#f0fdf4;border:1px solid #86efac;border-radius:var(--r);padding:12px;font-size:13px;color:#166534;margin-bottom:12px">
+          ✅ App already install hai! Home Screen pe icon dikhega.
+        </div>
+        <button id="pwa-btn" class="btn btn-pr" onclick="installPWA()" style="display:none;margin-bottom:12px">📲 Home Screen Pe Install Karen</button>
+        <div style="font-size:13px;color:#555;line-height:1.9">
+          <b>Android (Chrome):</b><br/>
+          1. Yeh file Google Drive pe upload karen<br/>
+          2. Chrome mein kholen<br/>
+          3. Menu (⋮) → "Add to Home screen" → Install<br/><br/>
+          <b>iPhone (Safari):</b><br/>
+          1. Safari mein kholein<br/>
+          2. Share button (□↑) → "Add to Home Screen"<br/><br/>
+          <div style="background:#e0f2fe;border-radius:var(--r);padding:10px;font-size:12px;color:#0369a1">
+            💡 <b>Best Tarika:</b> File ko <a href="https://drive.google.com" target="_blank" style="color:var(--blue)">Google Drive</a> mein upload karen → "Share" → "Anyone with link" → Link ko Chrome mein kholen → Home Screen pe add karen. Phir internet ke bina bhi kaam karega!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><span class="ct">🗑️ Data Management</span></div>
+      <div class="cb">
+        <p style="font-size:13px;color:#aaa;margin-bottom:13px">Sab data hamesha ke liye delete ho jayega. Pehle Excel backup zaroor len!</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-gh btn-sm" onclick="exportExcel('all')" style="background:#f0fdf4;border-color:#86efac;color:#166534">📥 Pehle Backup Lo</button>
+          <button class="btn btn-dr btn-sm" onclick="if(confirm('Pakka? Sab data delete ho jayega!'))resetAll()">⚠️ Sab Data Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /appShell -->
+
+<!-- ===== MODALS ===== -->
+<!-- Member -->
+<div class="mo" id="m-member"><div class="mbox">
+  <div class="mhd"><span class="mtl">👤 Member Add/Edit Karen</span><button class="mcl" onclick="editingMemberId=null;document.querySelector('#m-member .mtl').textContent='👤 Member Add/Edit Karen';closeM('m-member')">×</button></div>
+  <div class="mbd"><div class="fg2">
+    <div class="fg"><label class="lbl">Naam *</label><input class="inp" id="fm-n" placeholder="Muhammad Ahmed"/></div>
+    <div class="fg"><label class="lbl">Phone *</label><input class="inp" id="fm-p" placeholder="9876543210"/></div>
+    <div class="fg"><label class="lbl">Ohda (Role)</label>
+      <select class="inp" id="fm-r">
+        <option>Aam Member</option><option>Committee Member</option><option>Khaas Daniyaal</option>
+        <option>Muezzin</option><option>Treasurer</option><option>Secretary</option>
+        <option>President</option><option>Mutawalli</option><option>Naib Imam</option><option>Imam</option>
+      </select></div>
+    <div class="fg"><label class="lbl">Maahana Chanda (₹)</label><input class="inp" type="number" id="fm-d" placeholder="200"/></div>
+    <div class="fg full"><label class="lbl">Address</label><input class="inp" id="fm-a" placeholder="Mohalla, Gali..."/></div>
+    <div class="fg"><label class="lbl">Status</label><select class="inp" id="fm-s"><option>Active</option><option>Inactive</option></select></div>
+    <div class="fg"><label class="lbl">Joining Date</label><input type="date" class="inp" id="fm-j"/></div>
+  </div></div>
+  <div class="mft"><button class="btn btn-gh" onclick="editingMemberId=null;document.querySelector('#m-member .mtl').textContent='👤 Member Add/Edit Karen';closeM('m-member')">Cancel</button><button class="btn btn-pr" onclick="saveMember()">💾 Save</button></div>
+</div></div>
+
+<!-- Transaction -->
+<div class="mo" id="m-tx"><div class="mbox">
+  <div class="mhd"><span class="mtl">💳 Transaction Darj Karen</span><button class="mcl" onclick="closeM('m-tx')">×</button></div>
+  <div class="mbd"><div class="fg2">
+    <div class="fg"><label class="lbl">Qism *</label><select class="inp" id="ft-t"><option value="in">📈 Amdani (Income)</option><option value="out">📉 Kharch (Expense)</option></select></div>
+    <div class="fg"><label class="lbl">Category *</label>
+      <select class="inp" id="ft-c">
+        <option>Chanda</option><option>Jumu'ah Collection</option><option>Eid Collection</option>
+        <option>Donation</option><option>Maktab Fee</option><option>Bijli Bill</option>
+        <option>Paani Bill</option><option>Maintenance</option><option>Imam Tankhwa</option>
+        <option>Muezzin Tankhwa</option><option>Teacher Tankhwa</option><option>Safaai</option>
+        <option>Construction</option><option>Other</option>
+      </select></div>
+    <div class="fg"><label class="lbl">Raqam (₹) *</label><input class="inp" type="number" id="ft-a" placeholder="0"/></div>
+    <div class="fg"><label class="lbl">Tarikh</label><input type="date" class="inp" id="ft-d"/></div>
+    <div class="fg full"><label class="lbl">Notes</label><input class="inp" id="ft-n" placeholder="Brief description..."/></div>
+  </div></div>
+  <div class="mft"><button class="btn btn-gh" onclick="closeM('m-tx')">Cancel</button><button class="btn btn-pr" onclick="saveTx()">💾 Save</button></div>
+</div></div>
+
+<!-- Qabristan Transaction -->
+<div class="mo" id="m-qb-tx"><div class="mbox">
+  <div class="mhd"><span class="mtl">🪦 Qabristan — Amdani/Kharch</span><button class="mcl" onclick="closeM('m-qb-tx')">×</button></div>
+  <div class="mbd"><div class="fg2">
+    <div class="fg"><label class="lbl">Qism *</label>
+      <select class="inp" id="qbt-type"><option value="in">📈 Amdani (Income)</option><option value="out">📉 Kharch (Expense)</option></select></div>
+    <div class="fg"><label class="lbl">Category *</label>
+      <select class="inp" id="qbt-cat">
+        <option>Qabristan Chanda</option><option>Donation</option><option>Plot Fee</option>
+        <option>Dewar / Fencing</option><option>Safaai</option><option>Pani/Naali</option>
+        <option>Pooja Maintenance</option><option>Naya Construction</option><option>Other</option>
+      </select></div>
+    <div class="fg"><label class="lbl">Raqam (₹) *</label><input class="inp" type="number" id="qbt-amount" placeholder="0"/></div>
+    <div class="fg"><label class="lbl">Tarikh</label><input type="date" class="inp" id="qbt-date"/></div>
+    <div class="fg full"><label class="lbl">Notes</label><input class="inp" id="qbt-note" placeholder="Kaam ki tafseel..."/></div>
+  </div></div>
+  <div class="mft"><button class="btn btn-gh" onclick="closeM('m-qb-tx')">Cancel</button><button class="btn btn-pr" onclick="saveQbTx()">💾 Save</button></div>
+</div></div>
+
+<!-- Qabristan Member -->
+<div class="mo" id="m-qb-member"><div class="mbox">
+  <div class="mhd"><span class="mtl">👥 Qabristan Member Add</span><button class="mcl" onclick="closeM('m-qb-member')">×</button></div>
+  <div class="mbd"><div class="fg2">
+    <div class="fg"><label class="lbl">Naam *</label><input class="inp" id="qbm-n" placeholder="Muhammad Ahmed"/></div>
+    <div class="fg"><label class="lbl">Phone</label><input class="inp" id="qbm-p" placeholder="91XXXXXXXXXX"/></div>
+    <div class="fg"><label class="lbl">Maahana Chanda (₹)</label><input class="inp" type="number" id="qbm-due" placeholder="50"/></div>
+    <div class="fg"><label class="lbl">Address/Mohalla</label><input class="inp" id="qbm-addr" placeholder="Mohalla..."/></div>
+  </div></div>
+  <div class="mft"><button class="btn btn-gh" onclick="closeM('m-qb-member')">Cancel</button><button class="btn btn-pr" onclick="saveQbMember()">💾 Save</button></div>
+</div></div>
+
+<!-- Taraweeh Member Add -->
+<div class="mo" id="m-tw-member"><div class="mbox">
+  <div class="mhd"><span class="mtl">🌙 Taraweeh Member Add Karen</span><button class="mcl" onclick="closeM('m-tw-member')">×</button></div>
+  <div class="mbd"><div class="fg2">
+    <div class="fg"><label class="lbl">Naam *</label><input class="inp" id="tw-n" placeholder="Muhammad Ahmed"/></div>
+    <div class="fg"><label class="lbl">Phone *</label><input class="inp" id="tw-p" placeholder="91XXXXXXXXXX"/></div>
+    <div class="fg"><label class="lbl">Nazrana Amount (₹) *</label><input class="inp" type="number" id="tw-a" placeholder="5000"/></div>
+    <div class="fg"><label class="lbl">Ramzan Saal</label>
+      <select class="inp" id="tw-yr"><option>Ramzan 2026</option><option>Ramzan 2025</option><option>Ramzan 2024</option></select></div>
+    <div class="fg full"><label class="lbl">Notes</label><input class="inp" id="tw-note" placeholder="Koi khaas baat..."/></div>
+  </div></div>
+  <div class="mft"><button class="btn btn-gh" onclick="closeM('m-tw-member')">Cancel</button><button class="btn btn-pr" onclick="saveTWMember()">💾 Save</button></div>
+</div></div>
+
+<!-- Taraweeh Nazrana Collect -->
+<div class="mo" id="m-tw-collect"><div class="mbox">
+  <div class="mhd"><span class="mtl">💰 Nazrana Jama Karen</span><button class="mcl" onclick="closeM('m-tw-collect')">×</button></div>
+  <div class="mbd"><div class="fg2">
+    <div class="fg full"><label class="lbl">Member *</label><select class="inp" id="twc-m"></select></div>
+    <div class="fg"><label class="lbl">Ramzan</label>
+      <select class="inp" id="twc-yr"><option>Ramzan 2026</option><option>Ramzan 2025</option><option>Ramzan 2024</option></select></div>
+    <div class="fg"><label class="lbl">Raqam (₹) *</label><input class="inp" type="number" id="twc-a" placeholder="0"/></div>
+    <div class="fg full"><label class="lbl">Notes</label><input class="inp" id="twc-note" placeholder=""/></div>
+  </div></div>
+  <div class="mft"><button class="btn btn-gh" onclick="closeM('m-tw-collect')">Cancel</button><button class="btn btn-pr" onclick="collectTW()">✅ Jama Karo</button></div>
+</div></div>
+
+<!-- Chanda -->
+<div class="mo" id="m-chanda"><div class="mbox">
+  <div class="mhd"><span class="mtl">💰 Chanda Jama Karen</span><button class="mcl" onclick="closeM('m-chanda')">×</button></div>
+  <div class="mbd"><div class="fg2">
+    <div class="fg full"><label class="lbl">Member *</label><select class="inp" id="fc-m"></select></div>
+    <div class="fg"><label class="lbl">Month</label><select class="inp" id="fc-mo"><option>March 2026</option><option>February 2026</option><option>January 2026</option><option>December 2025</option></select></div>
+    <div class="fg"><label class="lbl">Raqam (₹) *</label><input class="inp" type="number" id="fc-a" placeholder="0"/></div>
+    <div class="fg full"><label class="lbl">Notes</label><input class="inp" id="fc-n" placeholder=""/></div>
+  </div></div>
+  <div class="mft"><button class="btn btn-gh" onclick="closeM('m-chanda')">Cancel</button><button class="btn btn-pr" onclick="collectChanda()">✅ Jama Karo</button></div>
+</div></div>
+
+<!-- Announcement -->
+<div class="mo" id="m-ann"><div class="mbox">
+  <div class="mhd"><span class="mtl">📢 Naya Ilaan</span><button class="mcl" onclick="closeM('m-ann')">×</button></div>
+  <div class="mbd"><div class="fg2">
+    <div class="fg full"><label class="lbl">Title *</label><input class="inp" id="fa-t" placeholder="Ilaan ka unwan..."/></div>
+    <div class="fg"><label class="lbl">Tarikh</label><input type="date" class="inp" id="fa-d"/></div>
+    <div class="fg"><label class="lbl">Qism</label><select class="inp" id="fa-q"><option>General</option><option>Meeting</option><option>Event</option><option>Alert</option><option>Maktab</option><option>Finance</option></select></div>
+    <div class="fg full"><label class="lbl">Tafseel *</label><textarea class="inp" id="fa-b" rows="4" placeholder="Poori baat likhein..."></textarea></div>
+  </div></div>
+  <div class="mft">
+    <button class="btn btn-gh" onclick="closeM('m-ann')">Cancel</button>
+    <button class="btn btn-wa" onclick="saveAnn(true)">📤 Save + WhatsApp</button>
+    <button class="btn btn-pr" onclick="saveAnn(false)">💾 Save</button>
+  </div>
+</div></div>
+
+<!-- Student -->
+<div class="mo" id="m-student"><div class="mbox">
+  <div class="mhd"><span class="mtl">📚 Student Add Karen</span><button class="mcl" onclick="closeM('m-student')">×</button></div>
+  <div class="mbd"><div class="fg2">
+    <div class="fg"><label class="lbl">Student Ka Naam *</label><input class="inp" id="fs-n" placeholder="Muhammad Ali"/></div>
+    <div class="fg"><label class="lbl">Walid Ka Naam *</label><input class="inp" id="fs-f" placeholder="Ali Ahmed"/></div>
+    <div class="fg"><label class="lbl">Phone</label><input class="inp" id="fs-p" placeholder="9876543210"/></div>
+    <div class="fg"><label class="lbl">Class</label>
+      <select class="inp" id="fs-c"><option>Qaida</option><option>Nazra (Quran)</option><option>Hifz (Hafiz)</option>
+        <option>Tajweed</option><option>Class 1</option><option>Class 2</option>
+        <option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div>
+    <div class="fg"><label class="lbl">Maahana Fee (₹)</label><input class="inp" type="number" id="fs-fee" placeholder="100"/></div>
+    <div class="fg"><label class="lbl">Daakhila Tarikh</label><input type="date" class="inp" id="fs-j"/></div>
+  </div></div>
+  <div class="mft"><button class="btn btn-gh" onclick="closeM('m-student')">Cancel</button><button class="btn btn-pr" onclick="saveStudent()">💾 Save</button></div>
+</div></div>
+
+<!-- Teacher -->
+<div class="mo" id="m-teacher"><div class="mbox">
+  <div class="mhd"><span class="mtl">👨‍🏫 Ustaad Add Karen</span><button class="mcl" onclick="closeM('m-teacher')">×</button></div>
+  <div class="mbd"><div class="fg2">
+    <div class="fg"><label class="lbl">Naam *</label><input class="inp" id="ft2-n" placeholder="Maulana Sahab"/></div>
+    <div class="fg"><label class="lbl">Subject</label>
+      <select class="inp" id="ft2-s"><option>Quran Nazra</option><option>Hifz</option><option>Tajweed</option>
+        <option>Urdu</option><option>Arabic</option><option>Fiqh</option><option>All Subjects</option></select></div>
+    <div class="fg"><label class="lbl">Phone</label><input class="inp" id="ft2-p" placeholder="9876543210"/></div>
+    <div class="fg"><label class="lbl">Maahana Tankhwa (₹)</label><input class="inp" type="number" id="ft2-sal" placeholder="5000"/></div>
+  </div></div>
+  <div class="mft"><button class="btn btn-gh" onclick="closeM('m-teacher')">Cancel</button><button class="btn btn-pr" onclick="saveTeacher()">💾 Save</button></div>
+</div></div>
+
+<!-- Meeting -->
+<div class="mo" id="m-meeting"><div class="mbox">
+  <div class="mhd"><span class="mtl">📝 Meeting Minutes</span><button class="mcl" onclick="closeM('m-meeting')">×</button></div>
+  <div class="mbd"><div class="fg2">
+    <div class="fg"><label class="lbl">Tarikh</label><input type="date" class="inp" id="fm2-d"/></div>
+    <div class="fg"><label class="lbl">Sadar (Chairman)</label><input class="inp" id="fm2-c" placeholder="Name..."/></div>
+    <div class="fg full"><label class="lbl">Agenda</label><input class="inp" id="fm2-a" placeholder="Meeting ka agenda..."/></div>
+    <div class="fg full"><label class="lbl">Minutes / Faislay</label><textarea class="inp" id="fm2-m" rows="4" placeholder="Jo faislay hue woh yahan likhein..."></textarea></div>
+  </div></div>
+  <div class="mft"><button class="btn btn-gh" onclick="closeM('m-meeting')">Cancel</button><button class="btn btn-pr" onclick="saveMeeting()">💾 Save</button></div>
+</div></div>
+
+<!-- Fee Collect -->
+<div class="mo" id="m-fee"><div class="mbox">
+  <div class="mhd"><span class="mtl">💳 Maktab Fee Jama</span><button class="mcl" onclick="closeM('m-fee')">×</button></div>
+  <div class="mbd"><div class="fg2">
+    <div class="fg full"><label class="lbl">Student *</label><select class="inp" id="ff-s"></select></div>
+    <div class="fg"><label class="lbl">Month</label><select class="inp" id="ff-m"><option>March 2026</option><option>February 2026</option><option>January 2026</option><option>December 2025</option></select></div>
+    <div class="fg"><label class="lbl">Raqam (₹) *</label><input class="inp" type="number" id="ff-a" placeholder="0"/></div>
+  </div></div>
+  <div class="mft"><button class="btn btn-gh" onclick="closeM('m-fee')">Cancel</button><button class="btn btn-pr" onclick="collectFee()">✅ Jama Karo</button></div>
+</div></div>
+
+<script>
+// ===== DATA LAYER =====
+const K='jm2_';
+const S={
+  get:(k,d=[])=>{try{const v=localStorage.getItem(K+k);return v!=null?JSON.parse(v):d}catch{return d}},
+  set:(k,v)=>{try{localStorage.setItem(K+k,JSON.stringify(v))}catch(e){console.warn(e)}},
+  obj:(k,d={})=>{try{const v=localStorage.getItem(K+k);return v!=null?JSON.parse(v):d}catch{return d}}
+};
+
+let members,transactions,announces,students,teachers,meetings,chanda,fees,attendance,namaz,auth;
+let txF={type:'',cat:''};
+
+const avColors=['#1a5c36','#1d4ed8','#7c3aed','#b45309','#0e7490','#b91c1c','#be185d','#2e7d52','#0e6e3a','#4338ca'];
+const roleMap={'Imam':'bp','Naib Imam':'bp','Mutawalli':'bt','President':'bb','Secretary':'bb',
+  'Treasurer':'bg','Committee Member':'ba','Muezzin':'ba','Khaas Daniyaal':'bgold','Aam Member':'bgray'};
+const hierDefs=[
+  {role:'Imam',color:'#6d28d9',indent:0,desc:'Dini Rahbar'},
+  {role:'Naib Imam',color:'#7c3aed',indent:16,desc:'Imam ki madad'},
+  {role:'Mutawalli',color:'#1a5c36',indent:0,desc:'Masjid ka malika zimmedar'},
+  {role:'President',color:'#1d4ed8',indent:16,desc:'Committee Sadar'},
+  {role:'Secretary',color:'#2563eb',indent:32,desc:'Records & Kaagzaat'},
+  {role:'Treasurer',color:'#059669',indent:32,desc:'Hisab Kitab'},
+  {role:'Committee Member',color:'#d97706',indent:32,desc:'Meetings & Planning'},
+  {role:'Muezzin',color:'#0891b2',indent:32,desc:'Azaan dene wala'},
+  {role:'Khaas Daniyaal',color:'#b8960c',indent:48,desc:'Bade donators'},
+  {role:'Aam Member',color:'#6b7280',indent:48,desc:'Regular namazis'},
+];
+const namazDefs=[
+  {k:'fajr',ar:'فجر',ur:'Fajr',dw:'5:12',dj:'5:30'},
+  {k:'zuhr',ar:'ظہر',ur:'Zuhr',dw:'12:30',dj:'1:00'},
+  {k:'asr',ar:'عصر',ur:'Asr',dw:'4:15',dj:'4:30'},
+  {k:'maghrib',ar:'مغرب',ur:'Maghrib',dw:'6:28',dj:'6:30'},
+  {k:'isha',ar:'عشاء',ur:"Isha",dw:'7:45',dj:'8:00'},
+  {k:'juma',ar:'جمعہ',ur:"Jumu'ah",dw:'1:30 PM',dj:'1:30 PM'},
+];
+
+function loadData(){
+  members=S.get('members');transactions=S.get('transactions');
+  announces=S.get('announces');students=S.get('students');
+  teachers=S.get('teachers');meetings=S.get('meetings');
+  chanda=S.obj('chanda');fees=S.obj('fees');attendance=S.obj('att');
+  auth=S.obj('auth',{password:'masjid@2024'});
+  if(!S.get('taraweeh_members').length&&localStorage.getItem(K+'taraweeh_members')===null)S.set('taraweeh_members',[]);
+  if(localStorage.getItem(K+'qb_tx')===null)S.set('qb_tx',[]);
+  if(localStorage.getItem(K+'qb_members')===null)S.set('qb_members',[]);
+  const defNamaz={};namazDefs.forEach(n=>{defNamaz[n.k]={w:n.dw,j:n.dj};});
+  namaz=S.obj('namaz',defNamaz);
+}
+function saveData(){
+  S.set('members',members);S.set('transactions',transactions);
+  S.set('announces',announces);S.set('students',students);
+  S.set('teachers',teachers);S.set('meetings',meetings);
+  S.set('chanda',chanda);S.set('fees',fees);S.set('att',attendance);S.set('namaz',namaz);
+}
+
+// ===== AUTH =====
+function doLogin(){
+  const p=document.getElementById('lPass').value;
+  const err=document.getElementById('lErr');
+  if(p===auth.password){
+    err.style.display='none';
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('appShell').style.display='block';
+    S.set('sess',{ok:true,t:Date.now()});
+    initApp();
+  } else {
+    err.style.display='block';
+    document.getElementById('lPass').value='';
+  }
+}
+function doLogout(){
+  S.set('sess',{ok:false});
+  document.getElementById('appShell').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('lPass').value='';
+}
+function changePass(){
+  const op=document.getElementById('op').value;
+  const np=document.getElementById('np').value;
+  const cp=document.getElementById('cp').value;
+  if(op!==auth.password){alert('Purana password galat hai!');return;}
+  if(np!==cp){alert('Naya password match nahi karta!');return;}
+  if(np.length<6){alert('Kam se kam 6 characters ka password rakhein!');return;}
+  auth.password=np;S.set('auth',auth);
+  alert('✅ Password badal gaya!');
+  ['op','np','cp'].forEach(id=>document.getElementById(id).value='');
+}
+
+// ===== NAV =====
+const pgTitles={dashboard:'Dashboard',members:'Members / ممبران',committee:'Committee & Hierarchy',
+  accounts:'Accounts / حساب کتاب',chanda:'Chanda Tracking / چندہ',namaz:'Namaz Timings / نماز اوقات',
+  maktab:'Maktab / مکتب',announcements:'Announcements / اعلانات',whatsapp:'WhatsApp Broadcast',settings:'Settings'};
+
+function goPage(id,el){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('pg-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  document.getElementById('pgTitle').textContent=pgTitles[id]||id;
+  if(id==='dashboard')renderDash();
+  if(id==='members')renderMembers();
+  if(id==='committee')renderCommittee();
+  if(id==='accounts')renderTx();
+  if(id==='chanda')renderChanda();
+  if(id==='maktab'){renderStudents();renderTeachers();renderAtt();renderFees();}
+  if(id==='settings'){initSettingsGS();}
+}
+function showTab(id,el){
+  ['ts','tt','ta','tf'].forEach(t=>{const e=document.getElementById(t);if(e)e.style.display='none';});
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).style.display='block';
+  el.classList.add('active');
+}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+
+// ===== INIT =====
+function initApp(){
+  const now=new Date();
+  document.getElementById('tbDate').textContent=now.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+  const today=now.toISOString().split('T')[0];
+  ['attDate','ft-d','fa-d','fm2-d','fs-j','qbt-date'].forEach(id=>{const e=document.getElementById(id);if(e&&!e.value)e.value=today;});
+  populateSelects();
+  renderDash();renderMembers();renderCommittee();renderTx();renderChanda();
+  renderNamazEdit();renderStudents();renderTeachers();renderAtt();renderFees();renderAnn();
+}
+
+// ===== CALC BALANCE =====
+function calcBal(){
+  const i=transactions.filter(t=>t.type==='in').reduce((s,t)=>s+t.amount,0);
+  const o=transactions.filter(t=>t.type==='out').reduce((s,t)=>s+t.amount,0);
+  return{income:i,expense:o,balance:i-o};
+}
+
+// ===== DASHBOARD =====
+function renderDash(){
+  const{income,expense,balance}=calcBal();
+  const month='March 2026';
+  const cd=chanda[month]||{};
+  const pending=members.filter(m=>m.due>0).reduce((s,m)=>s+Math.max(0,m.due-(cd[m.id]||0)),0);
+  document.getElementById('dash-metrics').innerHTML=`
+    <div class="mc cg"><div class="mc-i">👥</div><div class="mc-v">${members.length}</div><div class="mc-l">Kul Members</div></div>
+    <div class="mc cgold"><div class="mc-i">💰</div><div class="mc-v">₹${balance.toLocaleString('en-IN')}</div><div class="mc-l">Current Balance</div></div>
+    <div class="mc cb"><div class="mc-i">📚</div><div class="mc-v">${students.length}</div><div class="mc-l">Maktab Students</div></div>
+    <div class="mc cr"><div class="mc-i">⚠️</div><div class="mc-v">₹${pending.toLocaleString('en-IN')}</div><div class="mc-l">Pending Chanda</div></div>
+    <div class="mc cp"><div class="mc-i">👨‍🏫</div><div class="mc-v">${teachers.length}</div><div class="mc-l">Maktab Teachers</div></div>
+    <div class="mc cam"><div class="mc-i">📢</div><div class="mc-v">${announces.length}</div><div class="mc-l">Announcements</div></div>`;
+
+  document.getElementById('dash-namaz').innerHTML=namazDefs.map(n=>
+    `<div class="nm-tile"><div class="nm-ar">${n.ar}</div><div class="nm-ur">${n.ur}</div>
+    <div class="nm-t">${namaz[n.k]?.w||'-'}</div><div class="nm-j">Jamaah: ${namaz[n.k]?.j||'-'}</div></div>`
+  ).join('');
+
+  const rec=transactions.slice(0,5);
+  document.getElementById('dash-tx').innerHTML=rec.length?
+    `<table><thead><tr><th>Category</th><th>Notes</th><th>Raqam</th></tr></thead><tbody>`+
+    rec.map(t=>`<tr><td>${t.cat}</td><td style="color:#aaa;font-size:11px">${t.note||'—'}</td>
+    <td style="font-weight:700;color:${t.type==='in'?'var(--g1)':'var(--red)'}">${t.type==='in'?'+':'-'}₹${t.amount.toLocaleString('en-IN')}</td></tr>`).join('')+'</tbody></table>':
+    '<div class="empty">Koi transaction nahi</div>';
+
+  const ra=announces.slice(0,2);
+  document.getElementById('dash-ann').innerHTML=ra.length?
+    ra.map(a=>`<div class="ann-c"><div class="ann-t">${a.title}</div><div class="ann-m">📅 ${a.date} • ${a.type}</div><div class="ann-b">${a.body}</div></div>`).join(''):
+    '<div class="empty">Koi ilaan nahi</div>';
+}
+
+// ===== MEMBERS =====
+function renderMembers(list){
+  const data=list||members;
+  document.getElementById('members-tb').innerHTML=data.length?
+    data.map((m,i)=>{
+      const init=m.name.trim().split(' ').map(w=>w[0]||'').join('').substring(0,2).toUpperCase();
+      const col=avColors[i%avColors.length];
+      return`<tr>
+        <td>${i+1}</td>
+        <td><div style="display:flex;align-items:center;gap:9px">
+          <div class="av" style="background:${col}">${init}</div>
+          <div><div style="font-weight:700">${m.name}</div><div style="font-size:10.5px;color:#bbb">${m.address||''}</div></div>
+        </div></td>
+        <td><span class="badge ${roleMap[m.role]||'bgray'}">${m.role}</span></td>
+        <td>${m.phone||'—'}</td>
+        <td>${m.due?'₹'+m.due+'/mo':'Volunteer'}</td>
+        <td style="font-size:11.5px;color:#bbb">${m.address||'—'}</td>
+        <td><span class="badge ${m.status==='Active'?'bg':'br'}">${m.status||'Active'}</span></td>
+        <td><div style="display:flex;gap:4px">
+          <button class="btn btn-gh btn-xs" style="color:var(--blue);border-color:#bfdbfe;background:#eff6ff" onclick="editMember(${m.id})">✏️ Edit</button>
+          <button class="btn btn-gh btn-xs" onclick="delMember(${m.id})">🗑️</button>
+        </div></td>
+      </tr>`;
+    }).join(''):
+    '<tr><td colspan="8" class="empty">Koi member nahi — upar se add karen</td></tr>';
+}
+function filterMembers(q){renderMembers(members.filter(m=>m.name.toLowerCase().includes(q.toLowerCase())||(m.phone&&m.phone.includes(q))));}
+function filterMRole(r){renderMembers(r?members.filter(m=>m.role===r):members);}
+
+let editingMemberId=null;
+function editMember(id){
+  const m=members.find(x=>x.id===id);
+  if(!m)return;
+  editingMemberId=id;
+  document.getElementById('fm-n').value=m.name||'';
+  document.getElementById('fm-p').value=m.phone||'';
+  document.getElementById('fm-r').value=m.role||'Aam Member';
+  document.getElementById('fm-d').value=m.due||'';
+  document.getElementById('fm-a').value=m.address||'';
+  document.getElementById('fm-s').value=m.status||'Active';
+  document.getElementById('fm-j').value=m.joinDate||'';
+  // Update modal title
+  document.querySelector('#m-member .mtl').textContent='✏️ Member Edit Karen';
+  openM('m-member');
+}
+function saveMember(){
+  const n=document.getElementById('fm-n').value.trim();
+  if(!n){alert('Naam zaroor darj karen!');return;}
+  const data={name:n,phone:document.getElementById('fm-p').value.trim(),
+    role:document.getElementById('fm-r').value,due:parseInt(document.getElementById('fm-d').value)||0,
+    address:document.getElementById('fm-a').value,status:document.getElementById('fm-s').value,
+    joinDate:document.getElementById('fm-j').value};
+  if(editingMemberId){
+    // Update existing
+    const idx=members.findIndex(m=>m.id===editingMemberId);
+    if(idx>-1)members[idx]={...members[idx],...data};
+    editingMemberId=null;
+  } else {
+    // Add new
+    members.unshift({id:Date.now(),...data});
+  }
+  saveData();renderMembers();renderCommittee();renderChanda();renderDash();populateSelects();
+  closeM('m-member');
+  document.querySelector('#m-member .mtl').textContent='👤 Member Add/Edit Karen';
+  ['fm-n','fm-p','fm-d','fm-a'].forEach(id=>document.getElementById(id).value='');
+}
+function delMember(id){
+  if(!confirm('Member delete karna chahte ho?'))return;
+  members=members.filter(m=>m.id!==id);saveData();renderMembers();renderDash();
+}
+
+// ===== COMMITTEE =====
+function renderCommittee(){
+  document.getElementById('hier-bd').innerHTML=hierDefs.map((h,i)=>{
+    const found=members.filter(m=>m.role===h.role).map(m=>m.name).join(', ')||'(khaali)';
+    return`<div class="hier-row" style="margin-left:${h.indent}px;background:${h.color}12;border:1px solid ${h.color}22">
+      <div class="hier-num" style="background:${h.color}">${i+1}</div>
+      <div><div style="font-size:12.5px;font-weight:700;color:${h.color}">${h.role}</div>
+      <div style="font-size:10.5px;color:#aaa">${found}</div></div>
+    </div>`;
+  }).join('');
+
+  const cRoles=['Imam','Naib Imam','Mutawalli','President','Secretary','Treasurer','Committee Member','Muezzin'];
+  const cm=members.filter(m=>cRoles.includes(m.role));
+  document.getElementById('comm-tb').innerHTML=cm.length?
+    cm.map(m=>`<tr><td style="font-weight:700">${m.name}</td>
+    <td><span class="badge ${roleMap[m.role]||'bgray'}">${m.role}</span></td>
+    <td>${m.phone||'—'}</td></tr>`).join(''):
+    '<tr><td colspan="3" class="empty">Koi committee member nahi</td></tr>';
+
+  document.getElementById('meeting-bd').innerHTML=meetings.length?
+    meetings.map(m=>`<div class="ann-c"><div class="ann-t">📅 ${m.date} — ${m.agenda}</div>
+    <div class="ann-m">Sadar: ${m.chair}</div>
+    <div class="ann-b">${m.minutes||'—'}</div></div>`).join(''):
+    '<div class="empty">Koi meeting record nahi</div>';
+}
+function saveMeeting(){
+  const a=document.getElementById('fm2-a').value.trim();
+  if(!a){alert('Agenda likhein!');return;}
+  meetings.unshift({id:Date.now(),date:document.getElementById('fm2-d').value||new Date().toLocaleDateString('en-IN'),
+    chair:document.getElementById('fm2-c').value,agenda:a,minutes:document.getElementById('fm2-m').value});
+  saveData();renderCommittee();closeM('m-meeting');
+  ['fm2-a','fm2-c','fm2-m'].forEach(id=>document.getElementById(id).value='');
+}
+
+// ===== ACCOUNTS =====
+function renderTx(){
+  let data=transactions;
+  if(txF.type)data=data.filter(t=>t.type===txF.type);
+  if(txF.cat)data=data.filter(t=>t.cat===txF.cat);
+  const{income,expense,balance}=calcBal();
+  document.getElementById('a-in').textContent='₹'+income.toLocaleString('en-IN');
+  document.getElementById('a-out').textContent='₹'+expense.toLocaleString('en-IN');
+  const be=document.getElementById('a-bal');
+  be.textContent='₹'+Math.abs(balance).toLocaleString('en-IN');
+  be.style.color=balance>=0?'var(--g1)':'var(--red)';
+  document.getElementById('tx-tb').innerHTML=data.length?
+    data.map(t=>`<tr>
+      <td style="white-space:nowrap;font-size:11.5px">${t.date}</td>
+      <td>${t.cat}</td>
+      <td style="color:#aaa;font-size:11.5px">${t.note||'—'}</td>
+      <td><span class="badge ${t.type==='in'?'bg':'br'}">${t.type==='in'?'📈 Amdani':'📉 Kharch'}</span></td>
+      <td style="font-weight:800;color:${t.type==='in'?'var(--g1)':'var(--red)'}">
+        ${t.type==='in'?'+':'-'}₹${t.amount.toLocaleString('en-IN')}</td>
+      <td><button class="btn btn-gh btn-xs" onclick="delTx(${t.id})">🗑️</button></td>
+    </tr>`).join(''):
+    '<tr><td colspan="6" class="empty">Koi transaction nahi</td></tr>';
+}
+function setTxF(k,v){txF[k]=v;renderTx();}
+function saveTx(){
+  const a=parseInt(document.getElementById('ft-a').value);
+  if(!a){alert('Raqam darj karen!');return;}
+  transactions.unshift({id:Date.now(),type:document.getElementById('ft-t').value,
+    cat:document.getElementById('ft-c').value,amount:a,
+    date:document.getElementById('ft-d').value||new Date().toLocaleDateString('en-IN'),
+    note:document.getElementById('ft-n').value});
+  saveData();renderTx();renderDash();closeM('m-tx');
+  document.getElementById('ft-a').value='';document.getElementById('ft-n').value='';
+}
+function delTx(id){
+  if(!confirm('Transaction delete karna chahte ho?'))return;
+  transactions=transactions.filter(t=>t.id!==id);saveData();renderTx();renderDash();
+}
+
+// ===== CHANDA =====
+function renderChanda(){
+  const month=document.getElementById('chandaMonth')?.value||'March 2026';
+  const md=chanda[month]||{};
+  const cm=members.filter(m=>m.due>0);
+  let td=0,tp=0;
+  document.getElementById('chanda-tb').innerHTML=cm.length?
+    cm.map((m,i)=>{
+      const paid=md[m.id]||0,baaki=Math.max(0,m.due-paid);
+      td+=m.due;tp+=paid;
+      return`<tr>
+        <td>${i+1}</td><td style="font-weight:700">${m.name}</td>
+        <td><span class="badge ${roleMap[m.role]||'bgray'}">${m.role}</span></td>
+        <td>₹${m.due}</td>
+        <td style="color:var(--g1);font-weight:700">₹${paid}</td>
+        <td style="color:${baaki>0?'var(--red)':'var(--g1)'};font-weight:700">₹${baaki}</td>
+        <td><span class="badge ${baaki===0?'bg':'br'}">${baaki===0?'✅ Ada':'⚠️ Baaki'}</span></td>
+        <td>
+          <button class="btn btn-pr btn-xs" onclick="quickChanda(${m.id},'${month}',${m.due})">Jama</button>
+        </td>
+      </tr>`;
+    }).join(''):
+    '<tr><td colspan="8" class="empty">Koi monthly chanda member nahi</td></tr>';
+  const s=document.getElementById('chandaSummary');
+  if(s)s.textContent=`Ada: ₹${tp} | Baaki: ₹${td-tp} | Total: ₹${td}`;
+}
+function quickChanda(mid,month,due){
+  const a=prompt(`Raqam darj karen (₹)\nDue: ₹${due}:`,due);
+  if(!a||isNaN(a))return;
+  const amt=parseInt(a);
+  if(!chanda[month])chanda[month]={};
+  chanda[month][mid]=(chanda[month][mid]||0)+amt;
+  const m=members.find(x=>x.id===mid);
+  transactions.unshift({id:Date.now(),type:'in',cat:'Chanda',amount:amt,
+    date:new Date().toISOString().split('T')[0],note:(m?.name||'')+' — '+month});
+  saveData();renderChanda();renderTx();renderDash();
+}
+function collectChanda(){
+  const mid=parseInt(document.getElementById('fc-m').value);
+  const month=document.getElementById('fc-mo').value;
+  const a=parseInt(document.getElementById('fc-a').value);
+  if(!a){alert('Raqam darj karen!');return;}
+  if(!chanda[month])chanda[month]={};
+  chanda[month][mid]=(chanda[month][mid]||0)+a;
+  const m=members.find(x=>x.id===mid);
+  transactions.unshift({id:Date.now(),type:'in',cat:'Chanda',amount:a,
+    date:new Date().toISOString().split('T')[0],note:(m?.name||'')+' — '+month});
+  saveData();renderChanda();renderTx();renderDash();closeM('m-chanda');
+  document.getElementById('fc-a').value='';
+  alert('✅ Chanda jama ho gaya!');
+}
+
+// ===== CHANDA TAB SWITCHER =====
+function showChandaTab(id,el){
+  ['ct-general','ct-taraweeh','ct-qabristan'].forEach(t=>{const e=document.getElementById(t);if(e)e.style.display='none';});
+  document.querySelectorAll('#pg-chanda .tabs .tab').forEach(t=>t.classList.remove('active'));
+  const e=document.getElementById(id);if(e)e.style.display='block';
+  if(el)el.classList.add('active');
+  if(id==='ct-taraweeh')renderTaraweeh();
+  if(id==='ct-qabristan')renderQabristan();
+}
+
+// ===== QABRISTAN =====
+let qbFilter='all';
+function setQbF(f){
+  qbFilter=f;
+  ['all','in','out'].forEach(x=>{
+    const b=document.getElementById('qbf-'+x);
+    if(b){b.style.background='';b.style.color='';b.style.borderColor='';}
+  });
+  const active=document.getElementById('qbf-'+f);
+  if(active){active.style.background='var(--blue-lt)';active.style.color='var(--blue)';active.style.borderColor='var(--blue)';}
+  renderQabristan();
+}
+function renderQabristan(){
+  const month=document.getElementById('qbMonth')?.value||'March 2026';
+  const qbTx=S.get('qb_tx');
+  const qbMembers=S.get('qb_members');
+  const qbPaid=S.obj('qb_paid');
+
+  // Transactions
+  let txData=qbTx;
+  if(qbFilter!=='all')txData=txData.filter(t=>t.type===qbFilter);
+  const totalIn=qbTx.filter(t=>t.type==='in').reduce((s,t)=>s+t.amount,0);
+  const totalOut=qbTx.filter(t=>t.type==='out').reduce((s,t)=>s+t.amount,0);
+  const bal=totalIn-totalOut;
+
+  document.getElementById('qb-metrics').innerHTML=`
+    <div class="mc cg"><div class="mc-i">📈</div><div class="mc-v">₹${totalIn.toLocaleString('en-IN')}</div><div class="mc-l">Kul Amdani</div></div>
+    <div class="mc cr"><div class="mc-i">📉</div><div class="mc-v">₹${totalOut.toLocaleString('en-IN')}</div><div class="mc-l">Kul Kharch</div></div>
+    <div class="mc cgold"><div class="mc-i">💼</div><div class="mc-v" style="color:${bal>=0?'':'var(--red)'}">₹${Math.abs(bal).toLocaleString('en-IN')}</div><div class="mc-l">Balance${bal<0?' ⚠️':''}</div></div>
+    <div class="mc cb"><div class="mc-i">👥</div><div class="mc-v">${qbMembers.length}</div><div class="mc-l">Members</div></div>`;
+
+  document.getElementById('qb-tb').innerHTML=txData.length?
+    txData.map(t=>`<tr>
+      <td style="font-size:11.5px;white-space:nowrap">${t.date}</td>
+      <td><span class="badge ${t.type==='in'?'bg':'br'}">${t.type==='in'?'📈 Amdani':'📉 Kharch'}</span></td>
+      <td style="font-size:12px">${t.cat}</td>
+      <td style="font-size:11.5px;color:#aaa">${t.note||'—'}</td>
+      <td style="font-weight:700;color:${t.type==='in'?'var(--g1)':'var(--red)'}">
+        ${t.type==='in'?'+':'-'}₹${t.amount.toLocaleString('en-IN')}</td>
+      <td><button class="btn btn-gh btn-xs" onclick="delQbTx(${t.id})">🗑️</button></td>
+    </tr>`).join(''):
+    '<tr><td colspan="6" class="empty">Koi record nahi — upar se add karen</td></tr>';
+
+  // Members
+  const paidData=qbPaid[month]||{};
+  let ts=document.getElementById('qbSummary');
+  const pendCount=qbMembers.filter(m=>m.due>0&&(paidData[m.id]||0)<m.due).length;
+  if(ts)ts.textContent=pendCount>0?`${pendCount} members ka chanda baaki`:'Sab ada ✅';
+
+  document.getElementById('qb-member-tb').innerHTML=qbMembers.length?
+    qbMembers.map((m,i)=>{
+      const paid=paidData[m.id]||0,baaki=Math.max(0,m.due-paid);
+      return`<tr>
+        <td>${i+1}</td><td style="font-weight:700">${m.name}<div style="font-size:10.5px;color:#aaa">${m.addr||''}</div></td>
+        <td>${m.phone||'—'}</td>
+        <td>₹${m.due}/mo</td>
+        <td style="color:var(--g1);font-weight:700">₹${paid}</td>
+        <td style="color:${baaki>0?'var(--red)':'var(--g1)'};font-weight:700">₹${baaki}</td>
+        <td><span class="badge ${baaki===0?'bg':'br'}">${baaki===0?'✅ Ada':'⚠️ Baaki'}</span></td>
+        <td><div style="display:flex;gap:4px">
+          <button class="btn btn-pr btn-xs" onclick="quickQbChanda(${m.id},'${month}',${m.due})">💰</button>
+          <button class="btn btn-gh btn-xs" onclick="delQbMember(${m.id})">🗑️</button>
+        </div></td>
+      </tr>`;
+    }).join(''):
+    '<tr><td colspan="8" class="empty">Koi member nahi</td></tr>';
+}
+
+function saveQbTx(){
+  const a=parseInt(document.getElementById('qbt-amount').value)||0;
+  if(!a){alert('Raqam darj karen!');return;}
+  const tx=S.get('qb_tx');
+  const rec={id:Date.now(),type:document.getElementById('qbt-type').value,
+    cat:document.getElementById('qbt-cat').value,amount:a,
+    date:document.getElementById('qbt-date').value||new Date().toISOString().split('T')[0],
+    note:document.getElementById('qbt-note').value};
+  tx.unshift(rec);S.set('qb_tx',tx);
+  // Also record in main accounts
+  transactions.unshift({id:Date.now()+1,type:rec.type,cat:'Qabristan — '+rec.cat,
+    amount:rec.amount,date:rec.date,note:rec.note});
+  saveData();renderQabristan();renderTx();renderDash();closeM('m-qb-tx');
+  ['qbt-amount','qbt-note'].forEach(id=>document.getElementById(id).value='');
+}
+
+function saveQbMember(){
+  const n=document.getElementById('qbm-n').value.trim();
+  if(!n){alert('Naam darj karen!');return;}
+  const list=S.get('qb_members');
+  list.push({id:Date.now(),name:n,phone:document.getElementById('qbm-p').value.trim(),
+    due:parseInt(document.getElementById('qbm-due').value)||0,
+    addr:document.getElementById('qbm-addr').value});
+  S.set('qb_members',list);
+  renderQabristan();closeM('m-qb-member');
+  ['qbm-n','qbm-p','qbm-due','qbm-addr'].forEach(id=>document.getElementById(id).value='');
+}
+
+function quickQbChanda(id,month,due){
+  const paid=S.obj('qb_paid');
+  const already=(paid[month]||{})[id]||0;
+  const m=S.get('qb_members').find(x=>x.id===id);
+  const a=prompt(`${m?.name||''} — Qabristan Chanda\nDue: ₹${due} | Ada: ₹${already} | Baaki: ₹${Math.max(0,due-already)}\n\nRaqam:`,Math.max(0,due-already)||due);
+  if(!a||isNaN(a)||parseInt(a)<=0)return;
+  const amt=parseInt(a);
+  if(!paid[month])paid[month]={};
+  paid[month][id]=(paid[month][id]||0)+amt;
+  S.set('qb_paid',paid);
+  const qbTx=S.get('qb_tx');
+  qbTx.unshift({id:Date.now(),type:'in',cat:'Qabristan Chanda',amount:amt,
+    date:new Date().toISOString().split('T')[0],note:(m?.name||'')+' — '+month});
+  S.set('qb_tx',qbTx);
+  transactions.unshift({id:Date.now()+1,type:'in',cat:'Qabristan Chanda',amount:amt,
+    date:new Date().toISOString().split('T')[0],note:(m?.name||'')+' — '+month});
+  saveData();renderQabristan();renderDash();renderTx();
+}
+
+function delQbTx(id){
+  if(!confirm('Delete karna chahte ho?'))return;
+  S.set('qb_tx',S.get('qb_tx').filter(t=>t.id!==id));
+  renderQabristan();renderDash();
+}
+function delQbMember(id){
+  if(!confirm('Member delete karna chahte ho?'))return;
+  S.set('qb_members',S.get('qb_members').filter(m=>m.id!==id));
+  renderQabristan();
+}
+
+
+// ===== TARAWEEH NAZRANA =====
+function renderTaraweeh(){
+  const yr=document.getElementById('twYear')?.value||'Ramzan 2026';
+  const twData=S.get('taraweeh_members');
+  const twPaid=S.obj('taraweeh_paid');
+  const list=twData.filter(t=>t.year===yr);
+  const paidData=twPaid[yr]||{};
+  let total=0,totalPaid=0;
+  document.getElementById('tw-tb').innerHTML=list.length?
+    list.map((t,i)=>{
+      const paid=paidData[t.id]||0,baaki=Math.max(0,t.amount-paid);
+      total+=t.amount;totalPaid+=paid;
+      return`<tr>
+        <td>${i+1}</td>
+        <td><div style="font-weight:700">${t.name}</div><div style="font-size:10.5px;color:#aaa">${t.note||''}</div></td>
+        <td>${t.phone||'—'}</td>
+        <td style="font-weight:700">₹${t.amount.toLocaleString('en-IN')}</td>
+        <td style="color:var(--g1);font-weight:700">₹${paid.toLocaleString('en-IN')}</td>
+        <td style="color:${baaki>0?'var(--red)':'var(--g1)'};font-weight:700">₹${baaki.toLocaleString('en-IN')}</td>
+        <td><span class="badge ${baaki===0?'bg':'br'}">${baaki===0?'✅ Mukammal':'⚠️ Baaki'}</span></td>
+        <td><div style="display:flex;gap:4px;flex-wrap:wrap">
+          <button class="btn btn-pr btn-xs" onclick="quickTW(${t.id},'${yr}',${t.amount})">💰</button>
+          <button class="btn btn-wa btn-xs" onclick="waTWMember(${t.id},'${yr}')">📤</button>
+          <button class="btn btn-gh btn-xs" onclick="delTWMember(${t.id})">🗑️</button>
+        </div></td>
+      </tr>`;
+    }).join(''):
+    '<tr><td colspan="8" class="empty">Koi Taraweeh member nahi — upar "+ Member Add" dabao</td></tr>';
+  const pend=list.filter(t=>(paidData[t.id]||0)<t.amount).length;
+  const s=document.getElementById('twSummary');
+  if(s)s.textContent=`Kul: ₹${total.toLocaleString('en-IN')} | Ada: ₹${totalPaid.toLocaleString('en-IN')} | ${pend} baaki`;
+  document.getElementById('tw-summary-grid').innerHTML=`
+    <div class="mc cg"><div class="mc-i">👥</div><div class="mc-v">${list.length}</div><div class="mc-l">Kul Members</div></div>
+    <div class="mc cgold"><div class="mc-i">🎯</div><div class="mc-v">₹${total.toLocaleString('en-IN')}</div><div class="mc-l">Kul Target</div></div>
+    <div class="mc cg"><div class="mc-i">✅</div><div class="mc-v">₹${totalPaid.toLocaleString('en-IN')}</div><div class="mc-l">Ada Ho Gaya</div></div>
+    <div class="mc cr"><div class="mc-i">⏳</div><div class="mc-v">₹${(total-totalPaid).toLocaleString('en-IN')}</div><div class="mc-l">Abhi Baaki</div></div>`;
+  const sel=document.getElementById('twc-m');
+  if(sel)sel.innerHTML=list.map(t=>`<option value="${t.id}">${t.name} — ₹${t.amount} (Ada: ₹${paidData[t.id]||0})</option>`).join('')||'<option>Koi member nahi</option>';
+}
+function saveTWMember(){
+  const n=document.getElementById('tw-n').value.trim();
+  const a=parseInt(document.getElementById('tw-a').value)||0;
+  const yr=document.getElementById('tw-yr').value;
+  if(!n){alert('Naam zaroor darj karen!');return;}
+  if(!a){alert('Nazrana amount darj karen!');return;}
+  const list=S.get('taraweeh_members');
+  list.push({id:Date.now(),name:n,phone:document.getElementById('tw-p').value.trim(),amount:a,year:yr,note:document.getElementById('tw-note').value});
+  S.set('taraweeh_members',list);
+  renderTaraweeh();closeM('m-tw-member');
+  ['tw-n','tw-p','tw-a','tw-note'].forEach(id=>document.getElementById(id).value='');
+}
+function quickTW(id,yr,amount){
+  const paid=S.obj('taraweeh_paid');
+  const already=(paid[yr]||{})[id]||0;
+  const baaki=amount-already;
+  const a=prompt(`Naam: ${S.get('taraweeh_members').find(t=>t.id===id)?.name||''}\nDue: ₹${amount} | Ada: ₹${already} | Baaki: ₹${baaki}\n\nRaqam darj karen:`,baaki>0?baaki:'');
+  if(!a||isNaN(a)||parseInt(a)<=0)return;
+  const amt=parseInt(a);
+  if(!paid[yr])paid[yr]={};
+  paid[yr][id]=(paid[yr][id]||0)+amt;
+  S.set('taraweeh_paid',paid);
+  const m=S.get('taraweeh_members').find(t=>t.id===id);
+  transactions.unshift({id:Date.now(),type:'in',cat:'Taraweeh Nazrana',amount:amt,
+    date:new Date().toISOString().split('T')[0],note:(m?.name||'')+' — '+yr});
+  saveData();renderTaraweeh();renderDash();renderTx();
+}
+function collectTW(){
+  const id=parseInt(document.getElementById('twc-m').value);
+  const yr=document.getElementById('twc-yr').value;
+  const a=parseInt(document.getElementById('twc-a').value)||0;
+  if(!a){alert('Raqam darj karen!');return;}
+  const paid=S.obj('taraweeh_paid');
+  if(!paid[yr])paid[yr]={};
+  paid[yr][id]=(paid[yr][id]||0)+a;
+  S.set('taraweeh_paid',paid);
+  const m=S.get('taraweeh_members').find(t=>t.id===id);
+  transactions.unshift({id:Date.now(),type:'in',cat:'Taraweeh Nazrana',amount:a,
+    date:new Date().toISOString().split('T')[0],note:(m?.name||'')+' — '+yr});
+  saveData();renderTaraweeh();renderDash();renderTx();closeM('m-tw-collect');
+  document.getElementById('twc-a').value='';alert('✅ Nazrana jama ho gaya!');
+}
+function delTWMember(id){
+  if(!confirm('Delete karna chahte ho?'))return;
+  S.set('taraweeh_members',S.get('taraweeh_members').filter(t=>t.id!==id));
+  renderTaraweeh();
+}
+function waTWMember(id,yr){
+  const list=S.get('taraweeh_members');
+  const paid=S.obj('taraweeh_paid');
+  const m=list.find(t=>t.id===id);if(!m)return;
+  const p=paid[yr]?.[id]||0,baaki=Math.max(0,m.amount-p);
+  const sep='─'.repeat(32);
+  const msg=`🕌 *JAMA MASJID BHAGWANPUR — MUZAFFARPUR*\n🌙 *Taraweeh Nazrana — ${yr}*\n${sep}\n\nAssalamu Alaikum *${m.name}* Sahab 🤲\n\nApka ${yr} ke liye Imam Sahab ka Taraweeh Nazrana:\n\n💰 *Kul Nazrana:* ₹${m.amount.toLocaleString('en-IN')}\n✅ *Ada Ho Gaya:* ₹${p.toLocaleString('en-IN')}\n${baaki>0?`⏳ *Abhi Baaki:* ₹${baaki.toLocaleString('en-IN')}\n\nMeherbani karke baaki raqam jald ada karen.\n\nJazakAllah Khair 🤲`:'🎉 *Baaki: Kuch Nahi*\n\nJazakAllah Khair! Aapne nazrana mukammal ada kar diya. Allah qubool farmaye. 🤲'}\n${sep}\n_Jama Masjid Bhagwanpur Committee_`;
+  const num=m.phone?m.phone.replace(/\D/g,''):'';
+  window.open(num?`https://wa.me/${num}?text=${encodeURIComponent(msg)}`:`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// ===== NAMAZ =====
+function renderNamazEdit(){
+  document.getElementById('namaz-edit').innerHTML=namazDefs.map(n=>`
+    <div class="nm-tile">
+      <div class="nm-ar">${n.ar}</div><div class="nm-ur">${n.ur}</div>
+      <div style="margin-top:10px">
+        <div style="font-size:10px;color:#aaa;margin-bottom:3px">Waqt</div>
+        <input class="inp" style="text-align:center;font-size:17px;font-weight:800" id="nw-${n.k}" value="${namaz[n.k]?.w||n.dw}"/>
+        <div style="font-size:10px;color:#aaa;margin:6px 0 3px">Jamaah</div>
+        <input class="inp" style="text-align:center;font-size:13px" id="nj-${n.k}" value="${namaz[n.k]?.j||n.dj}"/>
+      </div>
+    </div>`).join('');
+}
+function saveNamaz(){
+  namazDefs.forEach(n=>{namaz[n.k]={w:document.getElementById('nw-'+n.k).value,j:document.getElementById('nj-'+n.k).value};});
+  saveData();renderDash();alert('✅ Namaz timings save ho gayi!');
+}
+
+// ===== MAKTAB =====
+function renderStudents(list){
+  const data=list||students;
+  document.getElementById('student-tb').innerHTML=data.length?
+    data.map((s,i)=>`<tr>
+      <td>${i+1}</td><td style="font-weight:700">${s.name}</td>
+      <td>${s.father}</td><td>${s.phone||'—'}</td>
+      <td><span class="badge bb">${s.class}</span></td>
+      <td>₹${s.fee||0}/mo</td>
+      <td><button class="btn btn-gh btn-xs" onclick="delStudent(${s.id})">🗑️</button></td>
+    </tr>`).join(''):
+    '<tr><td colspan="7" class="empty">Koi student nahi</td></tr>';
+}
+function filterStudents(q){renderStudents(students.filter(s=>s.name.toLowerCase().includes(q.toLowerCase())||s.father.toLowerCase().includes(q.toLowerCase())));}
+function saveStudent(){
+  const n=document.getElementById('fs-n').value.trim();
+  const f=document.getElementById('fs-f').value.trim();
+  if(!n||!f){alert('Naam aur walid ka naam zaroor darj karen!');return;}
+  students.push({id:Date.now(),name:n,father:f,phone:document.getElementById('fs-p').value,
+    class:document.getElementById('fs-c').value,fee:parseInt(document.getElementById('fs-fee').value)||0,
+    joinDate:document.getElementById('fs-j').value});
+  saveData();renderStudents();renderDash();populateSelects();closeM('m-student');
+  ['fs-n','fs-f','fs-p','fs-fee'].forEach(id=>document.getElementById(id).value='');
+}
+function delStudent(id){
+  if(!confirm('Student delete karna chahte ho?'))return;
+  students=students.filter(s=>s.id!==id);saveData();renderStudents();renderDash();
+}
+function renderTeachers(){
+  document.getElementById('teacher-tb').innerHTML=teachers.length?
+    teachers.map((t,i)=>`<tr>
+      <td>${i+1}</td><td style="font-weight:700">${t.name}</td>
+      <td>${t.subject}</td><td>${t.phone||'—'}</td>
+      <td>₹${t.salary||0}/mo</td>
+      <td><button class="btn btn-gh btn-xs" onclick="delTeacher(${t.id})">🗑️</button></td>
+    </tr>`).join(''):
+    '<tr><td colspan="6" class="empty">Koi ustaad nahi</td></tr>';
+}
+function saveTeacher(){
+  const n=document.getElementById('ft2-n').value.trim();
+  if(!n){alert('Naam darj karen!');return;}
+  teachers.push({id:Date.now(),name:n,subject:document.getElementById('ft2-s').value,
+    phone:document.getElementById('ft2-p').value,salary:parseInt(document.getElementById('ft2-sal').value)||0});
+  saveData();renderTeachers();closeM('m-teacher');
+  ['ft2-n','ft2-p','ft2-sal'].forEach(id=>document.getElementById(id).value='');
+}
+function delTeacher(id){teachers=teachers.filter(t=>t.id!==id);saveData();renderTeachers();}
+function renderAtt(){
+  const bd=document.getElementById('att-bd');
+  if(!students.length){bd.innerHTML='<div class="empty">Pehle students add karen</div>';return;}
+  const date=document.getElementById('attDate').value;
+  const da=attendance[date]||{};
+  bd.innerHTML=`<table><thead><tr><th>Student</th><th>Class</th><th>Haazri / Attendance</th></tr></thead><tbody>`+
+    students.map(s=>`<tr>
+      <td style="font-weight:700">${s.name}</td>
+      <td><span class="badge bb">${s.class}</span></td>
+      <td>
+        <label style="margin-right:14px;cursor:pointer;font-size:13px"><input type="radio" name="at_${s.id}" value="present" ${da[s.id]==='present'?'checked':''}/> ✅ Hazir</label>
+        <label style="cursor:pointer;font-size:13px"><input type="radio" name="at_${s.id}" value="absent" ${da[s.id]==='absent'?'checked':''}/> ❌ Ghaib</label>
+      </td>
+    </tr>`).join('')+'</tbody></table>';
+}
+function saveAtt(){
+  const date=document.getElementById('attDate').value;
+  if(!date){alert('Tarikh select karen!');return;}
+  attendance[date]={};
+  students.forEach(s=>{
+    document.querySelectorAll(`input[name="at_${s.id}"]`).forEach(r=>{if(r.checked)attendance[date][s.id]=r.value;});
+  });
+  saveData();alert('✅ Haazri save ho gayi!');
+}
+function renderFees(){
+  const month=document.getElementById('feesMonth')?.value||'March 2026';
+  const mf=fees[month]||{};
+  document.getElementById('fees-tb').innerHTML=students.length?
+    students.map((s,i)=>{
+      const paid=mf[s.id]||0,baaki=Math.max(0,s.fee-paid);
+      return`<tr>
+        <td>${i+1}</td><td style="font-weight:700">${s.name}</td>
+        <td><span class="badge bb">${s.class}</span></td>
+        <td>₹${s.fee}</td>
+        <td style="color:var(--g1);font-weight:700">₹${paid}</td>
+        <td style="color:${baaki>0?'var(--red)':'var(--g1)'};font-weight:700">₹${baaki}</td>
+        <td><span class="badge ${baaki===0?'bg':'br'}">${baaki===0?'✅ Ada':'⚠️ Baaki'}</span></td>
+      </tr>`;
+    }).join(''):
+    '<tr><td colspan="7" class="empty">Koi student nahi</td></tr>';
+}
+function collectFee(){
+  const sid=parseInt(document.getElementById('ff-s').value);
+  const month=document.getElementById('ff-m').value;
+  const a=parseInt(document.getElementById('ff-a').value);
+  if(!a){alert('Raqam darj karen!');return;}
+  if(!fees[month])fees[month]={};
+  fees[month][sid]=(fees[month][sid]||0)+a;
+  const st=students.find(s=>s.id===sid);
+  transactions.unshift({id:Date.now(),type:'in',cat:'Maktab Fee',amount:a,
+    date:new Date().toISOString().split('T')[0],note:(st?.name||'')+' — '+month});
+  saveData();renderFees();renderTx();renderDash();closeM('m-fee');
+  document.getElementById('ff-a').value='';alert('✅ Fee jama ho gayi!');
+}
+
+// ===== ANNOUNCEMENTS =====
+const annBadge={General:'bgray',Meeting:'bb',Event:'bg',Alert:'br',Maktab:'ba',Finance:'bgold'};
+function renderAnn(){
+  document.getElementById('ann-list').innerHTML=announces.length?
+    announces.map(a=>`<div class="ann-c">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+        <div class="ann-t">${a.title}</div>
+        <div style="display:flex;gap:5px;flex-shrink:0">
+          <span class="badge ${annBadge[a.type]||'bgray'}">${a.type}</span>
+          <button class="btn btn-wa btn-xs" onclick="shareAnnWA(${a.id})">📤</button>
+          <button class="btn btn-gh btn-xs" onclick="delAnn(${a.id})">🗑️</button>
+        </div>
+      </div>
+      <div class="ann-m">📅 ${a.date}</div>
+      <div class="ann-b">${a.body}</div>
+    </div>`).join(''):
+    '<div class="empty" style="padding:48px">Koi ilaan nahi — upar se add karen</div>';
+}
+function saveAnn(wa){
+  const t=document.getElementById('fa-t').value.trim();
+  const b=document.getElementById('fa-b').value.trim();
+  if(!t||!b){alert('Title aur tafseel zaroor likhein!');return;}
+  const a={id:Date.now(),title:t,body:b,
+    date:document.getElementById('fa-d').value||new Date().toLocaleDateString('en-IN'),
+    type:document.getElementById('fa-q').value};
+  announces.unshift(a);saveData();renderAnn();renderDash();closeM('m-ann');
+  ['fa-t','fa-b'].forEach(id=>document.getElementById(id).value='');
+  if(wa){setWAMsg(buildAnnMsg(a));goPage('whatsapp',document.querySelector('.ni:nth-child(10)'));}
+}
+function shareAnnWA(id){const a=announces.find(x=>x.id===id);if(a){setWAMsg(buildAnnMsg(a));goPage('whatsapp',null);}}
+function buildAnnMsg(a){
+  return`🕌 *JAMA MASJID BHAGWANPUR — MUZAFFARPUR*\n📢 *${a.title}*\n${'─'.repeat(32)}\n\n${a.body}\n\n📅 Tarikh: ${a.date}\n${'─'.repeat(32)}\n_Jama Masjid Bhagwanpur Committee_`;
+}
+function delAnn(id){announces=announces.filter(a=>a.id!==id);saveData();renderAnn();renderDash();}
+
+// ===== WHATSAPP =====
+const sep='─'.repeat(32);
+const MN='🕌 *JAMA MASJID BHAGWANPUR — MUZAFFARPUR*\n';
+const footer=`\n${sep}\n_Jama Masjid Bhagwanpur Committee_`;
+
+const templates={
+  chanda:()=>{
+    const month='March 2026';const md=chanda[month]||{};
+    const pend=members.filter(m=>m.due>0&&(md[m.id]||0)<m.due);
+    return MN+`💰 *Chanda Reminder — ${month}*\n${sep}\n\nAssalamu Alaikum wa Rahmatullahi wa Barakatuh 🤲\n\nMuhtaram Members,\n\nApka ${month} ka masjid chanda baaki hai. Masjid ke kharchon ke liye aapka chanda bahut zaruri hai.\n\n`+
+      (pend.length?`⚠️ *Pending Members:*\n${pend.map(m=>`• *${m.name}* — ₹${m.due-(md[m.id]||0)} baaki`).join('\n')}\n\n`:'')+
+      `Meherbani karke jald ada karen.\n\nJazakAllah Khair 🤲${footer}`;
+  },
+  namaz:()=>MN+`🕐 *Namaz Timings — Muzaffarpur*\n${sep}\n\n`+
+    namazDefs.map(n=>`*${n.ar} (${n.ur}):*\n⏰ Waqt: ${namaz[n.k]?.w||'-'} | Jamaah: ${namaz[n.k]?.j||'-'}`).join('\n\n')+
+    `\n\n📍 Jama Masjid Bhagwanpur, Muzaffarpur\n📅 Date: ${new Date().toLocaleDateString('en-IN')}${footer}`,
+  juma:()=>MN+`⭐ *Jumu'ah Mubarak!*\n${sep}\n\nAssalamu Alaikum wa Rahmatullahi wa Barakatuh 🤲\n\nAaj Jumu'ah Mubarak ka din hai!\n\n🕐 *Jumu'ah Namaz:* ${namaz.juma?.w||'1:30 PM'}\n📍 *Jagah:* Jama Masjid Bhagwanpur\n\n"Ya Ayyuhal Lazeena Amanu Iza Nudiya Lis-Salati Min Yawmil Jumu'ati..."\n\nSab ko dawat-e-aam hai!${footer}`,
+  meeting:()=>MN+`📅 *Committee Meeting Notice*\n${sep}\n\nAssalamu Alaikum 🤲\n\nTamam committee members ko ittila di jati hai ke masjid ki maahana meeting munaqid hogi:\n\n📅 *Tarikh:* [Tarikh likhen]\n🕐 *Waqt:* Baad Jumu'ah Namaz\n📍 *Jagah:* Masjid Office\n\n📋 *Agenda:*\n1. Maali hisab (Accounts review)\n2. Masjid ke masail (Issues)\n3. Maktab update\n4. Next month planning\n\nMeherbani karke lazmi sharik hon.\n\nJazakAllah Khair${footer}`,
+  eid:()=>MN+`🌙 *Eid Mubarak!*\n${sep}\n\nAssalamu Alaikum wa Rahmatullahi wa Barakatuh 🤲\n\nTamam Muslimeen aur unke khandan ko EID MUBARAK! 🎉🌙\n\n🕐 *Eid Namaz Ka Waqt:* Subah 7:00 AM\n📍 *Jagah:* Jama Masjid Bhagwanpur, Muzaffarpur\n\n"Taqabbalallahu minna wa minkum"\n(Allah hamare aur aapke amaal qubool farmaye)\n\nEid Mubarak wa Kareem! 🤲${footer}`,
+  fee:()=>{
+    const month=document.getElementById('feesMonth')?.value||'March 2026';
+    const mf=fees[month]||{};
+    const pend=students.filter(s=>s.fee>0&&(mf[s.id]||0)<s.fee);
+    return MN+`📚 *Maktab Fee Reminder — ${month}*\n${sep}\n\nAssalamu Alaikum 🤲\n\nMuhtaram Parents,\n\n${month} ki maktab fee baaki hai. Meherbani karke jald ada karen.\n\n`+
+      (pend.length?`📋 *Pending Students:*\n${pend.map(s=>`• *${s.name}* (${s.class}) — ₹${s.fee-(mf[s.id]||0)} baaki`).join('\n')}\n\n`:'')+
+      `JazakAllah Khair 🤲\n_Maktab Jama Masjid Bhagwanpur_`;
+  },
+  ramzan:()=>MN+`🌙 *Ramzan Mubarak!*\n${sep}\n\nAssalamu Alaikum wa Rahmatullahi wa Barakatuh 🤲\n\nTamam ko RAMZAN MUBARAK! 🌟\n\nAaj se Ramzan ki ibtida hai. Allah is mubarak mahine ki barkatein aap sab par nazil farmaye.\n\n🕐 *Sehri Ka Waqt:* [Waqt likhein]\n🌅 *Iftaar Ka Waqt:* [Waqt likhein]\n🌙 *Taraweeh:* Isha ke baad — Jama Masjid Bhagwanpur\n\n"Ramzan Al-Lazeee Unzila Feehil Quran"\n\nRamzan Kareem! 🤲${footer}`,
+};
+
+function exportWA(type){
+  let msg='';
+  if(type==='members'){
+    msg=MN+`👥 *Members List*\n${sep}\n\n`+
+      members.map((m,i)=>`${i+1}. *${m.name}*\n   Ohda: ${m.role}\n   📞 ${m.phone||'N/A'}\n   Chanda: ₹${m.due||0}/maah`).join('\n\n')+
+      `\n\n${sep}\nKul Members: ${members.length}\nDate: ${new Date().toLocaleDateString('en-IN')}${footer}`;
+  } else if(type==='accounts'){
+    const{income,expense,balance}=calcBal();
+    const cats={};
+    transactions.forEach(t=>{if(!cats[t.cat])cats[t.cat]={i:0,o:0};cats[t.cat][t.type==='in'?'i':'o']+=t.amount;});
+    msg=MN+`📒 *Accounts Summary*\n${sep}\n\n📈 *Kul Amdani:* ₹${income.toLocaleString('en-IN')}\n📉 *Kul Kharch:* ₹${expense.toLocaleString('en-IN')}\n💼 *Net Balance:* ₹${balance.toLocaleString('en-IN')}${balance<0?' ⚠️':''}\n\n📊 *Category Breakdown:*\n`+
+      Object.entries(cats).map(([k,v])=>`• *${k}:* In ₹${v.i.toLocaleString('en-IN')} | Out ₹${v.o.toLocaleString('en-IN')}`).join('\n')+
+      `\n${sep}\nDate: ${new Date().toLocaleDateString('en-IN')}${footer}`;
+  } else if(type==='chanda'){
+    msg=templates.chanda();
+  } else if(type==='namaz'){
+    msg=templates.namaz();
+  } else if(type==='students'){
+    msg=MN+`📚 *Maktab Students List*\n${sep}\n\n`+
+      students.map((s,i)=>`${i+1}. *${s.name}* (${s.class})\n   Walid: ${s.father}\n   📞 ${s.phone||'N/A'}`).join('\n\n')+
+      `\n\n${sep}\nKul Students: ${students.length}${footer}`;
+  } else if(type==='committee'){
+    const cRoles=['Imam','Naib Imam','Mutawalli','President','Secretary','Treasurer','Committee Member','Muezzin'];
+    const cm=members.filter(m=>cRoles.includes(m.role));
+    msg=MN+`🏛️ *Committee Members*\n${sep}\n\n`+
+      cm.map(m=>`• *${m.name}* — ${m.role}\n  📞 ${m.phone||'N/A'}`).join('\n\n')+
+      `\n${sep}\nDate: ${new Date().toLocaleDateString('en-IN')}${footer}`;
+  } else if(type==='taraweeh'){
+    const yr=document.getElementById('twYear')?.value||'Ramzan 2026';
+    const twData=S.get('taraweeh_members').filter(t=>t.year===yr);
+    const twPaid=S.obj('taraweeh_paid');
+    const paidData=twPaid[yr]||{};
+    const pend=twData.filter(t=>(paidData[t.id]||0)<t.amount);
+    const sep='─'.repeat(32);
+    msg=`🕌 *JAMA MASJID BHAGWANPUR — MUZAFFARPUR*\n🌙 *Taraweeh Nazrana Reminder — ${yr}*\n${sep}\n\nAssalamu Alaikum wa Rahmatullahi wa Barakatuh 🤲\n\nTamam members ko ittila di jati hai ke Taraweeh Nazrana ada karne ka waqt aa gaya hai.\n\n`+
+    (pend.length?`📋 *Baaki Members (${pend.length}):*\n${pend.map(t=>{const p=paidData[t.id]||0;return`• *${t.name}* — ₹${(t.amount-p).toLocaleString('en-IN')} baaki`;}).join('\n')}\n\n`:'')+
+    `Meherbani karke jald ada karen taake Imam Sahab ki khidmat mukammal ho sake.\n\nJazakAllah Khair 🤲\n${sep}\n_Jama Masjid Bhagwanpur Committee_`;
+
+    const date=document.getElementById('attDate')?.value;
+    const da=date?attendance[date]||{}:{};
+    const present=students.filter(s=>da[s.id]==='present');
+    const absent=students.filter(s=>da[s.id]==='absent');
+    msg=MN+`📋 *Maktab Haazri — ${date||'Aaj'}*\n${sep}\n\n✅ *Hazir (${present.length}):*\n${present.map(s=>`• ${s.name} (${s.class})`).join('\n')||'Koi nahi'}\n\n❌ *Ghaib (${absent.length}):*\n${absent.map(s=>`• ${s.name} (${s.class})`).join('\n')||'Koi nahi'}\n\nKul Students: ${students.length}${footer}`;
+  } else if(type==='fees'){
+    msg=templates.fee();
+  } else if(type==='qabristan'){
+    const qbTx=S.get('qb_tx');
+    const qbMembers=S.get('qb_members');
+    const month=document.getElementById('qbMonth')?.value||'March 2026';
+    const qbPaid=S.obj('qb_paid');
+    const paidData=qbPaid[month]||{};
+    const totalIn=qbTx.filter(t=>t.type==='in').reduce((s,t)=>s+t.amount,0);
+    const totalOut=qbTx.filter(t=>t.type==='out').reduce((s,t)=>s+t.amount,0);
+    const pend=qbMembers.filter(m=>m.due>0&&(paidData[m.id]||0)<m.due);
+    msg=`🕌 *JAMA MASJID BHAGWANPUR*\n🪦 *Qabristan Report — ${month}*\n${sep}\n\n📈 *Amdani:* ₹${totalIn.toLocaleString('en-IN')}\n📉 *Kharch:* ₹${totalOut.toLocaleString('en-IN')}\n💼 *Balance:* ₹${(totalIn-totalOut).toLocaleString('en-IN')}\n\n`+
+    (pend.length?`⚠️ *Pending Chanda (${pend.length} members):*\n${pend.map(m=>`• *${m.name}* — ₹${m.due-(paidData[m.id]||0)} baaki`).join('\n')}\n\n`:'')+
+    `${sep}\nDate: ${new Date().toLocaleDateString('en-IN')}\n_Jama Masjid Bhagwanpur Committee_`;
+  }
+  setWAMsg(msg);
+  goPage('whatsapp',null);
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-whatsapp').classList.add('active');
+  document.getElementById('pgTitle').textContent='WhatsApp Broadcast';
+}
+function loadTemplate(v){
+  if(!v){setWAMsg('');return;}
+  if(templates[v])setWAMsg(templates[v]());
+}
+function setWAMsg(msg){
+  document.getElementById('waMsg').value=msg;
+  updateWAPreview();
+}
+function updateWAPreview(){
+  document.getElementById('waPreview').textContent=document.getElementById('waMsg').value||'Koi message nahi...';
+}
+function sendWA(){
+  const msg=document.getElementById('waMsg').value.trim();
+  const num=document.getElementById('waNum').value.trim();
+  if(!msg){alert('Pehle message likhen!');return;}
+  const url=num?`https://wa.me/${num}?text=${encodeURIComponent(msg)}`:`https://wa.me/?text=${encodeURIComponent(msg)}`;
+  window.open(url,'_blank');
+}
+function copyWAMsg(){
+  const msg=document.getElementById('waMsg').value;
+  if(!msg.trim()){alert('Koi message nahi! Pehle template select karen ya likhen.');return;}
+  try{
+    if(navigator.clipboard&&window.isSecureContext){
+      navigator.clipboard.writeText(msg).then(()=>alert('✅ Message copy ho gaya!\nAb WhatsApp mein paste karen (Ctrl+V ya long press > Paste).')).catch(()=>fallbackCopy(msg));
+    } else {fallbackCopy(msg);}
+  } catch(e){fallbackCopy(msg);}
+}
+function fallbackCopy(msg){
+  const ta=document.createElement('textarea');
+  ta.value=msg;ta.style.cssText='position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{const ok=document.execCommand('copy');alert(ok?'✅ Message copy ho gaya!\nAb WhatsApp mein paste karen.':'❌ Auto-copy nahi hua.\n\nMessage box mein click karein, Ctrl+A se sab select karen, phir Ctrl+C se copy karen.');}
+  catch(e){alert('❌ Copy nahi hua.\n\nMessage box mein click karein, Ctrl+A se sab select karen, phir Ctrl+C se copy karen.');}
+  document.body.removeChild(ta);
+}
+
+// ===== WA TAB =====
+function showWATab(id,el){
+  ['wa-compose','wa-templates'].forEach(t=>{const e=document.getElementById(t);if(e)e.style.display='none';});
+  document.querySelectorAll('#pg-whatsapp .tab').forEach(t=>t.classList.remove('active'));
+  const e=document.getElementById(id);if(e)e.style.display='block';
+  if(el)el.classList.add('active');
+}
+
+// ===== TEMPLATE EDITOR =====
+const tplDefaults={
+  tpl_chanda:'🕌 *JAMA MASJID BHAGWANPUR — MUZAFFARPUR*\n💰 *Chanda Reminder*\n────────────────────────────────\n\nAssalamu Alaikum wa Rahmatullahi wa Barakatuh 🤲\n\nMuhtaram Members,\n\nApka is maah ka masjid chanda baaki hai. Masjid ke roz marra ke kharchon ke liye aapka taaawun bahut zaruri hai.\n\nMeherbani karke jald ada karen.\n\nJazakAllah Khair 🤲\n────────────────────────────────\n_Jama Masjid Bhagwanpur Committee_',
+  tpl_namaz:'🕌 *JAMA MASJID BHAGWANPUR — MUZAFFARPUR*\n🕐 *Namaz Timings*\n────────────────────────────────\n\n🌅 *Fajr فجر* — [WAQT] | Jamaah: [JAMAAH]\n☀️ *Zuhr ظہر* — [WAQT] | Jamaah: [JAMAAH]\n🌤️ *Asr عصر* — [WAQT] | Jamaah: [JAMAAH]\n🌅 *Maghrib مغرب* — [WAQT] | Jamaah: [JAMAAH]\n🌙 *Isha عشاء* — [WAQT] | Jamaah: [JAMAAH]\n⭐ *Jumu\'ah جمعہ* — [WAQT]\n\n📍 Jama Masjid Bhagwanpur, Muzaffarpur\n────────────────────────────────\n_Jama Masjid Bhagwanpur_',
+  tpl_juma:'🕌 *JAMA MASJID BHAGWANPUR — MUZAFFARPUR*\n⭐ *Jumu\'ah Mubarak!*\n────────────────────────────────\n\nAssalamu Alaikum wa Rahmatullahi wa Barakatuh 🤲\n\nAaj Jumu\'ah Mubarak ka din hai!\n\n🕐 *Jumu\'ah Namaz:* 1:30 PM\n📍 *Jagah:* Jama Masjid Bhagwanpur, Muzaffarpur\n\nSab ko dawat-e-aam hai! Jald ayen.\n\nJumu\'ah Mubarak! 🤲\n────────────────────────────────\n_Jama Masjid Bhagwanpur_',
+  tpl_meeting:'🕌 *JAMA MASJID BHAGWANPUR — MUZAFFARPUR*\n📅 *Committee Meeting Notice*\n────────────────────────────────\n\nAssalamu Alaikum 🤲\n\nTamam committee members ko ittila di jati hai ke masjid ki maahana meeting munaqid hogi:\n\n📅 *Tarikh:* [TARIKH LIKHEIN]\n🕐 *Waqt:* Baad Jumu\'ah Namaz\n📍 *Jagah:* Masjid Office\n\nMeherbani karke lazmi sharik hon.\n\nJazakAllah Khair\n────────────────────────────────\n_Jama Masjid Bhagwanpur Committee_',
+  tpl_eid:'🕌 *JAMA MASJID BHAGWANPUR — MUZAFFARPUR*\n🌙 *Eid Mubarak!*\n────────────────────────────────\n\nAssalamu Alaikum wa Rahmatullahi wa Barakatuh 🤲\n\nTamam Muslimeen aur unke khandan ko EID MUBARAK! 🎉\n\n🕐 *Eid Namaz:* Subah 7:00 AM\n📍 *Jagah:* Jama Masjid Bhagwanpur, Muzaffarpur\n\n"Taqabbalallahu minna wa minkum"\n\nEid Mubarak wa Kareem! 🤲\n────────────────────────────────\n_Jama Masjid Bhagwanpur_',
+  tpl_fee:'🕌 *JAMA MASJID MAKTAB — BHAGWANPUR*\n📚 *Maktab Fee Reminder*\n────────────────────────────────\n\nAssalamu Alaikum 🤲\n\nMuhtaram Parents,\n\nIs maah ki maktab fee baaki hai. Meherbani karke jald ada karen taake Maktab ka nizaam theek se chalta rahe.\n\nJazakAllah Khair 🤲\n────────────────────────────────\n_Maktab — Jama Masjid Bhagwanpur_',
+  tpl_ramzan:'🕌 *JAMA MASJID BHAGWANPUR — MUZAFFARPUR*\n🌙 *Ramzan Mubarak!*\n────────────────────────────────\n\nAssalamu Alaikum wa Rahmatullahi wa Barakatuh 🤲\n\nTamam ko RAMZAN MUBARAK! 🌟\n\n🕐 *Sehri Ka Waqt:* [WAQT]\n🌅 *Iftaar Ka Waqt:* [WAQT]\n🌙 *Taraweeh:* Isha ke baad — Jama Masjid\n\nRamzan Kareem! 🤲\n────────────────────────────────\n_Jama Masjid Bhagwanpur_'
+};
+let tplEditing='';
+function loadTplEdit(key){
+  if(!key){document.getElementById('tpl-edit-area').style.display='none';return;}
+  tplEditing=key;
+  const saved=S.get('tpl_'+key,null);
+  const txt=saved!==null?saved:(tplDefaults[key]||'');
+  document.getElementById('tpl-text').value=txt;
+  document.getElementById('tpl-edit-area').style.display='block';
+}
+function saveTplEdit(){
+  const txt=document.getElementById('tpl-text').value;
+  S.set('tpl_'+tplEditing,txt);
+  alert('✅ Template save ho gaya!');
+}
+function resetTplEdit(){
+  if(!confirm('Default template par wapas jana chahte ho? Aapke changes delete ho jayenge.'))return;
+  localStorage.removeItem(K+'tpl_'+tplEditing);
+  document.getElementById('tpl-text').value=tplDefaults[tplEditing]||'';
+  alert('↺ Default template restore ho gaya!');
+}
+function useTpl(){
+  const txt=document.getElementById('tpl-text').value;
+  setWAMsg(txt);
+  showWATab('wa-compose',document.querySelector('#pg-whatsapp .tab'));
+  document.querySelectorAll('#pg-whatsapp .tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector('#pg-whatsapp .tab').classList.add('active');
+}
+function populateSelects(){
+  const ms=members.filter(m=>m.due>0);
+  const mOpts=ms.map(m=>`<option value="${m.id}">${m.name} (${m.role}) — ₹${m.due}/mo</option>`).join('');
+  const fc=document.getElementById('fc-m');if(fc)fc.innerHTML=mOpts||'<option>Koi member nahi</option>';
+  const sOpts=students.map(s=>`<option value="${s.id}">${s.name} (${s.class})</option>`).join('');
+  const ffs=document.getElementById('ff-s');if(ffs)ffs.innerHTML=sOpts||'<option>Koi student nahi</option>';
+}
+
+// ===== RESET =====
+function resetAll(){
+  ['members','transactions','announces','students','teachers','meetings','chanda','fees','att','namaz','taraweeh_members','taraweeh_paid','qb_tx','qb_members','qb_paid'].forEach(k=>localStorage.removeItem(K+k));
+  loadData();renderDash();renderMembers();renderCommittee();renderTx();renderChanda();
+  renderNamazEdit();renderStudents();renderTeachers();renderAtt();renderFees();renderAnn();
+  alert('✅ Sab data reset ho gaya!');
+}
+
+// ===== EXCEL EXPORT =====
+function exportExcel(type){
+  if(typeof XLSX==='undefined'){alert('Excel library load nahi hui. Internet connection check karen aur dobara try karen.');return;}
+  const wb=XLSX.utils.book_new();
+  const today=new Date().toLocaleDateString('en-IN').replace(/\//g,'-');
+
+  if(type==='all'||type==='members'){
+    const rows=members.map((m,i)=>[i+1,m.name,m.role,m.phone||'',m.due||0,m.address||'',m.status||'Active',m.joinDate||'']);
+    const ws=XLSX.utils.aoa_to_sheet([['#','Naam','Ohda (Role)','Phone','Maahana Chanda (₹)','Address','Status','Joining Date'],...rows]);
+    ws['!cols']=[{wch:5},{wch:22},{wch:18},{wch:14},{wch:18},{wch:24},{wch:10},{wch:14}];
+    XLSX.utils.book_append_sheet(wb,ws,'Members');
+  }
+  if(type==='all'||type==='transactions'){
+    const rows=transactions.map((t,i)=>[i+1,t.date,t.type==='in'?'Amdani':'Kharch',t.cat,t.note||'',t.amount]);
+    const ws=XLSX.utils.aoa_to_sheet([['#','Tarikh','Qism','Category','Notes','Raqam (₹)'],...rows]);
+    const{income,expense,balance}=calcBal();
+    XLSX.utils.sheet_add_aoa(ws,[['','','','','Kul Amdani →',income],['','','','','Kul Kharch →',expense],['','','','','Net Balance →',balance]],{origin:-1});
+    ws['!cols']=[{wch:5},{wch:14},{wch:10},{wch:20},{wch:24},{wch:12}];
+    XLSX.utils.book_append_sheet(wb,ws,'Accounts');
+  }
+  if(type==='all'||type==='chanda'){
+    const months=Object.keys(chanda);
+    const allMonths=['March 2026','February 2026','January 2026','December 2025','November 2025','October 2025'];
+    const useMonths=months.length?months:allMonths.slice(0,3);
+    const headers=['#','Naam','Ohda',...useMonths,'Kul Ada','Kul Due'];
+    const rows=members.filter(m=>m.due>0).map((m,i)=>{
+      const mVals=useMonths.map(mo=>(chanda[mo]||{})[m.id]||0);
+      const total=mVals.reduce((s,v)=>s+v,0);
+      return[i+1,m.name,m.role,...mVals,total,m.due*useMonths.length];
+    });
+    const ws=XLSX.utils.aoa_to_sheet([headers,...rows]);
+    ws['!cols']=[{wch:4},{wch:22},{wch:16},...useMonths.map(()=>({wch:14})),{wch:10},{wch:10}];
+    XLSX.utils.book_append_sheet(wb,ws,'Chanda');
+  }
+  if(type==='all'||type==='students'){
+    const rows=students.map((s,i)=>[i+1,s.name,s.father,s.phone||'',s.class,s.fee||0,s.joinDate||'']);
+    const ws=XLSX.utils.aoa_to_sheet([['#','Student Naam','Walid','Phone','Class','Fee/Mo (₹)','Daakhila Tarikh'],...rows]);
+    ws['!cols']=[{wch:4},{wch:22},{wch:22},{wch:14},{wch:14},{wch:10},{wch:14}];
+    XLSX.utils.book_append_sheet(wb,ws,'Maktab Students');
+  }
+  if(type==='all'||type==='fees'){
+    const months=['March 2026','February 2026','January 2026','December 2025'];
+    const headers=['#','Naam','Class',...months,'Kul Ada'];
+    const rows=students.map((s,i)=>{
+      const mVals=months.map(mo=>(fees[mo]||{})[s.id]||0);
+      return[i+1,s.name,s.class,...mVals,mVals.reduce((a,b)=>a+b,0)];
+    });
+    const ws=XLSX.utils.aoa_to_sheet([headers,...rows]);
+    ws['!cols']=[{wch:4},{wch:22},{wch:14},...months.map(()=>({wch:14})),{wch:10}];
+    XLSX.utils.book_append_sheet(wb,ws,'Maktab Fees');
+  }
+  if(wb.SheetNames.length===0){alert('Koi data nahi export karne ke liye!');return;}
+  const fname=`JamaMasjidBhagwanpur_${type==='all'?'FullBackup':type}_${today}.xlsx`;
+  XLSX.writeFile(wb,fname);
+  setTimeout(()=>alert('✅ Excel file download ho gayi!\nFile naam: '+fname),300);
+}
+
+// ===== EXCEL IMPORT =====
+function showXLTab(id,el){
+  ['xl-export','xl-import','xl-how'].forEach(t=>{const e=document.getElementById(t);if(e)e.style.display='none';});
+  const pTabs=el&&el.closest('.tabs');
+  if(pTabs)pTabs.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  const e=document.getElementById(id);if(e)e.style.display='block';
+  if(el)el.classList.add('active');
+}
+function importExcel(type,input){
+  const file=input.files[0];
+  if(!file){return;}
+  if(typeof XLSX==='undefined'){alert('Excel library load nahi hui. Internet check karen.');return;}
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const wb=XLSX.read(e.target.result,{type:'array'});
+      let count=0,errors=[];
+      if(type==='members'){
+        const sheetName=wb.SheetNames.find(n=>n.toLowerCase().includes('member'))||wb.SheetNames[0];
+        const ws=wb.Sheets[sheetName];
+        const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+        const data=rows.slice(1).filter(r=>r[1]&&String(r[1]).trim());
+        if(!data.length){errors.push('Members sheet mein koi data nahi mila');} 
+        else{
+          members=data.map((r,i)=>({id:Date.now()+i,name:String(r[1]||'').trim(),
+            role:String(r[2]||'Aam Member').trim(),phone:String(r[3]||'').trim(),
+            due:parseInt(r[4])||0,address:String(r[5]||'').trim(),
+            status:String(r[6]||'Active').trim()}));
+          count=members.length;
+        }
+      } else if(type==='transactions'){
+        const sheetName=wb.SheetNames.find(n=>n.toLowerCase().includes('account'))||wb.SheetNames[0];
+        const ws=wb.Sheets[sheetName];
+        const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+        const data=rows.slice(1).filter(r=>r[5]&&!isNaN(r[5]));
+        if(!data.length){errors.push('Accounts sheet mein koi data nahi mila');}
+        else{
+          transactions=data.map((r,i)=>({id:Date.now()+i,
+            date:String(r[1]||new Date().toLocaleDateString('en-IN')).trim(),
+            type:String(r[2]||'').toLowerCase().includes('amdani')||String(r[2]||'').toLowerCase().includes('in')?'in':'out',
+            cat:String(r[3]||'Other').trim(),note:String(r[4]||'').trim(),
+            amount:parseFloat(r[5])||0}));
+          count=transactions.length;
+        }
+      } else if(type==='students'){
+        const sheetName=wb.SheetNames.find(n=>n.toLowerCase().includes('student'))||wb.SheetNames[0];
+        const ws=wb.Sheets[sheetName];
+        const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+        const data=rows.slice(1).filter(r=>r[1]&&String(r[1]).trim());
+        if(!data.length){errors.push('Students sheet mein koi data nahi mila');}
+        else{
+          students=data.map((r,i)=>({id:Date.now()+i,name:String(r[1]||'').trim(),
+            father:String(r[2]||'').trim(),phone:String(r[3]||'').trim(),
+            class:String(r[4]||'Qaida').trim(),fee:parseInt(r[5])||0,
+            joinDate:String(r[6]||'').trim()}));
+          count=students.length;
+        }
+      }
+      saveData();
+      const statusEl=document.getElementById('import-status');
+      if(statusEl){
+        statusEl.style.display='block';
+        if(errors.length){
+          statusEl.innerHTML=`<div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:var(--r);padding:10px;color:#991b1b">❌ Error: ${errors.join(', ')}</div>`;
+        } else {
+          statusEl.innerHTML=`<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:var(--r);padding:10px;color:#166534">✅ <b>${count} records import ho gaye!</b> System mein data load ho gaya.</div>`;
+          renderMembers();renderStudents();renderTx();renderDash();renderChanda();populateSelects();
+        }
+      }
+      input.value='';
+    } catch(err){
+      alert('❌ File read nahi hui: '+err.message+'\n\nSirf Masjid system se export ki gayi .xlsx file use karen.');
+      input.value='';
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+
+function showGSTab(id,el){
+  ['gs-setup','gs-sync','gs-guide'].forEach(t=>{const e=document.getElementById(t);if(e)e.style.display='none';});
+  document.querySelectorAll('.card #gs-setup,#gs-sync,#gs-guide').forEach(t=>t.classList&&t.classList.remove('active'));
+  const e=document.getElementById(id);if(e)e.style.display='block';
+  const tabs=document.querySelectorAll('#pg-settings .tabs .tab');
+  tabs.forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  if(id==='gs-sync'){
+    const url=S.obj('gsconf',{}).url||'';
+    const w=document.getElementById('gs-url-warn');
+    if(w)w.style.display=url?'none':'block';
+  }
+}
+function saveGSUrl(){
+  const url=document.getElementById('gs-url').value.trim();
+  if(!url||!url.startsWith('https://script.google.com')){
+    alert('Valid Google Apps Script URL darj karen!\nURL "https://script.google.com/macros/s/..." se shuru honi chahiye.');return;
+  }
+  S.set('gsconf',{url});
+  alert('✅ URL save ho gayi!');
+  document.getElementById('gs-status').innerHTML='<span style="color:var(--g1)">✅ URL saved. Ab "Test Connection" try karen.</span>';
+}
+function testGS(){
+  const cfg=S.obj('gsconf',{});
+  if(!cfg.url){alert('Pehle URL save karen!');return;}
+  const st=document.getElementById('gs-status');
+  st.innerHTML='<span style="color:var(--g1)">✅ URL save hai! Ab Sync tab mein "Sab Sync Karen" dabao.</span>';
+}
+function syncLog(msg){
+  const el=document.getElementById('sync-log');
+  if(el){const t=new Date().toLocaleTimeString('en-IN');
+    el.innerHTML=(el.innerHTML==='Sync log yahan dikhega...'?'':el.innerHTML+'\n')+`[${t}] ${msg}`;}
+}
+function syncToSheets(type){
+  const cfg=S.obj('gsconf',{});
+  if(!cfg.url){alert('Pehle Settings mein Google Sheets URL save karen!');return;}
+  const sends=[];
+  if(type==='all'||type==='members'){
+    sends.push({tab:'Members',headers:['#','Naam','Ohda','Phone','Chanda/Mo','Address','Status'],
+      rows:members.map((m,i)=>[i+1,m.name,m.role,m.phone||'',m.due||0,m.address||'',m.status||'Active']),clear:true});
+  }
+  if(type==='all'||type==='transactions'){
+    sends.push({tab:'Accounts',headers:['#','Tarikh','Qism','Category','Notes','Raqam'],
+      rows:transactions.map((t,i)=>[i+1,t.date,t.type==='in'?'Amdani':'Kharch',t.cat,t.note||'',t.amount]),clear:true});
+  }
+  if(type==='all'||type==='chanda'){
+    const months=['March 2026','February 2026','January 2026'];
+    sends.push({tab:'Chanda',headers:['#','Naam','Ohda',...months],
+      rows:members.filter(m=>m.due>0).map((m,i)=>[i+1,m.name,m.role,...months.map(mo=>(chanda[mo]||{})[m.id]||0)]),clear:true});
+  }
+  if(type==='all'||type==='students'){
+    sends.push({tab:'Maktab',headers:['#','Naam','Walid','Phone','Class','Fee/Mo'],
+      rows:students.map((s,i)=>[i+1,s.name,s.father,s.phone||'',s.class,s.fee||0]),clear:true});
+  }
+  if(type==='all'){
+    const qbTx=S.get('qb_tx');
+    sends.push({tab:'Qabristan',headers:['Tarikh','Qism','Category','Notes','Raqam'],
+      rows:qbTx.map(t=>[t.date,t.type==='in'?'Amdani':'Kharch',t.cat,t.note||'',t.amount]),clear:true});
+  }
+  syncLog('Sync shuru: '+type+' — '+sends.length+' sheets...');
+  sends.forEach((payload,idx)=>{
+    setTimeout(()=>{
+      const f=document.createElement('form');
+      f.method='POST';f.action=cfg.url;f.target='sf_'+idx;f.style.display='none';
+      const inp=document.createElement('input');
+      inp.type='hidden';inp.name='payload';inp.value=JSON.stringify(payload);
+      f.appendChild(inp);
+      const ifr=document.createElement('iframe');
+      ifr.name='sf_'+idx;ifr.style.display='none';
+      document.body.appendChild(ifr);
+      document.body.appendChild(f);
+      ifr.onload=()=>{
+        syncLog('✅ '+payload.tab+' — '+payload.rows.length+' rows sync ho gaye!');
+        if(idx===sends.length-1){
+          syncLog('🎉 Sab sync complete! Google Sheet check karen.');
+          alert('✅ Sab data Google Sheet mein sync ho gaya!\n\nSheet kholo: sheets.google.com');
+        }
+        setTimeout(()=>{ifr.remove();f.remove();},3000);
+      };
+      f.submit();
+    },idx*1000);
+  });
+}
+
+// ===== PWA =====
+let pwaPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();pwaPrompt=e;
+  const btn=document.getElementById('pwa-btn');
+  if(btn)btn.style.display='flex';
+});
+window.addEventListener('appinstalled',()=>{
+  pwaPrompt=null;
+  const btn=document.getElementById('pwa-btn');if(btn)btn.style.display='none';
+  const ins=document.getElementById('pwa-installed');if(ins)ins.style.display='block';
+});
+function installPWA(){
+  if(pwaPrompt){pwaPrompt.prompt();pwaPrompt.userChoice.then(r=>{if(r.outcome==='accepted')pwaPrompt=null;});}
+  else alert('Install prompt available nahi hai.\nManually: Chrome menu (⋮) → "Add to Home screen"');
+}
+
+// ===== SETTINGS GS TAB INIT =====
+function initSettingsGS(){
+  const cfg=S.obj('gsconf',{});
+  const inp=document.getElementById('gs-url');
+  if(inp&&cfg.url)inp.value=cfg.url;
+}
+
+
+
+// ===== BOOT =====
+// PWA Manifest inject
+const manifestData={name:'Jama Masjid Bhagwanpur',short_name:'Masjid MGT',
+  description:'Jama Masjid Bhagwanpur Management System',start_url:'.',
+  display:'standalone',background_color:'#0f3d25',theme_color:'#0f3d25',
+  orientation:'portrait-primary',
+  icons:[{src:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%230f3d25'/%3E%3Ctext y='.85em' font-size='140' x='16'%3E🕌%3C/text%3E%3C/svg%3E",sizes:'192x192',type:'image/svg+xml'},
+    {src:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%230f3d25'/%3E%3Ctext y='.85em' font-size='380' x='36'%3E🕌%3C/text%3E%3C/svg%3E",sizes:'512x512',type:'image/svg+xml',purpose:'any maskable'}]};
+const mb=document.createElement('link');mb.rel='manifest';
+mb.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(manifestData));
+document.head.appendChild(mb);
+loadData();
+const sess=S.obj('sess',{ok:false});
+if(sess.ok&&(Date.now()-sess.t)<86400000){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appShell').style.display='block';
+  initApp();
+}
+</script>
+</body>
+</html>
