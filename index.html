@@ -26,7 +26,91 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;
 --sh:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
 --sh-md:0 4px 16px rgba(0,0,0,.09);--sh-lg:0 12px 48px rgba(0,0,0,.18);}
 
-/* LOGIN */
+/* ===== PRINT — ONLY PRINT RECEIPT/VOUCHER ===== */
+@media print{
+  #loginScreen,#appShell .sidebar,#appShell .topbar,
+  #appShell .content > .pg,
+  .no-print{display:none!important}
+  body,html{background:#fff!important;margin:0;padding:0}
+  #print-portal{display:block!important;position:fixed;inset:0;background:#fff;z-index:9999}
+  .rdoc,.vdoc{box-shadow:none!important;page-break-after:avoid}
+  @page{margin:8mm;size:A5 portrait}
+  #print-portal.voucher-print{display:block!important}
+  #print-portal.voucher-print .rdoc{display:none}
+  @page.vpage{size:A4 landscape;margin:8mm}
+}
+
+/* ===== RECEIPT / VOUCHER STYLES ===== */
+#print-portal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;overflow-y:auto;padding:24px 16px}
+.print-modal-inner{max-width:680px;margin:0 auto;position:relative}
+.print-modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-bottom:12px;flex-wrap:wrap}
+
+/* Receipt — A5 proportions */
+.rdoc{background:#fff;width:100%;max-width:560px;margin:0 auto;font-family:'Plus Jakarta Sans',Arial,sans-serif;font-size:12.5px;border:1px solid #ddd;position:relative;overflow:hidden}
+.rdoc-hd{background:#0f3d25;padding:0}
+.rdoc-hd-inner{display:flex;align-items:center;gap:12px;padding:12px 16px}
+.rdoc-hd-text{flex:1}
+.rdoc-hd-name{font-size:15px;font-weight:700;color:#fff;font-family:'DM Serif Display',serif;line-height:1.2}
+.rdoc-hd-ar{font-size:10px;color:rgba(255,255,255,.5);direction:rtl;margin-top:2px}
+.rdoc-hd-addr{font-size:9.5px;color:rgba(255,255,255,.4);margin-top:1px}
+.rdoc-hd-mgf{text-align:right;flex-shrink:0}
+.rdoc-hd-mgf-label{font-size:8px;color:rgba(255,255,255,.35);letter-spacing:.8px;text-transform:uppercase}
+.rdoc-hd-mgf-val{font-size:13px;font-weight:800;color:#f5e642;letter-spacing:1px}
+.rdoc-gold{height:2.5px;background:linear-gradient(90deg,#8b6914,#f5e642,#d4b84a,#f5e642,#8b6914)}
+.rdoc-type-bar{display:flex;align-items:center;justify-content:space-between;padding:7px 16px;background:#f8f9fa;border-bottom:1px solid #e5e7eb}
+.rdoc-type-name{font-size:12px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.6px}
+.rdoc-type-num{font-family:'Courier New',monospace;font-size:12px;font-weight:700;color:#0f3d25;background:#e8f5ec;padding:2px 8px;border-radius:4px;border:1px solid #b8e0c9}
+.rdoc-body{padding:14px 16px}
+.rdoc-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.rdoc-field{display:flex;flex-direction:column;gap:2px}
+.rdoc-field.full{grid-column:1/-1}
+.rdoc-field-lbl{font-size:9px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px}
+.rdoc-field-val{font-size:12.5px;color:#111;border-bottom:1px solid #e9ecef;padding-bottom:3px;min-height:20px;font-weight:500}
+.rdoc-amount{display:flex;align-items:center;justify-content:space-between;background:#0f3d25;color:#fff;padding:11px 14px;border-radius:6px;margin:10px 0}
+.rdoc-amount-lbl{font-size:9.5px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.rdoc-amount-words{font-size:9.5px;color:rgba(255,255,255,.5);margin-top:2px;font-style:italic}
+.rdoc-amount-fig{font-size:22px;font-weight:800;color:#f5e642;font-family:'DM Serif Display',serif}
+.rdoc-status{display:flex;align-items:center;gap:6px;font-size:11px;color:#166534;background:#dcfce7;border:1px solid #86efac;border-radius:4px;padding:6px 10px;margin-bottom:12px}
+.rdoc-sigs{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-top:10px;border-top:1px dashed #ccc;margin-top:4px}
+.rdoc-sig{text-align:center}
+.rdoc-sig-space{height:36px}
+.rdoc-sig-line{border-top:1px solid #aaa;margin:0 8px 4px}
+.rdoc-sig-lbl{font-size:9px;color:#888;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.rdoc-stamp-wrap{position:absolute;right:14px;bottom:44px;opacity:.18;pointer-events:none}
+.rdoc-ft{display:flex;align-items:center;justify-content:space-between;background:#f8f9fa;border-top:1px solid #e5e7eb;padding:5px 16px}
+.rdoc-ft-l{font-size:8.5px;color:#bbb;font-weight:600;letter-spacing:.3px}
+.rdoc-ft-r{font-size:8px;color:#ccc;font-style:italic}
+.rdoc-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:64px;font-weight:900;color:rgba(0,0,0,.035);pointer-events:none;white-space:nowrap;letter-spacing:4px;font-family:'DM Serif Display',serif}
+
+/* Voucher — A4 landscape proportions */
+.vdoc{background:#fff;width:100%;max-width:740px;margin:0 auto;font-family:'Plus Jakarta Sans',Arial,sans-serif;font-size:12px;border:1px solid #ccc;position:relative}
+.vdoc-hd{background:#0f3d25;display:flex;align-items:center;justify-content:space-between;padding:10px 20px}
+.vdoc-hd-l{display:flex;align-items:center;gap:10px}
+.vdoc-hd-name{font-size:14px;font-weight:700;color:#fff;font-family:'DM Serif Display',serif}
+.vdoc-hd-sub{font-size:9px;color:rgba(255,255,255,.4);margin-top:1px}
+.vdoc-hd-r{text-align:right}
+.vdoc-hd-type{font-size:12px;font-weight:800;color:#f5e642;text-transform:uppercase;letter-spacing:.8px}
+.vdoc-hd-num{font-size:10px;color:rgba(255,255,255,.5);font-family:'Courier New',monospace;margin-top:2px}
+.vdoc-type-bar{display:flex;justify-content:space-between;align-items:center;padding:6px 20px;background:#f8f9fa;border-bottom:2px solid var(--vcolor,#0f3d25)}
+.vdoc-body{padding:16px 20px}
+.vdoc-row{display:grid;gap:12px;margin-bottom:10px}
+.vdoc-field{display:flex;flex-direction:column;gap:2px}
+.vdoc-field-lbl{font-size:9px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.4px}
+.vdoc-field-val{font-size:12.5px;color:#111;border-bottom:1px solid #e5e7eb;padding-bottom:3px;min-height:20px;font-weight:500}
+.vdoc-amount-bar{background:#f0fdf4;border:1.5px solid #86efac;border-radius:6px;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;margin:10px 0}
+.vdoc-amount-lbl{font-size:9.5px;color:#166534;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.vdoc-amount-words{font-size:9px;color:#4b7c5e;font-style:italic;margin-top:1px}
+.vdoc-amount-fig{font-size:20px;font-weight:800;color:#0f3d25;font-family:'DM Serif Display',serif}
+.vdoc-sigs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;padding-top:10px;border-top:1px dashed #ccc;margin-top:8px}
+.vdoc-sig{text-align:center}
+.vdoc-sig-space{height:30px}
+.vdoc-sig-line{border-top:1px solid #aaa;margin:0 6px 4px}
+.vdoc-sig-lbl{font-size:9px;color:#888;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.vdoc-ft{display:flex;align-items:center;justify-content:space-between;background:#f8f9fa;border-top:1px solid #e5e7eb;padding:5px 20px}
+
+/* Stamp mark inline */
+.stamp-mark{display:inline-block;width:72px;height:72px;border-radius:50%;border:2.5px solid rgba(15,61,37,.5);position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;overflow:hidden}
+
 #loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;
   overflow:hidden;position:relative;background:#040d1a}
 /* Animated night sky */
@@ -487,6 +571,8 @@ tbody tr:hover td{background:#fafafa}
     <div class="ni" onclick="goPage('maktab',this)"><span class="ni-ic">📚</span><span>Maktab</span></div>
     <div class="ni" onclick="goPage('announcements',this)"><span class="ni-ic">📢</span><span>Announcements</span></div>
     <div class="sb-sec">Tools</div>
+    <div class="ni" onclick="goPage('receipts',this)"><span class="ni-ic">🧾</span><span>Receipts</span></div>
+    <div class="ni" onclick="goPage('vouchers',this)"><span class="ni-ic">📄</span><span>Vouchers</span></div>
     <div class="ni" onclick="goPage('whatsapp',this)"><span class="ni-ic">💬</span><span>WhatsApp</span></div>
     <div class="ni" onclick="goPage('settings',this)"><span class="ni-ic">⚙️</span><span>Settings</span></div>
   </nav>
@@ -943,6 +1029,115 @@ tbody tr:hover td{background:#fafafa}
   </div>
 
   <!-- ===== SETTINGS ===== -->
+  <!-- ===== RECEIPTS ===== -->
+  <div class="pg" id="pg-receipts">
+    <div class="sec-h">
+      <span class="sec-t">🧾 Receipt System</span>
+      <button class="btn btn-pr btn-sm" onclick="openReceiptForm()">+ New Receipt</button>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="setRF('all',this)">All</div>
+      <div class="tab" onclick="setRF('payment',this)">💳 Payment</div>
+      <div class="tab" onclick="setRF('donation',this)">🤲 Donation</div>
+      <div class="tab" onclick="setRF('chanda',this)">💰 Chanda</div>
+      <div class="tab" onclick="setRF('taraweeh',this)">🌙 Taraweeh</div>
+      <div class="tab" onclick="setRF('cash',this)">💵 Cash</div>
+    </div>
+    <!-- New Receipt Form (inline) -->
+    <div class="card" id="receipt-form-card" style="display:none;margin-bottom:14px">
+      <div class="ch"><span class="ct">🧾 New Receipt</span><button class="btn btn-gh btn-sm" onclick="document.getElementById('receipt-form-card').style.display='none'">✕ Close</button></div>
+      <div class="cb">
+        <div class="fg2">
+          <div class="fg"><label class="lbl">Receipt Type *</label>
+            <select class="inp" id="r-type">
+              <option value="payment">💳 Payment Receipt</option>
+              <option value="donation">🤲 Donation Receipt</option>
+              <option value="chanda">💰 Chanda Receipt</option>
+              <option value="taraweeh">🌙 Taraweeh Nazrana Receipt</option>
+              <option value="cash">💵 Cash Receipt</option>
+            </select></div>
+          <div class="fg"><label class="lbl">Tarikh *</label><input type="date" class="inp" id="r-date"/></div>
+          <div class="fg"><label class="lbl">Naam (Payer) *</label><input class="inp" id="r-name" placeholder="Muhammad Ahmed"/></div>
+          <div class="fg"><label class="lbl">Phone</label><input class="inp" id="r-phone" placeholder="9876543210"/></div>
+          <div class="fg"><label class="lbl">Raqam (₹) *</label><input class="inp" type="number" id="r-amount" placeholder="0"/></div>
+          <div class="fg"><label class="lbl">Payment Mode</label>
+            <select class="inp" id="r-mode"><option>Cash (Naqdi)</option><option>Bank Transfer</option><option>UPI/GPay</option><option>Cheque</option></select></div>
+          <div class="fg full"><label class="lbl">Purpose / Maqsad</label><input class="inp" id="r-purpose" placeholder="Chanda, Donation, etc."/></div>
+          <div class="fg full"><label class="lbl">Notes</label><input class="inp" id="r-notes" placeholder="Koi khaas baat..."/></div>
+        </div>
+        <div style="margin-top:12px"><button class="btn btn-pr" onclick="saveReceipt()">✅ Generate Receipt</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="twrap">
+        <table><thead><tr><th>Receipt #</th><th>Type</th><th>Naam</th><th>Amount</th><th>Tarikh</th><th>Mode</th><th>Actions</th></tr></thead>
+        <tbody id="receipts-tb"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VOUCHERS ===== -->
+  <div class="pg" id="pg-vouchers">
+    <div class="sec-h">
+      <span class="sec-t">📄 Voucher System</span>
+      <button class="btn btn-pr btn-sm" onclick="openVoucherForm()">+ New Voucher</button>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="setVF('all',this)">All</div>
+      <div class="tab" onclick="setVF('payment',this)">💳 Payment</div>
+      <div class="tab" onclick="setVF('expense',this)">📉 Expense</div>
+      <div class="tab" onclick="setVF('purchase',this)">🛒 Purchase</div>
+      <div class="tab" onclick="setVF('approval',this)">✅ Work Approval</div>
+    </div>
+    <div class="card" id="voucher-form-card" style="display:none;margin-bottom:14px">
+      <div class="ch"><span class="ct">📄 New Voucher</span><button class="btn btn-gh btn-sm" onclick="document.getElementById('voucher-form-card').style.display='none'">✕ Close</button></div>
+      <div class="cb">
+        <div class="fg2">
+          <div class="fg"><label class="lbl">Voucher Type *</label>
+            <select class="inp" id="v-type">
+              <option value="payment">💳 Payment Voucher</option>
+              <option value="expense">📉 Expense Voucher</option>
+              <option value="purchase">🛒 Purchase Voucher</option>
+              <option value="approval">✅ Work Approval Voucher</option>
+            </select></div>
+          <div class="fg"><label class="lbl">Tarikh *</label><input type="date" class="inp" id="v-date"/></div>
+          <div class="fg"><label class="lbl">Payee (Jisko diya) *</label><input class="inp" id="v-payee" placeholder="Naam ya company"/></div>
+          <div class="fg"><label class="lbl">Category</label>
+            <select class="inp" id="v-cat">
+              <option>Bijli Bill</option><option>Paani Bill</option><option>Imam Tankhwa</option>
+              <option>Muezzin Tankhwa</option><option>Teacher Tankhwa</option><option>Safaai</option>
+              <option>Maintenance</option><option>Construction</option><option>Purchase</option><option>Other</option>
+            </select></div>
+          <div class="fg"><label class="lbl">Raqam (₹) *</label><input class="inp" type="number" id="v-amount" placeholder="0"/></div>
+          <div class="fg"><label class="lbl">Payment Mode</label>
+            <select class="inp" id="v-mode"><option>Cash</option><option>Bank Transfer</option><option>UPI</option><option>Cheque</option></select></div>
+          <div class="fg full"><label class="lbl">Kaam ki Tafseel *</label><textarea class="inp" id="v-desc" rows="2" placeholder="Kaam ya purchase ki puri tafseel..."></textarea></div>
+          <div class="fg"><label class="lbl">Approved By</label><input class="inp" id="v-approved" placeholder="President / Secretary"/></div>
+          <div class="fg"><label class="lbl">Reference / Bill #</label><input class="inp" id="v-ref" placeholder="Invoice no."/></div>
+        </div>
+        <div style="margin-top:12px"><button class="btn btn-pr" onclick="saveVoucher()">✅ Generate Voucher</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="twrap">
+        <table><thead><tr><th>Voucher #</th><th>Type</th><th>Payee</th><th>Amount</th><th>Tarikh</th><th>Category</th><th>Approved</th><th>Actions</th></tr></thead>
+        <tbody id="vouchers-tb"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PRINT PORTAL (outside app flow) ===== -->
+  <div id="print-portal">
+    <div class="print-modal-inner">
+      <div class="print-modal-actions no-print">
+        <button class="btn btn-gh" onclick="closePrintPortal()" style="background:#fff">✕ Close</button>
+        <button class="btn" onclick="duplicatePrint()" style="background:#e0f2fe;color:#0369a1;border-color:#bae6fd">📋 Duplicate Copy</button>
+        <button class="btn btn-pr" onclick="doPrint()">🖨️ Print / Save PDF</button>
+      </div>
+      <div id="print-doc-area"></div>
+    </div>
+  </div>
+
   <div class="pg" id="pg-settings">
     <div class="sec-h"><span class="sec-t">⚙️ Settings</span></div>
     <div class="g2">
@@ -1447,7 +1642,8 @@ function changePass(){
 // ===== NAV =====
 const pgTitles={dashboard:'Dashboard',members:'Members / ممبران',committee:'Committee & Hierarchy',
   accounts:'Accounts / حساب کتاب',chanda:'Chanda Tracking / چندہ',namaz:'Namaz Timings / نماز اوقات',
-  maktab:'Maktab / مکتب',announcements:'Announcements / اعلانات',whatsapp:'WhatsApp Broadcast',settings:'Settings'};
+  maktab:'Maktab / مکتب',announcements:'Announcements / اعلانات',whatsapp:'WhatsApp Broadcast',settings:'Settings',
+  receipts:'Receipt System / رسیدیں',vouchers:'Voucher System / وصل'};
 
 function goPage(id,el){
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('active'));
@@ -1461,6 +1657,8 @@ function goPage(id,el){
   if(id==='accounts')renderTx();
   if(id==='chanda')renderChanda();
   if(id==='maktab'){renderStudents();renderTeachers();renderAtt();renderFees();}
+  if(id==='receipts'){renderReceipts();document.getElementById('r-date').value=new Date().toISOString().split('T')[0];}
+  if(id==='vouchers'){renderVouchers();document.getElementById('v-date').value=new Date().toISOString().split('T')[0];}
   if(id==='settings'){initSettingsGS();}
 }
 function showTab(id,el){
@@ -2545,7 +2743,352 @@ function initSettingsGS(){
 
 
 
-// ===== BOOT =====
+// ===== RECEIPT & VOUCHER SYSTEM =====
+let receipts=S.get('jm_receipts'),vouchers=S.get('jm_vouchers');
+function saveRV(){S.set('jm_receipts',receipts);S.set('jm_vouchers',vouchers);}
+
+// Amount in words (Hinglish)
+function numWords(n){
+  if(!n||isNaN(n))return'Zero';n=Math.abs(Math.round(n));
+  const o=['','Ek','Do','Teen','Chaar','Paanch','Chhe','Saat','Aath','Nau','Das','Gyarah','Barah','Terah','Chaudah','Pandrah','Solah','Satrah','Atharah','Unnis','Bees'];
+  const t=['','','Bees','Tees','Chaalees','Pachaas','Saath','Sattar','Assi','Nabbe'];
+  if(n<21)return o[n];if(n<100)return t[Math.floor(n/10)]+(n%10?' '+o[n%10]:'');
+  if(n<1000)return o[Math.floor(n/100)]+' Sau'+(n%100?' '+numWords(n%100):'');
+  if(n<100000)return numWords(Math.floor(n/1000))+' Hazaar'+(n%1000?' '+numWords(n%1000):'');
+  if(n<10000000)return numWords(Math.floor(n/100000))+' Lakh'+(n%100000?' '+numWords(n%100000):'');
+  return numWords(Math.floor(n/10000000))+' Crore'+(n%10000000?' '+numWords(n%10000000):'');
+}
+function fmtDate(d){try{return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});}catch{return d;}}
+
+// Receipt number
+function nextRNum(){const n=receipts.length?Math.max(...receipts.map(r=>parseInt(r.num?.split('-')[1]||0)))+1:1;return'JMB-'+String(n).padStart(3,'0');}
+// Voucher number
+function nextVNum(type){const p={payment:'PV',expense:'EV',purchase:'PUR',approval:'WAV'};const pfx=p[type]||'V';const n=vouchers.filter(v=>v.type===type).length+1;return pfx+'-'+String(n).padStart(3,'0');}
+
+// Tabs
+let rFilter='all',vFilter='all';
+function setRF(f,el){rFilter=f;document.querySelectorAll('#pg-receipts .tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');renderReceipts();}
+function setVF(f,el){vFilter=f;document.querySelectorAll('#pg-vouchers .tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');renderVouchers();}
+function openReceiptForm(){const c=document.getElementById('receipt-form-card');c.style.display=c.style.display==='none'?'block':'none';}
+function openVoucherForm(){const c=document.getElementById('voucher-form-card');c.style.display=c.style.display==='none'?'block':'none';}
+
+// Save Receipt
+function saveReceipt(){
+  const n=document.getElementById('r-name').value.trim();
+  const a=parseFloat(document.getElementById('r-amount').value)||0;
+  if(!n||!a){alert('Naam aur raqam zaroor darj karen!');return;}
+  const rec={id:Date.now(),num:nextRNum(),type:document.getElementById('r-type').value,
+    date:document.getElementById('r-date').value||new Date().toISOString().split('T')[0],
+    name:n,phone:document.getElementById('r-phone').value,amount:a,
+    mode:document.getElementById('r-mode').value,purpose:document.getElementById('r-purpose').value,
+    notes:document.getElementById('r-notes').value};
+  receipts.unshift(rec);saveRV();renderReceipts();
+  // Also add to main accounts
+  transactions.unshift({id:Date.now()+1,type:'in',cat:({payment:'Chanda',donation:'Donation',chanda:'Chanda',taraweeh:'Taraweeh Nazrana',cash:'Cash Receipt'})[rec.type]||'Income',
+    amount:rec.amount,date:rec.date,note:rec.name+' — '+rec.num});
+  saveData();renderTx();renderDash();
+  document.getElementById('receipt-form-card').style.display='none';
+  ['r-name','r-phone','r-amount','r-purpose','r-notes'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  viewDoc('receipt',rec.id);
+}
+
+// Save Voucher
+function saveVoucher(){
+  const p=document.getElementById('v-payee').value.trim();
+  const a=parseFloat(document.getElementById('v-amount').value)||0;
+  const d=document.getElementById('v-desc').value.trim();
+  if(!p||!a||!d){alert('Payee, raqam aur tafseel zaroor darj karen!');return;}
+  const vtype=document.getElementById('v-type').value;
+  const vch={id:Date.now(),num:nextVNum(vtype),type:vtype,
+    date:document.getElementById('v-date').value||new Date().toISOString().split('T')[0],
+    payee:p,cat:document.getElementById('v-cat').value,amount:a,
+    mode:document.getElementById('v-mode').value,desc:d,
+    approved:document.getElementById('v-approved').value,ref:document.getElementById('v-ref').value};
+  vouchers.unshift(vch);saveRV();renderVouchers();
+  // Also add to main accounts as expense
+  transactions.unshift({id:Date.now()+1,type:'out',cat:vch.cat,amount:vch.amount,date:vch.date,note:vch.payee+' — '+vch.num});
+  saveData();renderTx();renderDash();
+  document.getElementById('voucher-form-card').style.display='none';
+  ['v-payee','v-amount','v-desc','v-approved','v-ref'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  viewDoc('voucher',vch.id);
+}
+
+// Render lists
+function renderReceipts(){
+  const tl={payment:'💳 Payment',donation:'🤲 Donation',chanda:'💰 Chanda',taraweeh:'🌙 Taraweeh',cash:'💵 Cash'};
+  const data=rFilter==='all'?receipts:receipts.filter(r=>r.type===rFilter);
+  document.getElementById('receipts-tb').innerHTML=data.length?data.map(r=>`<tr>
+    <td><b style="color:var(--g1);font-family:monospace">${r.num}</b></td>
+    <td><span class="badge bg" style="font-size:10px">${tl[r.type]||r.type}</span></td>
+    <td style="font-weight:600">${r.name}</td>
+    <td style="font-weight:700;color:var(--g1)">₹${r.amount.toLocaleString('en-IN')}</td>
+    <td style="font-size:11.5px">${r.date}</td>
+    <td style="font-size:11.5px;color:#aaa">${r.mode||'—'}</td>
+    <td><div style="display:flex;gap:4px">
+      <button class="btn btn-pr btn-xs" onclick="viewDoc('receipt',${r.id})">👁️ View</button>
+      <button class="btn btn-gh btn-xs" onclick="viewDoc('receipt',${r.id},true)">🖨️ Print</button>
+      <button class="btn btn-gh btn-xs" onclick="delReceipt(${r.id})">🗑️</button>
+    </div></td>
+  </tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:24px;color:#bbb">Koi receipt nahi</td></tr>';
+}
+function renderVouchers(){
+  const tl={payment:'💳 Payment',expense:'📉 Expense',purchase:'🛒 Purchase',approval:'✅ Approval'};
+  const data=vFilter==='all'?vouchers:vouchers.filter(v=>v.type===vFilter);
+  document.getElementById('vouchers-tb').innerHTML=data.length?data.map(v=>`<tr>
+    <td><b style="color:var(--blue);font-family:monospace">${v.num}</b></td>
+    <td><span class="badge bb" style="font-size:10px">${tl[v.type]||v.type}</span></td>
+    <td style="font-weight:600">${v.payee}</td>
+    <td style="font-weight:700;color:var(--red)">₹${v.amount.toLocaleString('en-IN')}</td>
+    <td style="font-size:11.5px">${v.date}</td>
+    <td style="font-size:11.5px;color:#aaa">${v.cat}</td>
+    <td style="font-size:11.5px;color:#aaa">${v.approved||'—'}</td>
+    <td><div style="display:flex;gap:4px">
+      <button class="btn btn-pr btn-xs" onclick="viewDoc('voucher',${v.id})">👁️ View</button>
+      <button class="btn btn-gh btn-xs" onclick="viewDoc('voucher',${v.id},true)">🖨️ Print</button>
+      <button class="btn btn-gh btn-xs" onclick="delVoucher(${v.id})">🗑️</button>
+    </div></td>
+  </tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:24px;color:#bbb">Koi voucher nahi</td></tr>';
+}
+function delReceipt(id){if(!confirm('Delete karna chahte ho?'))return;receipts=receipts.filter(r=>r.id!==id);saveRV();renderReceipts();}
+function delVoucher(id){if(!confirm('Delete karna chahte ho?'))return;vouchers=vouchers.filter(v=>v.id!==id);saveRV();renderVouchers();}
+
+// ===== PRINT PORTAL =====
+let currentPrintType='';
+function viewDoc(type,id,autoPrint=false){
+  const doc=type==='receipt'?buildReceiptDoc(receipts.find(r=>r.id===id)):buildVoucherDoc(vouchers.find(v=>v.id===id));
+  if(!doc)return;
+  currentPrintType=type;
+  document.getElementById('print-doc-area').innerHTML=doc;
+  document.getElementById('print-portal').style.display='block';
+  document.getElementById('print-portal').scrollTop=0;
+  if(autoPrint)setTimeout(doPrint,400);
+}
+function closePrintPortal(){document.getElementById('print-portal').style.display='none';}
+function doPrint(){
+  // Only print the doc area
+  const html=document.getElementById('print-doc-area').innerHTML;
+  const w=window.open('','_blank','width=800,height=600');
+  const isVoucher=currentPrintType==='voucher';
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',Arial,sans-serif;background:#fff;padding:0;margin:0}
+  @page{size:${isVoucher?'A4 portrait':'A5 portrait'};margin:8mm}
+  .rdoc,.vdoc{max-width:100%;border:none!important;box-shadow:none!important}
+  .rdoc-hd,.vdoc-hd{background:#0f3d25!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rdoc-amount,.vdoc-amount-bar{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rdoc-gold,.vdoc-gold{background:linear-gradient(90deg,#8b6914,#f5e642,#d4b84a,#f5e642,#8b6914)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;height:2.5px}
+  .rdoc-type-bar,.vdoc-type-bar{background:#f8f9fa!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rdoc-ft,.vdoc-ft{background:#f8f9fa!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rdoc-status{background:#dcfce7!important;border:1px solid #86efac!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  ${document.querySelector('style').textContent}
+  </style></head><body>${html}</body></html>`);
+  w.document.close();
+  setTimeout(()=>{w.focus();w.print();},600);
+}
+function duplicatePrint(){
+  // Add duplicate watermark
+  const area=document.getElementById('print-doc-area');
+  const wm=document.createElement('div');wm.className='rdoc-watermark';wm.textContent='DUPLICATE COPY';
+  const doc=area.querySelector('.rdoc')||area.querySelector('.vdoc');
+  if(doc){doc.style.position='relative';doc.appendChild(wm);}
+  doPrint();
+  setTimeout(()=>{if(doc&&doc.contains(wm))doc.removeChild(wm);},2000);
+}
+
+// ===== OFFICIAL HEADER/FOOTER HTML =====
+function docHeader(){
+  return`<div class="rdoc-hd">
+    <div class="rdoc-hd-inner">
+      <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="23" fill="#1a5c36" stroke="#b8960c" stroke-width="1.5"/>
+        <ellipse cx="24" cy="22" rx="10" ry="6.5" fill="#0a1e12"/>
+        <rect x="14" y="22" width="20" height="10" fill="#0a1e12" rx="1"/>
+        <rect x="9" y="15" width="3.5" height="17" fill="#071510" rx="1"/>
+        <path d="M8 15 Q10.75 11 13.5 15Z" fill="#071510"/>
+        <line x1="10.75" y1="11" x2="10.75" y2="8" stroke="#b8960c" stroke-width="1"/>
+        <ellipse cx="10.75" cy="8" rx="1.2" ry=".8" fill="#b8960c"/>
+        <rect x="35.5" y="15" width="3.5" height="17" fill="#071510" rx="1"/>
+        <path d="M34.5 15 Q37.25 11 40 15Z" fill="#071510"/>
+        <line x1="37.25" y1="11" x2="37.25" y2="8" stroke="#b8960c" stroke-width="1"/>
+        <ellipse cx="37.25" cy="8" rx="1.2" ry=".8" fill="#b8960c"/>
+        <line x1="24" y1="15.5" x2="24" y2="11" stroke="#b8960c" stroke-width="1.2"/>
+        <path d="M21.5 15.5 Q24 12 26.5 15.5Z" fill="#b8960c"/>
+        <ellipse cx="24" cy="11" rx="1.5" ry=".9" fill="#b8960c"/>
+        <path d="M20 32 L20 26 Q24 22.5 28 26 L28 32Z" fill="#040c07"/>
+        <rect x="16" y="24" width="3" height="4" fill="#b8960c" rx="1.5" opacity=".5"/>
+        <rect x="29" y="24" width="3" height="4" fill="#b8960c" rx="1.5" opacity=".5"/>
+        <text x="24" y="41" text-anchor="middle" font-size="3.5" fill="rgba(255,255,255,.5)" font-family="sans-serif">JAMA MASJID</text>
+        <path d="M35 7 A4 4 0 1 1 35 15 A3 3 0 1 0 35 7Z" fill="#f5e642" opacity=".85"/>
+      </svg>
+      <div class="rdoc-hd-text">
+        <div class="rdoc-hd-name">Jama Masjid Bhagwanpur</div>
+        <div class="rdoc-hd-ar">جامع مسجد بھگوانپور</div>
+        <div class="rdoc-hd-addr">Bhagwanpur, Muzaffarpur, Bihar — Established Masjid</div>
+      </div>
+      <div class="rdoc-hd-mgf">
+        <div class="rdoc-hd-mgf-label">Powered by</div>
+        <div class="rdoc-hd-mgf-val">MGF</div>
+        <div style="font-size:8px;color:rgba(255,255,255,.3)">v1.0 — 2026</div>
+      </div>
+    </div>
+    <div class="rdoc-gold"></div>
+  </div>`;
+}
+function docFooter(){
+  return`<div class="rdoc-ft">
+    <div class="rdoc-ft-l">Mosque Governance Framework (MGF) v1.0 — Jama Masjid Bhagwanpur</div>
+    <div class="rdoc-ft-r">This is a computer-generated document</div>
+  </div>`;
+}
+
+// ===== STAMP SVG (inline, professional) =====
+function stampSVG(size=72){
+  return`<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="48" fill="none" stroke="#0f3d25" stroke-width="3"/>
+    <circle cx="50" cy="50" r="43" fill="none" stroke="#0f3d25" stroke-width="1"/>
+    <circle cx="50" cy="50" r="40" fill="none" stroke="#b8960c" stroke-width="0.5"/>
+    <ellipse cx="50" cy="46" rx="12" ry="7.5" fill="#0f3d25"/>
+    <rect x="38" y="46" width="24" height="12" fill="#0f3d25" rx="1"/>
+    <rect x="31" y="37" width="4" height="21" fill="#0a1a0f" rx="1"/>
+    <path d="M29.5 37 Q33 31.5 36.5 37Z" fill="#0a1a0f"/>
+    <line x1="33" y1="31.5" x2="33" y2="27" stroke="#b8960c" stroke-width="1.2"/>
+    <ellipse cx="33" cy="27" rx="1.5" ry=".9" fill="#b8960c"/>
+    <rect x="65" y="37" width="4" height="21" fill="#0a1a0f" rx="1"/>
+    <path d="M63.5 37 Q67 31.5 70.5 37Z" fill="#0a1a0f"/>
+    <line x1="67" y1="31.5" x2="67" y2="27" stroke="#b8960c" stroke-width="1.2"/>
+    <ellipse cx="67" cy="27" rx="1.5" ry=".9" fill="#b8960c"/>
+    <line x1="50" y1="38.5" x2="50" y2="33" stroke="#b8960c" stroke-width="1.4"/>
+    <path d="M47.2 38.5 Q50 34.5 52.8 38.5Z" fill="#b8960c"/>
+    <ellipse cx="50" cy="33" rx="1.8" ry="1.1" fill="#b8960c"/>
+    <path d="M44 58 L44 52 Q50 47.5 56 52 L56 58Z" fill="#040d08"/>
+    <rect x="35" y="49" width="3" height="4.5" fill="#b8960c" rx="1.5" opacity=".5"/>
+    <rect x="62" y="49" width="3" height="4.5" fill="#b8960c" rx="1.5" opacity=".5"/>
+    <defs>
+      <path id="tc" d="M50,50 m-38,0 a38,38 0 1,1 76,0"/>
+      <path id="bc" d="M50,50 m-33,0 a33,33 0 0,0 66,0"/>
+    </defs>
+    <text font-size="7.5" fill="#0f3d25" font-family="Arial,sans-serif" font-weight="700" letter-spacing="1.8">
+      <textPath href="#tc" startOffset="6%">JAMA MASJID BHAGWANPUR</textPath>
+    </text>
+    <text font-size="6.5" fill="#b8960c" font-family="Arial,sans-serif" font-weight="600" letter-spacing="1">
+      <textPath href="#bc" startOffset="10%">MGF • MUZAFFARPUR • 2026</textPath>
+    </text>
+    <circle cx="12.5" cy="50" r="2.2" fill="#b8960c"/>
+    <circle cx="87.5" cy="50" r="2.2" fill="#b8960c"/>
+  </svg>`;
+}
+
+// ===== BUILD RECEIPT DOC =====
+function buildReceiptDoc(r,isDuplicate=false){
+  if(!r)return'';
+  const tNames={payment:'Payment Receipt',donation:'Donation Receipt',chanda:'Chanda Receipt',taraweeh:'Taraweeh Nazrana Receipt',cash:'Cash Receipt'};
+  const tColors={payment:'#1d4ed8',donation:'#166534',chanda:'#713f12',taraweeh:'#5b21b6',cash:'#92400e'};
+  const tBg={payment:'#eff6ff',donation:'#f0fdf4',chanda:'#fefce8',taraweeh:'#faf5ff',cash:'#fffbeb'};
+  const tName=tNames[r.type]||'Receipt';
+  const tColor=tColors[r.type]||'#0f3d25';
+  const tBgCol=tBg[r.type]||'#f0fdf4';
+  const words=numWords(r.amount)+' Rupaye Only/-';
+  return`<div class="rdoc">
+    ${isDuplicate?'<div class="rdoc-watermark">DUPLICATE COPY</div>':''}
+    ${docHeader()}
+    <div class="rdoc-type-bar" style="background:${tBgCol};border-bottom:2px solid ${tColor}">
+      <div class="rdoc-type-name" style="color:${tColor}">🧾 ${tName}</div>
+      <div class="rdoc-type-num">${r.num}</div>
+    </div>
+    <div class="rdoc-body">
+      <div class="rdoc-fields">
+        <div class="rdoc-field"><div class="rdoc-field-lbl">Receipt No.</div><div class="rdoc-field-val" style="font-family:monospace;font-weight:700;color:${tColor}">${r.num}</div></div>
+        <div class="rdoc-field"><div class="rdoc-field-lbl">Date / Tarikh</div><div class="rdoc-field-val">${fmtDate(r.date)}</div></div>
+        <div class="rdoc-field"><div class="rdoc-field-lbl">Received From / Naam</div><div class="rdoc-field-val" style="font-weight:700">${r.name}</div></div>
+        <div class="rdoc-field"><div class="rdoc-field-lbl">Contact</div><div class="rdoc-field-val">${r.phone||'—'}</div></div>
+        <div class="rdoc-field full"><div class="rdoc-field-lbl">Purpose / Maqsad</div><div class="rdoc-field-val">${r.purpose||'Masjid Contribution'}</div></div>
+        <div class="rdoc-field"><div class="rdoc-field-lbl">Payment Mode</div><div class="rdoc-field-val">${r.mode}</div></div>
+        ${r.notes?`<div class="rdoc-field"><div class="rdoc-field-lbl">Notes</div><div class="rdoc-field-val">${r.notes}</div></div>`:''}
+      </div>
+      <div class="rdoc-amount">
+        <div>
+          <div class="rdoc-amount-lbl">Amount Received / وصول شدہ رقم</div>
+          <div class="rdoc-amount-words">(${words})</div>
+        </div>
+        <div class="rdoc-amount-fig">₹${r.amount.toLocaleString('en-IN')}</div>
+      </div>
+      <div class="rdoc-status">✅ Payment received with thanks. JazakAllah Khair for your contribution.</div>
+      <div class="rdoc-sigs" style="position:relative">
+        <div class="rdoc-sig">
+          <div class="rdoc-sig-space"></div>
+          <div class="rdoc-sig-line"></div>
+          <div class="rdoc-sig-lbl">Treasurer / Khazanchi</div>
+        </div>
+        <div class="rdoc-sig" style="position:relative">
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);opacity:.2">
+            ${stampSVG(68)}
+          </div>
+          <div class="rdoc-sig-space"></div>
+          <div class="rdoc-sig-line"></div>
+          <div class="rdoc-sig-lbl">Official Stamp</div>
+        </div>
+      </div>
+    </div>
+    ${docFooter()}
+  </div>`;
+}
+
+// ===== BUILD VOUCHER DOC =====
+function buildVoucherDoc(v){
+  if(!v)return'';
+  const tNames={payment:'Payment Voucher',expense:'Expense Voucher',purchase:'Purchase Voucher',approval:'Work Approval Voucher'};
+  const tColors={payment:'#1d4ed8',expense:'#b91c1c',purchase:'#b45309',approval:'#166534'};
+  const tName=tNames[v.type]||'Voucher';
+  const tColor=tColors[v.type]||'#0f3d25';
+  const words=numWords(v.amount)+' Rupaye Only/-';
+  return`<div class="vdoc">
+    ${docHeader()}
+    <div class="vdoc-type-bar" style="border-bottom-color:${tColor}">
+      <div style="font-size:12.5px;font-weight:800;color:${tColor};text-transform:uppercase;letter-spacing:.6px">📄 ${tName}</div>
+      <div style="font-family:monospace;font-size:12px;font-weight:700;color:#555;background:#f0f0f0;padding:2px 8px;border-radius:4px">${v.num}</div>
+    </div>
+    <div class="vdoc-body">
+      <div class="vdoc-row" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Voucher No.</div><div class="vdoc-field-val" style="font-family:monospace;font-weight:700;color:${tColor}">${v.num}</div></div>
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Date / Tarikh</div><div class="vdoc-field-val">${fmtDate(v.date)}</div></div>
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Category</div><div class="vdoc-field-val">${v.cat}</div></div>
+      </div>
+      <div class="vdoc-row" style="grid-template-columns:2fr 1fr">
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Paid To / Payee</div><div class="vdoc-field-val" style="font-weight:700">${v.payee}</div></div>
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Payment Mode</div><div class="vdoc-field-val">${v.mode}</div></div>
+      </div>
+      <div class="vdoc-row" style="grid-template-columns:1fr">
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Description / Kaam ki Tafseel</div><div class="vdoc-field-val" style="min-height:32px">${v.desc}</div></div>
+      </div>
+      ${v.ref||v.approved?`<div class="vdoc-row" style="grid-template-columns:1fr 1fr">
+        ${v.ref?`<div class="vdoc-field"><div class="vdoc-field-lbl">Reference / Bill No.</div><div class="vdoc-field-val">${v.ref}</div></div>`:'<div></div>'}
+        ${v.approved?`<div class="vdoc-field"><div class="vdoc-field-lbl">Approved By</div><div class="vdoc-field-val" style="font-weight:700">${v.approved}</div></div>`:'<div></div>'}
+      </div>`:''}
+      <div class="vdoc-amount-bar">
+        <div>
+          <div class="vdoc-amount-lbl">Total Amount / کل رقم</div>
+          <div class="vdoc-amount-words">(${words})</div>
+        </div>
+        <div class="vdoc-amount-fig">₹${v.amount.toLocaleString('en-IN')}</div>
+      </div>
+      <div class="vdoc-sigs">
+        <div class="vdoc-sig"><div class="vdoc-sig-space"></div><div class="vdoc-sig-line"></div><div class="vdoc-sig-lbl">Prepared By</div></div>
+        <div class="vdoc-sig" style="position:relative">
+          <div style="position:absolute;top:-5px;left:50%;transform:translateX(-50%);opacity:.18">${stampSVG(60)}</div>
+          <div class="vdoc-sig-space"></div>
+          <div class="vdoc-sig-line"></div>
+          <div class="vdoc-sig-lbl">Treasurer / Khazanchi</div>
+        </div>
+        <div class="vdoc-sig"><div class="vdoc-sig-space"></div><div class="vdoc-sig-line"></div><div class="vdoc-sig-lbl">President / Sadar</div></div>
+      </div>
+    </div>
+    ${docFooter()}
+  </div>`;
+}
+
+
 // Pre-seed members on very first load
 (function(){
   if(localStorage.getItem(K+'members')!==null)return; // already has data
