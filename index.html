@@ -26,6 +26,23 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;
 --sh:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
 --sh-md:0 4px 16px rgba(0,0,0,.09);--sh-lg:0 12px 48px rgba(0,0,0,.18);}
 
+/* ===== DIGITAL SIGNATURE ===== */
+.sig-box{height:52px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:0}
+.sig-img{max-height:48px;max-width:120px;object-fit:contain}
+.sig-canvas-wrap{border:1.5px dashed #ccc;border-radius:6px;background:#fafafa;padding:4px;margin-bottom:4px;cursor:crosshair}
+.sig-actions{display:flex;gap:6px;justify-content:center;margin-top:6px;flex-wrap:wrap}
+/* Signature pad modal */
+.sigpad-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;align-items:center;justify-content:center}
+.sigpad-overlay.open{display:flex}
+.sigpad-box{background:#fff;border-radius:16px;width:420px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,.3);overflow:hidden}
+.sigpad-hd{padding:14px 18px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;background:#0f3d25;color:#fff}
+.sigpad-title{font-size:14px;font-weight:700}
+.sigpad-body{padding:16px}
+.sigpad-tabs{display:flex;gap:0;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;margin-bottom:14px}
+.sigpad-tab{flex:1;padding:8px;font-size:12px;font-weight:600;text-align:center;cursor:pointer;background:#f9fafb;color:#888;border:none;font-family:inherit}
+.sigpad-tab.active{background:#0f3d25;color:#fff}
+.sigpad-ft{padding:12px 16px;border-top:1px solid #f0f0f0;display:flex;justify-content:flex-end;gap:8px}
+
 /* ===== PRINT — ONLY PRINT RECEIPT/VOUCHER ===== */
 @media print{
   #loginScreen,#appShell .sidebar,#appShell .topbar,
@@ -1050,27 +1067,44 @@ tbody tr:hover td{background:#fafafa}
         <div class="fg2">
           <div class="fg"><label class="lbl">Receipt Type *</label>
             <select class="inp" id="r-type">
-              <option value="payment">💳 Payment Receipt</option>
+              <option value="acknowledgement">💳 Payment Acknowledgement Receipt</option>
               <option value="donation">🤲 Donation Receipt</option>
-              <option value="chanda">💰 Chanda Receipt</option>
-              <option value="taraweeh">🌙 Taraweeh Nazrana Receipt</option>
+              <option value="rent">🏠 Rent Receipt</option>
               <option value="cash">💵 Cash Receipt</option>
             </select></div>
-          <div class="fg"><label class="lbl">Tarikh *</label><input type="date" class="inp" id="r-date"/></div>
-          <div class="fg"><label class="lbl">Naam (Payer) *</label><input class="inp" id="r-name" placeholder="Muhammad Ahmed"/></div>
+          <div class="fg"><label class="lbl">Date / Tarikh *</label><input type="date" class="inp" id="r-date"/></div>
+          <div class="fg"><label class="lbl">Paid By (Naam) *</label><input class="inp" id="r-name" placeholder="Jis ne diya — naam"/></div>
           <div class="fg"><label class="lbl">Phone</label><input class="inp" id="r-phone" placeholder="9876543210"/></div>
-          <div class="fg"><label class="lbl">Raqam (₹) *</label><input class="inp" type="number" id="r-amount" placeholder="0"/></div>
+          <div class="fg"><label class="lbl">Department</label>
+            <select class="inp" id="r-dept">
+              <option value="">— General —</option>
+              <option>Administration</option><option>Finance</option>
+              <option>Construction & Maintenance</option><option>Safai</option>
+              <option>Ibadat & Deeni Taleem</option><option>Khidmat</option>
+            </select></div>
+          <div class="fg"><label class="lbl">Purpose / Maqsad *</label>
+            <select class="inp" id="r-purpose">
+              <option>Masjid Chanda</option><option>Taraweeh Nazrana</option>
+              <option>Donation (Hadiya)</option><option>Rent</option>
+              <option>Construction Fund</option><option>Maktab Fee</option>
+              <option>Qabristan Chanda</option><option>Other</option>
+            </select></div>
+          <div class="fg"><label class="lbl">Amount (₹) *</label><input class="inp" type="number" id="r-amount" placeholder="0"/></div>
           <div class="fg"><label class="lbl">Payment Mode</label>
             <select class="inp" id="r-mode"><option>Cash (Naqdi)</option><option>Bank Transfer</option><option>UPI/GPay</option><option>Cheque</option></select></div>
-          <div class="fg full"><label class="lbl">Purpose / Maqsad</label><input class="inp" id="r-purpose" placeholder="Chanda, Donation, etc."/></div>
-          <div class="fg full"><label class="lbl">Notes</label><input class="inp" id="r-notes" placeholder="Koi khaas baat..."/></div>
+          <div class="fg"><label class="lbl">Linked Voucher No.</label><input class="inp" id="r-voucher-link" placeholder="PV-001 (optional)"/></div>
+          <div class="fg"><label class="lbl">Bill/Invoice No.</label><input class="inp" id="r-bill" placeholder="Optional"/></div>
+          <div class="fg full"><label class="lbl">Remarks</label><input class="inp" id="r-notes" placeholder="Koi khaas baat..."/></div>
         </div>
-        <div style="margin-top:12px"><button class="btn btn-pr" onclick="saveReceipt()">✅ Generate Receipt</button></div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-pr" onclick="saveReceipt()">✅ Generate Receipt</button>
+          <span style="font-size:11px;color:#aaa;align-self:center">Receipt generate hone par automatically Voucher + Register entry bhi banegi</span>
+        </div>
       </div>
     </div>
     <div class="card">
       <div class="twrap">
-        <table><thead><tr><th>Receipt #</th><th>Type</th><th>Naam</th><th>Amount</th><th>Tarikh</th><th>Mode</th><th>Actions</th></tr></thead>
+        <table><thead><tr><th>Receipt #</th><th>Type</th><th>Paid By</th><th>Amount</th><th>Tarikh</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody id="receipts-tb"></tbody></table>
       </div>
     </div>
@@ -1079,48 +1113,45 @@ tbody tr:hover td{background:#fafafa}
   <!-- ===== VOUCHERS ===== -->
   <div class="pg" id="pg-vouchers">
     <div class="sec-h">
-      <span class="sec-t">📄 Voucher System</span>
+      <span class="sec-t">📄 Payment Voucher</span>
       <button class="btn btn-pr btn-sm" onclick="openVoucherForm()">+ New Voucher</button>
     </div>
-    <div class="tabs">
-      <div class="tab active" onclick="setVF('all',this)">All</div>
-      <div class="tab" onclick="setVF('payment',this)">💳 Payment</div>
-      <div class="tab" onclick="setVF('expense',this)">📉 Expense</div>
-      <div class="tab" onclick="setVF('purchase',this)">🛒 Purchase</div>
-      <div class="tab" onclick="setVF('approval',this)">✅ Work Approval</div>
-    </div>
     <div class="card" id="voucher-form-card" style="display:none;margin-bottom:14px">
-      <div class="ch"><span class="ct">📄 New Voucher</span><button class="btn btn-gh btn-sm" onclick="document.getElementById('voucher-form-card').style.display='none'">✕ Close</button></div>
+      <div class="ch"><span class="ct">📄 New Payment Voucher</span><button class="btn btn-gh btn-sm" onclick="document.getElementById('voucher-form-card').style.display='none'">✕ Close</button></div>
       <div class="cb">
         <div class="fg2">
-          <div class="fg"><label class="lbl">Voucher Type *</label>
-            <select class="inp" id="v-type">
-              <option value="payment">💳 Payment Voucher</option>
-              <option value="expense">📉 Expense Voucher</option>
-              <option value="purchase">🛒 Purchase Voucher</option>
-              <option value="approval">✅ Work Approval Voucher</option>
+          <div class="fg"><label class="lbl">Date / Tarikh *</label><input type="date" class="inp" id="v-date"/></div>
+          <div class="fg"><label class="lbl">Department *</label>
+            <select class="inp" id="v-dept">
+              <option>Administration</option><option>Finance</option>
+              <option>Construction & Maintenance</option><option>Safai</option>
+              <option>Ibadat & Deeni Taleem</option><option>Khidmat</option>
             </select></div>
-          <div class="fg"><label class="lbl">Tarikh *</label><input type="date" class="inp" id="v-date"/></div>
-          <div class="fg"><label class="lbl">Payee (Jisko diya) *</label><input class="inp" id="v-payee" placeholder="Naam ya company"/></div>
-          <div class="fg"><label class="lbl">Category</label>
-            <select class="inp" id="v-cat">
-              <option>Bijli Bill</option><option>Paani Bill</option><option>Imam Tankhwa</option>
-              <option>Muezzin Tankhwa</option><option>Teacher Tankhwa</option><option>Safaai</option>
-              <option>Maintenance</option><option>Construction</option><option>Purchase</option><option>Other</option>
-            </select></div>
-          <div class="fg"><label class="lbl">Raqam (₹) *</label><input class="inp" type="number" id="v-amount" placeholder="0"/></div>
+          <div class="fg"><label class="lbl">Paid To (Payee) *</label><input class="inp" id="v-payee" placeholder="Naam ya company"/></div>
+          <div class="fg"><label class="lbl">Purpose / Maqsad *</label><input class="inp" id="v-purpose" placeholder="Kaam ka mukhtasar naam"/></div>
+          <div class="fg"><label class="lbl">Amount (₹) *</label><input class="inp" type="number" id="v-amount" placeholder="0"/></div>
           <div class="fg"><label class="lbl">Payment Mode</label>
             <select class="inp" id="v-mode"><option>Cash</option><option>Bank Transfer</option><option>UPI</option><option>Cheque</option></select></div>
-          <div class="fg full"><label class="lbl">Kaam ki Tafseel *</label><textarea class="inp" id="v-desc" rows="2" placeholder="Kaam ya purchase ki puri tafseel..."></textarea></div>
-          <div class="fg"><label class="lbl">Approved By</label><input class="inp" id="v-approved" placeholder="President / Secretary"/></div>
-          <div class="fg"><label class="lbl">Reference / Bill #</label><input class="inp" id="v-ref" placeholder="Invoice no."/></div>
+          <div class="fg"><label class="lbl">Approved By *</label><input class="inp" id="v-approved" placeholder="President / Secretary"/></div>
+          <div class="fg"><label class="lbl">Paid By</label><input class="inp" id="v-paidby" placeholder="Treasurer ka naam"/></div>
+          <div class="fg full"><label class="lbl">Expense Category</label>
+            <select class="inp" id="v-cat">
+              <option>Labour</option><option>Cleaning</option><option>Maintenance</option>
+              <option>Electricity</option><option>Water</option><option>Purchase</option>
+              <option>Imam/Staff Salary</option><option>Construction</option><option>Misc</option>
+            </select></div>
+          <div class="fg full"><label class="lbl">Description / Tafseel *</label><textarea class="inp" id="v-desc" rows="2" placeholder="Kaam ki puri tafseel..."></textarea></div>
+          <div class="fg"><label class="lbl">Remarks</label><input class="inp" id="v-ref" placeholder="Notes..."/></div>
         </div>
-        <div style="margin-top:12px"><button class="btn btn-pr" onclick="saveVoucher()">✅ Generate Voucher</button></div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-pr" onclick="saveVoucher()">✅ Generate Voucher</button>
+          <span style="font-size:11px;color:#aaa;align-self:center">Voucher generate hone par automatically Expense Register entry bhi banegi</span>
+        </div>
       </div>
     </div>
     <div class="card">
       <div class="twrap">
-        <table><thead><tr><th>Voucher #</th><th>Type</th><th>Payee</th><th>Amount</th><th>Tarikh</th><th>Category</th><th>Approved</th><th>Actions</th></tr></thead>
+        <table><thead><tr><th>Voucher #</th><th>Payee</th><th>Dept</th><th>Amount</th><th>Tarikh</th><th>Approved</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody id="vouchers-tb"></tbody></table>
       </div>
     </div>
@@ -2743,11 +2774,22 @@ function initSettingsGS(){
 
 
 
-// ===== RECEIPT & VOUCHER SYSTEM =====
+// ===== RECEIPT & VOUCHER SYSTEM — MGF v1.0 =====
 let receipts=S.get('jm_receipts'),vouchers=S.get('jm_vouchers');
-function saveRV(){S.set('jm_receipts',receipts);S.set('jm_vouchers',vouchers);}
+let incomeReg=S.get('jm_income_reg'),expenseReg=S.get('jm_expense_reg'),donationReg=S.get('jm_donation_reg'),rentReg=S.get('jm_rent_reg');
+let activityLog=S.get('jm_activity_log');
 
-// Amount in words (Hinglish)
+function saveRV(){
+  S.set('jm_receipts',receipts);S.set('jm_vouchers',vouchers);
+  S.set('jm_income_reg',incomeReg);S.set('jm_expense_reg',expenseReg);
+  S.set('jm_donation_reg',donationReg);S.set('jm_rent_reg',rentReg);
+  S.set('jm_activity_log',activityLog);
+}
+function logActivity(action,details){
+  activityLog.unshift({id:Date.now(),action,details,time:new Date().toLocaleString('en-IN')});
+  if(activityLog.length>200)activityLog=activityLog.slice(0,200);
+}
+
 function numWords(n){
   if(!n||isNaN(n))return'Zero';n=Math.abs(Math.round(n));
   const o=['','Ek','Do','Teen','Chaar','Paanch','Chhe','Saat','Aath','Nau','Das','Gyarah','Barah','Terah','Chaudah','Pandrah','Solah','Satrah','Atharah','Unnis','Bees'];
@@ -2758,101 +2800,138 @@ function numWords(n){
   if(n<10000000)return numWords(Math.floor(n/100000))+' Lakh'+(n%100000?' '+numWords(n%100000):'');
   return numWords(Math.floor(n/10000000))+' Crore'+(n%10000000?' '+numWords(n%10000000):'');
 }
-function fmtDate(d){try{return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});}catch{return d;}}
+function fmtDate(d){try{return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});}catch{return d||'';}}
 
-// Receipt number
-function nextRNum(){const n=receipts.length?Math.max(...receipts.map(r=>parseInt(r.num?.split('-')[1]||0)))+1:1;return'JMB-'+String(n).padStart(3,'0');}
-// Voucher number
-function nextVNum(type){const p={payment:'PV',expense:'EV',purchase:'PUR',approval:'WAV'};const pfx=p[type]||'V';const n=vouchers.filter(v=>v.type===type).length+1;return pfx+'-'+String(n).padStart(3,'0');}
+function nextRNum(){
+  const nums=receipts.map(r=>parseInt(r.num?.replace('JMB-','')||0));
+  const n=nums.length?Math.max(...nums)+1:1;
+  return'JMB-'+String(n).padStart(3,'0');
+}
+function nextVNum(){
+  const nums=vouchers.map(v=>parseInt(v.num?.replace('PV-','')||0));
+  const n=nums.length?Math.max(...nums)+1:1;
+  return'PV-'+String(n).padStart(3,'0');
+}
 
-// Tabs
-let rFilter='all',vFilter='all';
-function setRF(f,el){rFilter=f;document.querySelectorAll('#pg-receipts .tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');renderReceipts();}
-function setVF(f,el){vFilter=f;document.querySelectorAll('#pg-vouchers .tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');renderVouchers();}
 function openReceiptForm(){const c=document.getElementById('receipt-form-card');c.style.display=c.style.display==='none'?'block':'none';}
 function openVoucherForm(){const c=document.getElementById('voucher-form-card');c.style.display=c.style.display==='none'?'block':'none';}
 
-// Save Receipt
 function saveReceipt(){
-  const n=document.getElementById('r-name').value.trim();
-  const a=parseFloat(document.getElementById('r-amount').value)||0;
-  if(!n||!a){alert('Naam aur raqam zaroor darj karen!');return;}
-  const rec={id:Date.now(),num:nextRNum(),type:document.getElementById('r-type').value,
-    date:document.getElementById('r-date').value||new Date().toISOString().split('T')[0],
-    name:n,phone:document.getElementById('r-phone').value,amount:a,
-    mode:document.getElementById('r-mode').value,purpose:document.getElementById('r-purpose').value,
-    notes:document.getElementById('r-notes').value};
-  receipts.unshift(rec);saveRV();renderReceipts();
-  // Also add to main accounts
-  transactions.unshift({id:Date.now()+1,type:'in',cat:({payment:'Chanda',donation:'Donation',chanda:'Chanda',taraweeh:'Taraweeh Nazrana',cash:'Cash Receipt'})[rec.type]||'Income',
-    amount:rec.amount,date:rec.date,note:rec.name+' — '+rec.num});
-  saveData();renderTx();renderDash();
+  const name=document.getElementById('r-name').value.trim();
+  const amount=parseFloat(document.getElementById('r-amount').value)||0;
+  if(!name||!amount){alert('Naam aur raqam zaroor darj karen!');return;}
+  const rtype=document.getElementById('r-type').value;
+  const date=document.getElementById('r-date').value||new Date().toISOString().split('T')[0];
+  const purpose=document.getElementById('r-purpose').value;
+  const dept=document.getElementById('r-dept').value;
+  const rec={
+    id:Date.now(),num:nextRNum(),type:rtype,date,
+    name,phone:document.getElementById('r-phone').value,
+    dept,purpose,amount,
+    mode:document.getElementById('r-mode').value,
+    notes:document.getElementById('r-notes').value,
+    bill:document.getElementById('r-bill').value,
+    voucherLink:document.getElementById('r-voucher-link').value,
+    status:'active',createdAt:new Date().toISOString()
+  };
+  receipts.unshift(rec);
+  const regEntry={id:Date.now()+1,date,name,purpose,amount,mode:rec.mode,receiptNum:rec.num,dept,status:'active'};
+  if(rtype==='donation')donationReg.unshift({...regEntry,type:'Donation'});
+  else if(rtype==='rent')rentReg.unshift({...regEntry,type:'Rent'});
+  else incomeReg.unshift({...regEntry,type:rtype});
+  const catMap={acknowledgement:'Chanda',donation:'Donation',rent:'Rent',cash:'Cash Receipt'};
+  transactions.unshift({id:Date.now()+2,type:'in',cat:catMap[rtype]||'Income',amount,date,note:name+' — '+rec.num});
+  saveData();
+  logActivity('Receipt Generated',rec.num+' — '+name+' — ₹'+amount+' — '+purpose);
+  saveRV();renderReceipts();renderDash();renderTx();
   document.getElementById('receipt-form-card').style.display='none';
-  ['r-name','r-phone','r-amount','r-purpose','r-notes'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  ['r-name','r-phone','r-amount','r-notes','r-bill','r-voucher-link'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   viewDoc('receipt',rec.id);
 }
 
-// Save Voucher
 function saveVoucher(){
-  const p=document.getElementById('v-payee').value.trim();
-  const a=parseFloat(document.getElementById('v-amount').value)||0;
-  const d=document.getElementById('v-desc').value.trim();
-  if(!p||!a||!d){alert('Payee, raqam aur tafseel zaroor darj karen!');return;}
-  const vtype=document.getElementById('v-type').value;
-  const vch={id:Date.now(),num:nextVNum(vtype),type:vtype,
-    date:document.getElementById('v-date').value||new Date().toISOString().split('T')[0],
-    payee:p,cat:document.getElementById('v-cat').value,amount:a,
-    mode:document.getElementById('v-mode').value,desc:d,
-    approved:document.getElementById('v-approved').value,ref:document.getElementById('v-ref').value};
-  vouchers.unshift(vch);saveRV();renderVouchers();
-  // Also add to main accounts as expense
-  transactions.unshift({id:Date.now()+1,type:'out',cat:vch.cat,amount:vch.amount,date:vch.date,note:vch.payee+' — '+vch.num});
-  saveData();renderTx();renderDash();
+  const payee=document.getElementById('v-payee').value.trim();
+  const amount=parseFloat(document.getElementById('v-amount').value)||0;
+  const desc=document.getElementById('v-desc').value.trim();
+  if(!payee||!amount||!desc){alert('Payee, raqam aur tafseel zaroor darj karen!');return;}
+  const date=document.getElementById('v-date').value||new Date().toISOString().split('T')[0];
+  const dept=document.getElementById('v-dept').value;
+  const vch={
+    id:Date.now(),num:nextVNum(),type:'payment',date,dept,
+    payee,purpose:document.getElementById('v-purpose').value,
+    amount,mode:document.getElementById('v-mode').value,
+    cat:document.getElementById('v-cat').value,desc,
+    approved:document.getElementById('v-approved').value,
+    paidBy:document.getElementById('v-paidby').value,
+    ref:document.getElementById('v-ref').value,
+    status:'active',createdAt:new Date().toISOString()
+  };
+  vouchers.unshift(vch);
+  expenseReg.unshift({id:Date.now()+1,date,payee,purpose:vch.purpose,dept,cat:vch.cat,amount,mode:vch.mode,voucherNum:vch.num,approved:vch.approved,desc,status:'active'});
+  transactions.unshift({id:Date.now()+2,type:'out',cat:vch.cat,amount,date,note:payee+' — '+vch.num});
+  saveData();
+  logActivity('Voucher Generated',vch.num+' — '+payee+' — ₹'+amount+' — '+dept);
+  saveRV();renderVouchers();renderDash();renderTx();
   document.getElementById('voucher-form-card').style.display='none';
-  ['v-payee','v-amount','v-desc','v-approved','v-ref'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  ['v-payee','v-purpose','v-amount','v-desc','v-approved','v-paidby','v-ref'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   viewDoc('voucher',vch.id);
 }
 
-// Render lists
+function changeReceiptStatus(id,status){
+  const r=receipts.find(x=>x.id===id);
+  if(!r||!confirm('Receipt '+r.num+' ko "'+status+'" karna chahte ho?'))return;
+  r.status=status;logActivity('Receipt Status Changed',r.num+' → '+status);saveRV();renderReceipts();
+}
+function changeVoucherStatus(id,status){
+  const v=vouchers.find(x=>x.id===id);
+  if(!v||!confirm('Voucher '+v.num+' ko "'+status+'" karna chahte ho?'))return;
+  v.status=status;logActivity('Voucher Status Changed',v.num+' → '+status);saveRV();renderVouchers();
+}
+
+let rFilter='all';
+function setRF(f,el){rFilter=f;document.querySelectorAll('#pg-receipts .tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');renderReceipts();}
+function setVF(f,el){document.querySelectorAll('#pg-vouchers .tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');renderVouchers();}
+
+function statusBadge(s){
+  const m={active:'<span class="badge bg">Active</span>',cancelled:'<span class="badge br">Cancelled</span>',void:'<span class="badge bgray">Void</span>'};
+  return m[s]||'<span class="badge bgray">'+s+'</span>';
+}
+const rTypeNames={acknowledgement:'Paymt Acknowledgement',donation:'Donation',rent:'Rent',cash:'Cash'};
+
 function renderReceipts(){
-  const tl={payment:'💳 Payment',donation:'🤲 Donation',chanda:'💰 Chanda',taraweeh:'🌙 Taraweeh',cash:'💵 Cash'};
-  const data=rFilter==='all'?receipts:receipts.filter(r=>r.type===rFilter);
+  let data=rFilter==='all'?receipts:receipts.filter(r=>r.type===rFilter);
   document.getElementById('receipts-tb').innerHTML=data.length?data.map(r=>`<tr>
     <td><b style="color:var(--g1);font-family:monospace">${r.num}</b></td>
-    <td><span class="badge bg" style="font-size:10px">${tl[r.type]||r.type}</span></td>
+    <td style="font-size:11px">${rTypeNames[r.type]||r.type}</td>
     <td style="font-weight:600">${r.name}</td>
-    <td style="font-weight:700;color:var(--g1)">₹${r.amount.toLocaleString('en-IN')}</td>
+    <td style="font-weight:700;color:var(--g1)">&#8377;${r.amount.toLocaleString('en-IN')}</td>
     <td style="font-size:11.5px">${r.date}</td>
-    <td style="font-size:11.5px;color:#aaa">${r.mode||'—'}</td>
-    <td><div style="display:flex;gap:4px">
-      <button class="btn btn-pr btn-xs" onclick="viewDoc('receipt',${r.id})">👁️ View</button>
-      <button class="btn btn-gh btn-xs" onclick="viewDoc('receipt',${r.id},true)">🖨️ Print</button>
-      <button class="btn btn-gh btn-xs" onclick="delReceipt(${r.id})">🗑️</button>
+    <td>${statusBadge(r.status||'active')}</td>
+    <td><div style="display:flex;gap:4px;flex-wrap:wrap">
+      <button class="btn btn-pr btn-xs" onclick="viewDoc('receipt',${r.id})">&#128065; View</button>
+      <button class="btn btn-blue btn-xs" onclick="viewDoc('receipt',${r.id},true)">&#128424; Print</button>
+      ${r.status==='active'?`<button class="btn btn-gh btn-xs" style="color:var(--amber)" onclick="changeReceiptStatus(${r.id},'cancelled')">Cancel</button>`:''}
     </div></td>
   </tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:24px;color:#bbb">Koi receipt nahi</td></tr>';
 }
+
 function renderVouchers(){
-  const tl={payment:'💳 Payment',expense:'📉 Expense',purchase:'🛒 Purchase',approval:'✅ Approval'};
-  const data=vFilter==='all'?vouchers:vouchers.filter(v=>v.type===vFilter);
-  document.getElementById('vouchers-tb').innerHTML=data.length?data.map(v=>`<tr>
+  document.getElementById('vouchers-tb').innerHTML=vouchers.length?vouchers.map(v=>`<tr>
     <td><b style="color:var(--blue);font-family:monospace">${v.num}</b></td>
-    <td><span class="badge bb" style="font-size:10px">${tl[v.type]||v.type}</span></td>
     <td style="font-weight:600">${v.payee}</td>
-    <td style="font-weight:700;color:var(--red)">₹${v.amount.toLocaleString('en-IN')}</td>
+    <td style="font-size:11px">${v.dept||'—'}</td>
+    <td style="font-weight:700;color:var(--red)">&#8377;${v.amount.toLocaleString('en-IN')}</td>
     <td style="font-size:11.5px">${v.date}</td>
-    <td style="font-size:11.5px;color:#aaa">${v.cat}</td>
-    <td style="font-size:11.5px;color:#aaa">${v.approved||'—'}</td>
-    <td><div style="display:flex;gap:4px">
-      <button class="btn btn-pr btn-xs" onclick="viewDoc('voucher',${v.id})">👁️ View</button>
-      <button class="btn btn-gh btn-xs" onclick="viewDoc('voucher',${v.id},true)">🖨️ Print</button>
-      <button class="btn btn-gh btn-xs" onclick="delVoucher(${v.id})">🗑️</button>
+    <td style="font-size:11px;color:#aaa">${v.approved||'—'}</td>
+    <td>${statusBadge(v.status||'active')}</td>
+    <td><div style="display:flex;gap:4px;flex-wrap:wrap">
+      <button class="btn btn-pr btn-xs" onclick="viewDoc('voucher',${v.id})">&#128065; View</button>
+      <button class="btn btn-blue btn-xs" onclick="viewDoc('voucher',${v.id},true)">&#128424; Print</button>
+      ${v.status==='active'?`<button class="btn btn-gh btn-xs" style="color:var(--red)" onclick="changeVoucherStatus(${v.id},'void')">Void</button>`:''}
     </div></td>
   </tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:24px;color:#bbb">Koi voucher nahi</td></tr>';
 }
-function delReceipt(id){if(!confirm('Delete karna chahte ho?'))return;receipts=receipts.filter(r=>r.id!==id);saveRV();renderReceipts();}
-function delVoucher(id){if(!confirm('Delete karna chahte ho?'))return;vouchers=vouchers.filter(v=>v.id!==id);saveRV();renderVouchers();}
 
-// ===== PRINT PORTAL =====
 let currentPrintType='';
 function viewDoc(type,id,autoPrint=false){
   const doc=type==='receipt'?buildReceiptDoc(receipts.find(r=>r.id===id)):buildVoucherDoc(vouchers.find(v=>v.id===id));
@@ -2865,169 +2944,67 @@ function viewDoc(type,id,autoPrint=false){
 }
 function closePrintPortal(){document.getElementById('print-portal').style.display='none';}
 function doPrint(){
-  // Only print the doc area
   const html=document.getElementById('print-doc-area').innerHTML;
-  const w=window.open('','_blank','width=800,height=600');
   const isVoucher=currentPrintType==='voucher';
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Plus Jakarta Sans',Arial,sans-serif;background:#fff;padding:0;margin:0}
-  @page{size:${isVoucher?'A4 portrait':'A5 portrait'};margin:8mm}
-  .rdoc,.vdoc{max-width:100%;border:none!important;box-shadow:none!important}
-  .rdoc-hd,.vdoc-hd{background:#0f3d25!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .rdoc-amount,.vdoc-amount-bar{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .rdoc-gold,.vdoc-gold{background:linear-gradient(90deg,#8b6914,#f5e642,#d4b84a,#f5e642,#8b6914)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;height:2.5px}
-  .rdoc-type-bar,.vdoc-type-bar{background:#f8f9fa!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .rdoc-ft,.vdoc-ft{background:#f8f9fa!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .rdoc-status{background:#dcfce7!important;border:1px solid #86efac!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  ${document.querySelector('style').textContent}
-  </style></head><body>${html}</body></html>`);
+  const w=window.open('','_blank','width=900,height=700');
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"/><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:\'Plus Jakarta Sans\',Arial,sans-serif;background:#fff}@page{size:'+(isVoucher?'A4 portrait':'A5 portrait')+';margin:6mm}.rdoc,.vdoc{max-width:100%;border:none!important;box-shadow:none!important}.rdoc-hd{background:#0f3d25!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.rdoc-amount{background:#0f3d25!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.rdoc-status,.vdoc-amount-bar{-webkit-print-color-adjust:exact;print-color-adjust:exact}.rdoc-gold{background:linear-gradient(90deg,#8b6914,#f5e642,#d4b84a)!important;height:2.5px!important;display:block!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+document.querySelector('style').textContent+'</style></head><body>'+html+'</body></html>');
   w.document.close();
-  setTimeout(()=>{w.focus();w.print();},600);
+  setTimeout(()=>{w.focus();w.print();},700);
 }
 function duplicatePrint(){
-  // Add duplicate watermark
   const area=document.getElementById('print-doc-area');
   const wm=document.createElement('div');wm.className='rdoc-watermark';wm.textContent='DUPLICATE COPY';
-  const doc=area.querySelector('.rdoc')||area.querySelector('.vdoc');
+  const doc=area.querySelector('.rdoc,.vdoc');
   if(doc){doc.style.position='relative';doc.appendChild(wm);}
   doPrint();
   setTimeout(()=>{if(doc&&doc.contains(wm))doc.removeChild(wm);},2000);
 }
 
-// ===== OFFICIAL HEADER/FOOTER HTML =====
-function docHeader(){
-  return`<div class="rdoc-hd">
-    <div class="rdoc-hd-inner">
-      <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="24" cy="24" r="23" fill="#1a5c36" stroke="#b8960c" stroke-width="1.5"/>
-        <ellipse cx="24" cy="22" rx="10" ry="6.5" fill="#0a1e12"/>
-        <rect x="14" y="22" width="20" height="10" fill="#0a1e12" rx="1"/>
-        <rect x="9" y="15" width="3.5" height="17" fill="#071510" rx="1"/>
-        <path d="M8 15 Q10.75 11 13.5 15Z" fill="#071510"/>
-        <line x1="10.75" y1="11" x2="10.75" y2="8" stroke="#b8960c" stroke-width="1"/>
-        <ellipse cx="10.75" cy="8" rx="1.2" ry=".8" fill="#b8960c"/>
-        <rect x="35.5" y="15" width="3.5" height="17" fill="#071510" rx="1"/>
-        <path d="M34.5 15 Q37.25 11 40 15Z" fill="#071510"/>
-        <line x1="37.25" y1="11" x2="37.25" y2="8" stroke="#b8960c" stroke-width="1"/>
-        <ellipse cx="37.25" cy="8" rx="1.2" ry=".8" fill="#b8960c"/>
-        <line x1="24" y1="15.5" x2="24" y2="11" stroke="#b8960c" stroke-width="1.2"/>
-        <path d="M21.5 15.5 Q24 12 26.5 15.5Z" fill="#b8960c"/>
-        <ellipse cx="24" cy="11" rx="1.5" ry=".9" fill="#b8960c"/>
-        <path d="M20 32 L20 26 Q24 22.5 28 26 L28 32Z" fill="#040c07"/>
-        <rect x="16" y="24" width="3" height="4" fill="#b8960c" rx="1.5" opacity=".5"/>
-        <rect x="29" y="24" width="3" height="4" fill="#b8960c" rx="1.5" opacity=".5"/>
-        <text x="24" y="41" text-anchor="middle" font-size="3.5" fill="rgba(255,255,255,.5)" font-family="sans-serif">JAMA MASJID</text>
-        <path d="M35 7 A4 4 0 1 1 35 15 A3 3 0 1 0 35 7Z" fill="#f5e642" opacity=".85"/>
-      </svg>
-      <div class="rdoc-hd-text">
-        <div class="rdoc-hd-name">Jama Masjid Bhagwanpur</div>
-        <div class="rdoc-hd-ar">جامع مسجد بھگوانپور</div>
-        <div class="rdoc-hd-addr">Bhagwanpur, Muzaffarpur, Bihar — Established Masjid</div>
-      </div>
-      <div class="rdoc-hd-mgf">
-        <div class="rdoc-hd-mgf-label">Powered by</div>
-        <div class="rdoc-hd-mgf-val">MGF</div>
-        <div style="font-size:8px;color:rgba(255,255,255,.3)">v1.0 — 2026</div>
-      </div>
-    </div>
-    <div class="rdoc-gold"></div>
-  </div>`;
-}
-function docFooter(){
-  return`<div class="rdoc-ft">
-    <div class="rdoc-ft-l">Mosque Governance Framework (MGF) v1.0 — Jama Masjid Bhagwanpur</div>
-    <div class="rdoc-ft-r">This is a computer-generated document</div>
-  </div>`;
-}
-
-// ===== STAMP SVG (inline, professional) =====
-function stampSVG(size=72){
-  return`<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="50" cy="50" r="48" fill="none" stroke="#0f3d25" stroke-width="3"/>
-    <circle cx="50" cy="50" r="43" fill="none" stroke="#0f3d25" stroke-width="1"/>
-    <circle cx="50" cy="50" r="40" fill="none" stroke="#b8960c" stroke-width="0.5"/>
-    <ellipse cx="50" cy="46" rx="12" ry="7.5" fill="#0f3d25"/>
-    <rect x="38" y="46" width="24" height="12" fill="#0f3d25" rx="1"/>
-    <rect x="31" y="37" width="4" height="21" fill="#0a1a0f" rx="1"/>
-    <path d="M29.5 37 Q33 31.5 36.5 37Z" fill="#0a1a0f"/>
-    <line x1="33" y1="31.5" x2="33" y2="27" stroke="#b8960c" stroke-width="1.2"/>
-    <ellipse cx="33" cy="27" rx="1.5" ry=".9" fill="#b8960c"/>
-    <rect x="65" y="37" width="4" height="21" fill="#0a1a0f" rx="1"/>
-    <path d="M63.5 37 Q67 31.5 70.5 37Z" fill="#0a1a0f"/>
-    <line x1="67" y1="31.5" x2="67" y2="27" stroke="#b8960c" stroke-width="1.2"/>
-    <ellipse cx="67" cy="27" rx="1.5" ry=".9" fill="#b8960c"/>
-    <line x1="50" y1="38.5" x2="50" y2="33" stroke="#b8960c" stroke-width="1.4"/>
-    <path d="M47.2 38.5 Q50 34.5 52.8 38.5Z" fill="#b8960c"/>
-    <ellipse cx="50" cy="33" rx="1.8" ry="1.1" fill="#b8960c"/>
-    <path d="M44 58 L44 52 Q50 47.5 56 52 L56 58Z" fill="#040d08"/>
-    <rect x="35" y="49" width="3" height="4.5" fill="#b8960c" rx="1.5" opacity=".5"/>
-    <rect x="62" y="49" width="3" height="4.5" fill="#b8960c" rx="1.5" opacity=".5"/>
-    <defs>
-      <path id="tc" d="M50,50 m-38,0 a38,38 0 1,1 76,0"/>
-      <path id="bc" d="M50,50 m-33,0 a33,33 0 0,0 66,0"/>
-    </defs>
-    <text font-size="7.5" fill="#0f3d25" font-family="Arial,sans-serif" font-weight="700" letter-spacing="1.8">
-      <textPath href="#tc" startOffset="6%">JAMA MASJID BHAGWANPUR</textPath>
-    </text>
-    <text font-size="6.5" fill="#b8960c" font-family="Arial,sans-serif" font-weight="600" letter-spacing="1">
-      <textPath href="#bc" startOffset="10%">MGF • MUZAFFARPUR • 2026</textPath>
-    </text>
-    <circle cx="12.5" cy="50" r="2.2" fill="#b8960c"/>
-    <circle cx="87.5" cy="50" r="2.2" fill="#b8960c"/>
-  </svg>`;
-}
-
-// ===== BUILD RECEIPT DOC =====
-function buildReceiptDoc(r,isDuplicate=false){
+function buildReceiptDoc(r){
   if(!r)return'';
-  const tNames={payment:'Payment Receipt',donation:'Donation Receipt',chanda:'Chanda Receipt',taraweeh:'Taraweeh Nazrana Receipt',cash:'Cash Receipt'};
-  const tColors={payment:'#1d4ed8',donation:'#166534',chanda:'#713f12',taraweeh:'#5b21b6',cash:'#92400e'};
-  const tBg={payment:'#eff6ff',donation:'#f0fdf4',chanda:'#fefce8',taraweeh:'#faf5ff',cash:'#fffbeb'};
+  const tNames={acknowledgement:'Payment Acknowledgement Receipt',donation:'Donation Receipt',rent:'Rent Receipt',cash:'Cash Receipt'};
+  const tColors={acknowledgement:'#1d4ed8',donation:'#166534',rent:'#b45309',cash:'#6d28d9'};
+  const tBg={acknowledgement:'#eff6ff',donation:'#f0fdf4',rent:'#fffbeb',cash:'#faf5ff'};
   const tName=tNames[r.type]||'Receipt';
   const tColor=tColors[r.type]||'#0f3d25';
-  const tBgCol=tBg[r.type]||'#f0fdf4';
   const words=numWords(r.amount)+' Rupaye Only/-';
-  return`<div class="rdoc">
-    ${isDuplicate?'<div class="rdoc-watermark">DUPLICATE COPY</div>':''}
+  const cancelled=r.status!=='active';
+  return`<div class="rdoc" style="position:relative;${cancelled?'opacity:.75':''}">
+    ${cancelled?'<div class="rdoc-watermark">'+r.status.toUpperCase()+'</div>':''}
     ${docHeader()}
-    <div class="rdoc-type-bar" style="background:${tBgCol};border-bottom:2px solid ${tColor}">
-      <div class="rdoc-type-name" style="color:${tColor}">🧾 ${tName}</div>
-      <div class="rdoc-type-num">${r.num}</div>
+    <div class="rdoc-type-bar" style="background:${tBg[r.type]||'#f0fdf4'};border-bottom:2px solid ${tColor}">
+      <div class="rdoc-type-name" style="color:${tColor}">${tName}</div>
+      <div class="rdoc-type-num" style="color:${tColor};background:${tBg[r.type]}">${r.num}</div>
     </div>
     <div class="rdoc-body">
       <div class="rdoc-fields">
-        <div class="rdoc-field"><div class="rdoc-field-lbl">Receipt No.</div><div class="rdoc-field-val" style="font-family:monospace;font-weight:700;color:${tColor}">${r.num}</div></div>
-        <div class="rdoc-field"><div class="rdoc-field-lbl">Date / Tarikh</div><div class="rdoc-field-val">${fmtDate(r.date)}</div></div>
-        <div class="rdoc-field"><div class="rdoc-field-lbl">Received From / Naam</div><div class="rdoc-field-val" style="font-weight:700">${r.name}</div></div>
-        <div class="rdoc-field"><div class="rdoc-field-lbl">Contact</div><div class="rdoc-field-val">${r.phone||'—'}</div></div>
-        <div class="rdoc-field full"><div class="rdoc-field-lbl">Purpose / Maqsad</div><div class="rdoc-field-val">${r.purpose||'Masjid Contribution'}</div></div>
+        <div class="rdoc-field"><div class="rdoc-field-lbl">Receipt No.</div><div class="rdoc-field-val" style="font-family:monospace;font-weight:800;color:${tColor}">${r.num}</div></div>
+        <div class="rdoc-field"><div class="rdoc-field-lbl">Date</div><div class="rdoc-field-val">${fmtDate(r.date)}</div></div>
+        <div class="rdoc-field full"><div class="rdoc-field-lbl">Paid By</div><div class="rdoc-field-val" style="font-weight:700">${r.name}${r.phone?' ('+r.phone+')':''}</div></div>
+        <div class="rdoc-field full"><div class="rdoc-field-lbl">Paid To</div><div class="rdoc-field-val" style="font-weight:600">Jama Masjid Bhagwanpur</div></div>
+        <div class="rdoc-field"><div class="rdoc-field-lbl">Department</div><div class="rdoc-field-val">${r.dept||'General'}</div></div>
+        <div class="rdoc-field"><div class="rdoc-field-lbl">Purpose</div><div class="rdoc-field-val">${r.purpose||'—'}</div></div>
         <div class="rdoc-field"><div class="rdoc-field-lbl">Payment Mode</div><div class="rdoc-field-val">${r.mode}</div></div>
-        ${r.notes?`<div class="rdoc-field"><div class="rdoc-field-lbl">Notes</div><div class="rdoc-field-val">${r.notes}</div></div>`:''}
+        <div class="rdoc-field"><div class="rdoc-field-lbl">Linked Voucher</div><div class="rdoc-field-val" style="font-family:monospace">${r.voucherLink||'—'}</div></div>
+        ${r.bill?'<div class="rdoc-field full"><div class="rdoc-field-lbl">Bill/Invoice No.</div><div class="rdoc-field-val">'+r.bill+'</div></div>':''}
+        ${r.notes?'<div class="rdoc-field full"><div class="rdoc-field-lbl">Remarks</div><div class="rdoc-field-val">'+r.notes+'</div></div>':''}
       </div>
       <div class="rdoc-amount">
         <div>
-          <div class="rdoc-amount-lbl">Amount Received / وصول شدہ رقم</div>
+          <div class="rdoc-amount-lbl">Payment Amount / ادا کی گئی رقم</div>
           <div class="rdoc-amount-words">(${words})</div>
         </div>
         <div class="rdoc-amount-fig">₹${r.amount.toLocaleString('en-IN')}</div>
       </div>
-      <div class="rdoc-status">✅ Payment received with thanks. JazakAllah Khair for your contribution.</div>
-      <div class="rdoc-sigs" style="position:relative">
-        <div class="rdoc-sig">
-          <div class="rdoc-sig-space"></div>
-          <div class="rdoc-sig-line"></div>
-          <div class="rdoc-sig-lbl">Treasurer / Khazanchi</div>
-        </div>
+      <div style="background:#fafafa;border:1px solid #e5e7eb;border-radius:6px;padding:9px 12px;margin-bottom:12px;font-size:11px;color:#444;line-height:1.7">
+        <b>Declaration:</b> I acknowledge that I have received the above payment from Jama Masjid Bhagwanpur.<br/>
+        <span style="color:#888">मैं प्रमाणित करता/करती हूँ कि मुझे उपर दी गई राशि जामा मस्जिद भगवानपुर से प्राप्त हो गई है।</span>
+      </div>
+      <div class="rdoc-sigs">
+        <div class="rdoc-sig">${getSigHTML('treasurer','Receiver Signature')}</div>
         <div class="rdoc-sig" style="position:relative">
-          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);opacity:.2">
-            ${stampSVG(68)}
-          </div>
-          <div class="rdoc-sig-space"></div>
-          <div class="rdoc-sig-line"></div>
-          <div class="rdoc-sig-lbl">Official Stamp</div>
+          <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);opacity:.12">${stampSVG(72)}</div>
+          ${getSigHTML('president','Authorized Signatory')}
         </div>
       </div>
     </div>
@@ -3035,37 +3012,39 @@ function buildReceiptDoc(r,isDuplicate=false){
   </div>`;
 }
 
-// ===== BUILD VOUCHER DOC =====
 function buildVoucherDoc(v){
   if(!v)return'';
-  const tNames={payment:'Payment Voucher',expense:'Expense Voucher',purchase:'Purchase Voucher',approval:'Work Approval Voucher'};
-  const tColors={payment:'#1d4ed8',expense:'#b91c1c',purchase:'#b45309',approval:'#166534'};
-  const tName=tNames[v.type]||'Voucher';
-  const tColor=tColors[v.type]||'#0f3d25';
   const words=numWords(v.amount)+' Rupaye Only/-';
-  return`<div class="vdoc">
+  const voided=v.status!=='active';
+  return`<div class="vdoc" style="${voided?'opacity:.75':''}">
+    ${voided?'<div class="rdoc-watermark">'+v.status.toUpperCase()+'</div>':''}
     ${docHeader()}
-    <div class="vdoc-type-bar" style="border-bottom-color:${tColor}">
-      <div style="font-size:12.5px;font-weight:800;color:${tColor};text-transform:uppercase;letter-spacing:.6px">📄 ${tName}</div>
-      <div style="font-family:monospace;font-size:12px;font-weight:700;color:#555;background:#f0f0f0;padding:2px 8px;border-radius:4px">${v.num}</div>
+    <div class="vdoc-type-bar" style="border-bottom-color:#0f3d25">
+      <div style="font-size:13px;font-weight:800;color:#0f3d25;text-transform:uppercase;letter-spacing:.6px">Payment Voucher</div>
+      <div style="font-family:monospace;font-size:12.5px;font-weight:700;color:#0f3d25;background:#e8f5ec;padding:2px 10px;border-radius:4px;border:1px solid #b8e0c9">${v.num}</div>
     </div>
     <div class="vdoc-body">
       <div class="vdoc-row" style="grid-template-columns:1fr 1fr 1fr">
-        <div class="vdoc-field"><div class="vdoc-field-lbl">Voucher No.</div><div class="vdoc-field-val" style="font-family:monospace;font-weight:700;color:${tColor}">${v.num}</div></div>
-        <div class="vdoc-field"><div class="vdoc-field-lbl">Date / Tarikh</div><div class="vdoc-field-val">${fmtDate(v.date)}</div></div>
-        <div class="vdoc-field"><div class="vdoc-field-lbl">Category</div><div class="vdoc-field-val">${v.cat}</div></div>
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Voucher No.</div><div class="vdoc-field-val" style="font-family:monospace;font-weight:800;color:#0f3d25">${v.num}</div></div>
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Date</div><div class="vdoc-field-val">${fmtDate(v.date)}</div></div>
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Department</div><div class="vdoc-field-val">${v.dept||'—'}</div></div>
       </div>
       <div class="vdoc-row" style="grid-template-columns:2fr 1fr">
-        <div class="vdoc-field"><div class="vdoc-field-lbl">Paid To / Payee</div><div class="vdoc-field-val" style="font-weight:700">${v.payee}</div></div>
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Paid To</div><div class="vdoc-field-val" style="font-weight:700">${v.payee}</div></div>
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Purpose</div><div class="vdoc-field-val">${v.purpose||'—'}</div></div>
+      </div>
+      <div class="vdoc-row" style="grid-template-columns:1fr 1fr 1fr">
         <div class="vdoc-field"><div class="vdoc-field-lbl">Payment Mode</div><div class="vdoc-field-val">${v.mode}</div></div>
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Expense Category</div><div class="vdoc-field-val">${v.cat||'—'}</div></div>
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Approved By</div><div class="vdoc-field-val" style="font-weight:700">${v.approved||'—'}</div></div>
       </div>
       <div class="vdoc-row" style="grid-template-columns:1fr">
-        <div class="vdoc-field"><div class="vdoc-field-lbl">Description / Kaam ki Tafseel</div><div class="vdoc-field-val" style="min-height:32px">${v.desc}</div></div>
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Description / Tafseel</div><div class="vdoc-field-val" style="min-height:30px">${v.desc}</div></div>
       </div>
-      ${v.ref||v.approved?`<div class="vdoc-row" style="grid-template-columns:1fr 1fr">
-        ${v.ref?`<div class="vdoc-field"><div class="vdoc-field-lbl">Reference / Bill No.</div><div class="vdoc-field-val">${v.ref}</div></div>`:'<div></div>'}
-        ${v.approved?`<div class="vdoc-field"><div class="vdoc-field-lbl">Approved By</div><div class="vdoc-field-val" style="font-weight:700">${v.approved}</div></div>`:'<div></div>'}
-      </div>`:''}
+      <div class="vdoc-row" style="grid-template-columns:1fr 1fr">
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Paid By</div><div class="vdoc-field-val">${v.paidBy||'—'}</div></div>
+        <div class="vdoc-field"><div class="vdoc-field-lbl">Reference/Bill No.</div><div class="vdoc-field-val">${v.ref||'—'}</div></div>
+      </div>
       <div class="vdoc-amount-bar">
         <div>
           <div class="vdoc-amount-lbl">Total Amount / کل رقم</div>
@@ -3073,15 +3052,13 @@ function buildVoucherDoc(v){
         </div>
         <div class="vdoc-amount-fig">₹${v.amount.toLocaleString('en-IN')}</div>
       </div>
-      <div class="vdoc-sigs">
-        <div class="vdoc-sig"><div class="vdoc-sig-space"></div><div class="vdoc-sig-line"></div><div class="vdoc-sig-lbl">Prepared By</div></div>
+      <div class="vdoc-sigs" style="position:relative">
+        <div class="vdoc-sig">${getSigHTML('secretary','Prepared By')}</div>
         <div class="vdoc-sig" style="position:relative">
-          <div style="position:absolute;top:-5px;left:50%;transform:translateX(-50%);opacity:.18">${stampSVG(60)}</div>
-          <div class="vdoc-sig-space"></div>
-          <div class="vdoc-sig-line"></div>
-          <div class="vdoc-sig-lbl">Treasurer / Khazanchi</div>
+          <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);opacity:.11">${stampSVG(62)}</div>
+          ${getSigHTML('treasurer','Treasurer / Khazanchi')}
         </div>
-        <div class="vdoc-sig"><div class="vdoc-sig-space"></div><div class="vdoc-sig-line"></div><div class="vdoc-sig-lbl">President / Sadar</div></div>
+        <div class="vdoc-sig">${getSigHTML('president','President / Sadar')}</div>
       </div>
     </div>
     ${docFooter()}
@@ -3144,6 +3121,229 @@ if(sess.ok&&(Date.now()-sess.t)<86400000){
   document.getElementById('appShell').style.display='block';
   initApp();
 }
+</script>
+
+<!-- ===== SIGNATURE PAD MODAL ===== -->
+<div class="sigpad-overlay" id="sigpad-overlay">
+  <div class="sigpad-box">
+    <div class="sigpad-hd">
+      <span class="sigpad-title">✍️ Digital Signature — <span id="sigpad-role-label"></span></span>
+      <button style="background:none;border:none;color:rgba(255,255,255,.7);font-size:20px;cursor:pointer" onclick="closeSigPad()">×</button>
+    </div>
+    <div class="sigpad-body">
+      <div class="sigpad-tabs">
+        <button class="sigpad-tab active" onclick="showSigTab('draw',this)">✏️ Draw Signature</button>
+        <button class="sigpad-tab" onclick="showSigTab('upload',this)">📁 Upload Image</button>
+        <button class="sigpad-tab" onclick="showSigTab('type',this)">🔤 Type Name</button>
+      </div>
+
+      <!-- Draw Tab -->
+      <div id="sigtab-draw">
+        <p style="font-size:11.5px;color:#888;margin-bottom:8px">Neeche apni signature draw karen (mouse ya touch se)</p>
+        <canvas id="sig-canvas" width="380" height="120" class="sig-canvas-wrap" style="width:100%;display:block;border-radius:8px"></canvas>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-gh btn-sm" onclick="clearCanvas()">🗑️ Clear</button>
+          <button class="btn btn-gh btn-sm" onclick="undoCanvas()">↩️ Undo</button>
+        </div>
+      </div>
+
+      <!-- Upload Tab -->
+      <div id="sigtab-upload" style="display:none">
+        <p style="font-size:11.5px;color:#888;margin-bottom:10px">Signature ki image upload karen (PNG/JPG — white background best)</p>
+        <input type="file" accept="image/*" id="sig-upload-input" class="inp" onchange="loadSigImage(this)"/>
+        <div id="sig-upload-preview" style="margin-top:10px;text-align:center;min-height:60px;border:1px dashed #ddd;border-radius:8px;padding:10px;display:flex;align-items:center;justify-content:center">
+          <span style="color:#ccc;font-size:12px">Preview yahan aayega</span>
+        </div>
+      </div>
+
+      <!-- Type Tab -->
+      <div id="sigtab-type" style="display:none">
+        <p style="font-size:11.5px;color:#888;margin-bottom:8px">Naam type karen — signature font mein dikhega</p>
+        <input class="inp" id="sig-type-name" placeholder="Apna naam likhen..." oninput="updateTypedSig()"/>
+        <div id="sig-type-preview" style="margin-top:12px;text-align:center;padding:12px;background:#fafafa;border:1px solid #eee;border-radius:8px">
+          <span id="sig-typed-text" style="font-size:28px;color:#111;font-family:'Dancing Script',cursive,serif;font-style:italic">Naam likhein...</span>
+        </div>
+        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Caveat:wght@700&display=swap" rel="stylesheet"/>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <button class="btn btn-gh btn-xs" onclick="setSigFont('Dancing Script')">Style 1</button>
+          <button class="btn btn-gh btn-xs" onclick="setSigFont('Caveat')">Style 2</button>
+          <button class="btn btn-gh btn-xs" onclick="setSigFont('serif')">Style 3</button>
+        </div>
+      </div>
+    </div>
+    <div class="sigpad-ft">
+      <button class="btn btn-gh" onclick="closeSigPad()">Cancel</button>
+      <button class="btn btn-pr" onclick="saveSigFromPad()">✅ Save Signature</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DIGITAL SIGNATURE SYSTEM =====
+let sigData=S.obj('jm_signatures',{});// {treasurer:'data:image...', president:'data:image...', secretary:'data:image...'}
+let currentSigRole='';
+let sigFont='Dancing Script';
+let canvasHistory=[];
+let isDrawing=false;
+
+function getSigHTML(role,label){
+  const sig=sigData[role];
+  return`<div>
+    ${sig
+      ?`<div class="sig-box"><img src="${sig}" class="sig-img" alt="${label} signature"/></div>`
+      :`<div class="sig-box" style="align-items:center"><span style="font-size:10px;color:#ccc;font-style:italic">No signature</span></div>`
+    }
+    <div class="rdoc-sig-line"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="rdoc-sig-lbl">${label}</div>
+      <button class="no-print btn btn-gh btn-xs" style="font-size:9px;padding:1px 6px" onclick="openSigPad('${role}','${label}')">✏️</button>
+    </div>
+  </div>`;
+}
+
+function openSigPad(role,label){
+  currentSigRole=role;
+  document.getElementById('sigpad-role-label').textContent=label;
+  document.getElementById('sigpad-overlay').classList.add('open');
+  showSigTab('draw',document.querySelector('.sigpad-tab'));
+  setTimeout(initCanvas,100);
+}
+function closeSigPad(){document.getElementById('sigpad-overlay').classList.remove('open');}
+
+function showSigTab(id,el){
+  ['draw','upload','type'].forEach(t=>{const e=document.getElementById('sigtab-'+t);if(e)e.style.display='none';});
+  document.querySelectorAll('.sigpad-tab').forEach(t=>t.classList.remove('active'));
+  const e=document.getElementById('sigtab-'+id);if(e)e.style.display='block';
+  if(el)el.classList.add('active');
+  if(id==='draw')setTimeout(initCanvas,50);
+}
+
+// ── Canvas Draw ──
+function initCanvas(){
+  const canvas=document.getElementById('sig-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle='#0f3d25';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';
+  canvasHistory=[];
+  canvas.onmousedown=startDraw;canvas.onmousemove=draw;canvas.onmouseup=endDraw;canvas.onmouseleave=endDraw;
+  canvas.ontouchstart=e=>{e.preventDefault();startDraw(e.touches[0]);};
+  canvas.ontouchmove=e=>{e.preventDefault();draw(e.touches[0]);};
+  canvas.ontouchend=endDraw;
+}
+function getPos(e,canvas){
+  const r=canvas.getBoundingClientRect();
+  const scaleX=canvas.width/r.width,scaleY=canvas.height/r.height;
+  return{x:(e.clientX-r.left)*scaleX,y:(e.clientY-r.top)*scaleY};
+}
+function startDraw(e){
+  isDrawing=true;
+  const canvas=document.getElementById('sig-canvas');
+  const ctx=canvas.getContext('2d');
+  const pos=getPos(e,canvas);
+  ctx.beginPath();ctx.moveTo(pos.x,pos.y);
+  canvasHistory.push(ctx.getImageData(0,0,canvas.width,canvas.height));
+}
+function draw(e){
+  if(!isDrawing)return;
+  const canvas=document.getElementById('sig-canvas');
+  const ctx=canvas.getContext('2d');
+  const pos=getPos(e,canvas);
+  ctx.lineTo(pos.x,pos.y);ctx.stroke();
+}
+function endDraw(){isDrawing=false;}
+function clearCanvas(){
+  const canvas=document.getElementById('sig-canvas');
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);
+  canvasHistory=[];
+}
+function undoCanvas(){
+  if(!canvasHistory.length)return;
+  const canvas=document.getElementById('sig-canvas');
+  canvas.getContext('2d').putImageData(canvasHistory.pop(),0,0);
+}
+
+// ── Upload ──
+function loadSigImage(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('sig-upload-preview').innerHTML=`<img src="${e.target.result}" style="max-height:80px;max-width:100%;object-fit:contain"/>`;
+    document.getElementById('sig-upload-preview').dataset.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Type ──
+function updateTypedSig(){
+  const name=document.getElementById('sig-type-name').value||'Naam likhein...';
+  document.getElementById('sig-typed-text').textContent=name;
+}
+function setSigFont(font){
+  sigFont=font;
+  document.getElementById('sig-typed-text').style.fontFamily=`'${font}',cursive,serif`;
+}
+
+// ── Save ──
+function saveSigFromPad(){
+  const activeTab=document.querySelector('.sigpad-tab.active').textContent.trim();
+  let dataUrl='';
+  if(activeTab.includes('Draw')){
+    const canvas=document.getElementById('sig-canvas');
+    // Check if anything drawn
+    const ctx=canvas.getContext('2d');
+    const d=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+    let hasContent=false;
+    for(let i=0;i<d.length;i+=4){if(d[i]<250||d[i+1]<250||d[i+2]<250){hasContent=true;break;}}
+    if(!hasContent){alert('Pehle signature draw karen!');return;}
+    dataUrl=canvas.toDataURL('image/png');
+  } else if(activeTab.includes('Upload')){
+    const src=document.getElementById('sig-upload-preview').dataset.src;
+    if(!src){alert('Pehle image upload karen!');return;}
+    dataUrl=src;
+  } else if(activeTab.includes('Type')){
+    const name=document.getElementById('sig-type-name').value.trim();
+    if(!name){alert('Naam likhein!');return;}
+    // Render to canvas
+    const c=document.createElement('canvas');c.width=300;c.height=80;
+    const ctx=c.getContext('2d');
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,300,80);
+    ctx.font=`bold 42px '${sigFont}',cursive,serif`;
+    ctx.fillStyle='#0a1a10';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(name,150,45);
+    dataUrl=c.toDataURL('image/png');
+  }
+  sigData[currentSigRole]=dataUrl;
+  S.set('jm_signatures',sigData);
+  closeSigPad();
+  // Refresh current doc if open
+  const area=document.getElementById('print-doc-area');
+  if(area.innerHTML){
+    const portal=document.getElementById('print-portal');
+    if(portal.style.display!=='none'){
+      // Re-render current doc
+      const docEl=area.querySelector('.rdoc')||area.querySelector('.vdoc');
+      if(docEl){
+        // Find which doc is open by checking receipt/voucher lists
+        const rBtns=document.querySelectorAll('#receipts-tb button');
+        // Just update all sig imgs in current view
+        document.querySelectorAll('#print-doc-area .sig-img').forEach(img=>{
+          const lbl=img.closest('div').querySelector('.rdoc-sig-lbl,.vdoc-sig-lbl');
+          if(lbl){
+            const roleMap={'Treasurer / Khazanchi':'treasurer','President / Sadar':'president','Secretary / Kaatib':'secretary'};
+            const role=roleMap[lbl.textContent.trim()];
+            if(role&&sigData[role])img.src=sigData[role];
+          }
+        });
+      }
+    }
+  }
+  alert('✅ Signature save ho gaya!');
+}
+
+// Init sig data
+sigData=S.obj('jm_signatures',{});
 </script>
 </body>
 </html>
