@@ -1930,46 +1930,29 @@ const namazDefs=[
 
 const GS = {
   // POST to Apps Script (write/append/update/delete/nextnum)
+  // Uses fetch() with mode:'no-cors' + text/plain body — this avoids CORS
+  // preflight (Apps Script has no doOptions handler) and does NOT rely on
+  // hidden iframes / Google's script.google.com→googleusercontent.com echo
+  // redirect chain, which breaks on mobile browsers that block third-party
+  // cookies (causing the "echo?user_content_key=... 403" error).
+  // Trade-off: the response body is opaque (no-cors), so we can't read it —
+  // we treat a resolved fetch (no network error) as success.
   post: function(payload) {
-    return new Promise((resolve, reject) => {
-      const cfg = S.obj('gsconf', {});
-      if (!cfg.url) { reject(new Error('GS URL not configured')); return; }
+    const cfg = S.obj('gsconf', {});
+    if (!cfg.url) return Promise.reject(new Error('GS URL not configured'));
 
-      // Use no-cors form POST via iframe (works from GitHub Pages)
-      const frameId = 'gsf_' + Date.now();
-      const f = document.createElement('form');
-      f.method = 'POST'; f.action = cfg.url;
-      f.target = frameId; f.style.display = 'none';
-
-      const inp = document.createElement('input');
-      inp.type = 'hidden'; inp.name = 'payload';
-      inp.value = JSON.stringify(payload);
-      f.appendChild(inp);
-
-      const ifr = document.createElement('iframe');
-      ifr.name = frameId; ifr.style.display = 'none';
-      document.body.appendChild(ifr);
-      document.body.appendChild(f);
-
-      let done = false;
-      ifr.onload = () => {
-        if (done) return; done = true;
-        try {
-          const txt = ifr.contentDocument?.body?.innerText || '';
-          const res = txt ? JSON.parse(txt) : { ok: true };
-          resolve(res);
-        } catch(e) {
-          resolve({ ok: true }); // assume ok if can't read (CORS)
-        }
-        setTimeout(() => { ifr.remove(); f.remove(); }, 2000);
-      };
-      // Timeout fallback
-      setTimeout(() => {
-        if (!done) { done = true; resolve({ ok: true, timeout: true }); }
-      }, 8000);
-
-      f.submit();
-    });
+    return fetch(cfg.url, {
+      method: 'POST',
+      mode: 'no-cors',
+      // text/plain avoids a CORS preflight; Apps Script reads the raw body
+      // via e.postData.contents regardless of the declared content-type.
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).then(() => ({ ok: true }))
+      .catch(err => {
+        console.warn('[GS.post] network error:', err);
+        return { ok: false, error: err.message };
+      });
   },
 
   // GET from Apps Script (read data)
