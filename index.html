@@ -341,6 +341,24 @@ tbody tr:hover td{background:#fafafa}
   .fg2,.g2{grid-template-columns:1fr}.fg3{grid-template-columns:1fr 1fr}
   .content{padding:12px}.metrics{grid-template-columns:repeat(2,1fr)}
   .nm-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* Receipt / Voucher print-portal — mobile fix.
+   The voucher layout uses inline 3-column grids (grid-template-columns
+   set as an inline style) sized for A4. On narrow phone screens these
+   overflow the modal, pushing the Print button off-screen and making it
+   look like "print doesn't work". !important is required here because
+   inline styles otherwise win over normal CSS specificity. */
+@media(max-width:600px){
+  #print-portal{padding:12px 8px}
+  .print-modal-inner{max-width:100%}
+  .rdoc,.vdoc{width:100%;max-width:100%;font-size:11.5px}
+  .vdoc-row{grid-template-columns:1fr!important;gap:8px!important}
+  .rdoc-fields{grid-template-columns:1fr!important}
+  .rdoc-sigs,.vdoc-sigs{grid-template-columns:1fr!important;gap:20px!important}
+  .rdoc-hd-inner{flex-wrap:wrap;gap:8px}
+  .vdoc-hd{flex-wrap:wrap;gap:8px}
+  .print-modal-actions{position:sticky;top:0;background:rgba(255,255,255,.97);z-index:5;padding:8px 0;backdrop-filter:blur(4px)}
+}
 </style>
 </head>
 <body>
@@ -1957,55 +1975,49 @@ const GS = {
 
   // GET from Apps Script (read data)
   get: function(tab, params = {}) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const cfg = S.obj('gsconf', {});
       if (!cfg.url) { resolve([]); return; } // no URL = offline mode
 
-      const url = cfg.url + '?tab=' + encodeURIComponent(tab) +
+      const url = cfg.url + '?tab=' + encodeURIComponent(tab) + '&t=' + Date.now() +
         Object.entries(params).map(([k,v]) => '&' + k + '=' + encodeURIComponent(v)).join('');
 
-      // Use fetch with no-cors for read (returns opaque, so we use a different approach)
-      // Since Apps Script supports JSONP-style via callback, we use script tag
-      const cbName = 'mgf_cb_' + Date.now();
-      const script = document.createElement('script');
       let resolved = false;
 
-      window[cbName] = (data) => {
-        resolved = true;
-        delete window[cbName];
-        script.remove();
-        if (data && data.ok && Array.isArray(data.data)) {
-          resolve(data.data);
-        } else {
-          resolve([]);
-        }
-      };
-
-      // Apps Script URL with callback — using fetch with mode: 'no-cors' won't work for read
-      // Best approach: use fetch normally (Apps Script sets CORS headers via doGet)
-      fetch(cfg.url + '?tab=' + encodeURIComponent(tab) + '&t=' + Date.now())
-        .then(r => r.json())
-        .then(data => {
-          resolved = true;
-          delete window[cbName];
-          resolve(data.ok && Array.isArray(data.data) ? data.data : []);
+      // Apps Script's doGet (via ContentService) responds with CORS headers
+      // that allow this to be read cross-origin from GitHub Pages with a
+      // plain fetch — no iframe/JSONP trick needed for GET.
+      fetch(url)
+        .then(r => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
         })
-        .catch(() => {
-          // Fallback to LocalStorage cache
+        .then(data => {
+          if (resolved) return;
           resolved = true;
-          delete window[cbName];
+          if (data && data.ok && Array.isArray(data.data)) {
+            resolve(data.data);
+          } else {
+            console.warn('[GS.get] unexpected response for tab="'+tab+'":', data);
+            resolve(S.get(tab.toLowerCase()) || []);
+          }
+        })
+        .catch(err => {
+          if (resolved) return;
+          resolved = true;
+          console.warn('[GS.get] fetch failed for tab="'+tab+'":', err.message,
+            '— falling back to cached local data. Check: (1) Apps Script deployment access is set to "Anyone", (2) the URL in Settings is the latest deployment URL.');
           resolve(S.get(tab.toLowerCase()) || []);
         });
 
-      // Timeout
+      // Timeout fallback (slow network / hung request)
       setTimeout(() => {
         if (!resolved) {
           resolved = true;
-          delete window[cbName];
-          script.remove();
+          console.warn('[GS.get] timeout for tab="'+tab+'" — using cached local data.');
           resolve(S.get(tab.toLowerCase()) || []);
         }
-      }, 6000);
+      }, 8000);
     });
   },
 
@@ -2364,7 +2376,7 @@ function openM(id){document.getElementById(id).classList.add('open');}
 function closeM(id){document.getElementById(id).classList.remove('open');}
 
 // ===== INIT =====
-function initApp(){
+async function initApp(){
   initDataStores();
   const now=new Date();
   document.getElementById('tbDate').textContent=now.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
@@ -2372,8 +2384,33 @@ function initApp(){
   ['attDate','ft-d','fa-d','fm2-d','fs-j','qbt-date','wr-date','mr-date','ast-date'].forEach(id=>{const e=document.getElementById(id);if(e&&!e.value)e.value=today;});
   populateSelects();
   populateMSSelects();
+  // Show cached data immediately so the UI isn't blank while syncing
   renderDash();renderMembers();renderCommittee();renderTx();renderMasjidSupport();
   renderNamazEdit();renderStudents();renderTeachers();renderAtt();renderFees();renderAnn();
+
+  // Then fetch the LATEST data from Google Sheets (cross-device sync).
+  // This is what makes data entered on one device (e.g. mobile) show up
+  // on another device (e.g. laptop) as soon as the app is opened, instead
+  // of only refreshing when the user manually navigates into a module.
+  const cfg=S.obj('gsconf',{});
+  if(cfg.url){
+    GS.setStatus('🔄 Loading latest data...','loading');
+    try{
+      await Promise.allSettled([
+        refreshMembersFromGS(),
+        refreshTransactionsFromGS(),
+        refreshReceiptsFromGS(),
+        refreshVouchersFromGS()
+      ]);
+      GS.setStatus('✅ Up to date','ok');
+      setTimeout(()=>GS.setStatus('','info'),2500);
+    }catch(e){
+      console.warn('[MGF] Initial GS refresh failed:',e);
+      GS.setStatus('📱 Offline / cached data','info');
+    }
+    // Re-render dashboard once fresh data has replaced the cached copies
+    renderDash();
+  }
 }
 
 // ===== CALC BALANCE =====
@@ -4110,8 +4147,20 @@ function renderVouchers(){
 
 let currentPrintType='';
 function viewDoc(type,id,autoPrint=false){
-  const doc=type==='receipt'?buildReceiptDoc(receipts.find(r=>r.id===id)):buildVoucherDoc(vouchers.find(v=>v.id===id));
-  if(!doc)return;
+  const record=type==='receipt'?receipts.find(r=>r.id===id):vouchers.find(v=>v.id===id);
+  if(!record){
+    // This can happen if the list was mid-refresh (syncing from Google
+    // Sheets) when the button was tapped. Surface it instead of silently
+    // doing nothing, and retry once against the freshest array.
+    alert('⚠️ '+(type==='receipt'?'Receipt':'Voucher')+' data load nahi hua.\n\nDobara try karen — page thodi der pehle refresh ho rahi thi.');
+    console.warn('[MGF] viewDoc: record not found for',type,id);
+    return;
+  }
+  const doc=type==='receipt'?buildReceiptDoc(record):buildVoucherDoc(record);
+  if(!doc){
+    alert('⚠️ Document generate nahi ho saka. Console check karen.');
+    return;
+  }
   currentPrintType=type;
   document.getElementById('print-doc-area').innerHTML=doc;
   setPrintPageSize(type==='voucher');
