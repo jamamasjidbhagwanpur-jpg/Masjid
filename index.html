@@ -4156,9 +4156,20 @@ function viewDoc(type,id,autoPrint=false){
     console.warn('[MGF] viewDoc: record not found for',type,id);
     return;
   }
-  const doc=type==='receipt'?buildReceiptDoc(record):buildVoucherDoc(record);
+  let doc;
+  try{
+    doc=type==='receipt'?buildReceiptDoc(record):buildVoucherDoc(record);
+  }catch(err){
+    // A JS error while building the document (e.g. a missing helper
+    // function) used to fail completely silently on mobile — the button
+    // would appear to "do nothing". Now it's surfaced clearly so it can
+    // be reported and fixed instead of looking like a dead button.
+    console.error('[MGF] Error building',type,'document:',err);
+    alert('❌ '+(type==='receipt'?'Receipt':'Voucher')+' banane mein error aayi:\n\n'+err.message+'\n\nYeh screenshot bhej dena taake fix ho sake.');
+    return;
+  }
   if(!doc){
-    alert('⚠️ Document generate nahi ho saka. Console check karen.');
+    alert('⚠️ Document generate nahi ho saka.');
     return;
   }
   currentPrintType=type;
@@ -4228,6 +4239,78 @@ function duplicatePrint(){
 // still use Close / Duplicate Copy again if needed.
 window.addEventListener('afterprint',()=>{ /* no-op: intentionally keep portal open */ });
 
+// ═══════════════════════════════════════════════════════════════════════════
+// OFFICIAL DOCUMENT HEADER / FOOTER / STAMP — shared by Receipt & Voucher
+// (Previously accidentally dropped during an earlier edit, which caused
+// buildReceiptDoc()/buildVoucherDoc() to throw "docHeader is not defined"
+// and silently abort — the root cause of View/Print appearing unresponsive.)
+// ═══════════════════════════════════════════════════════════════════════════
+function docHeader(){
+  return`<div class="rdoc-hd">
+    <div class="rdoc-hd-inner">
+      <div style="text-align:center;flex-shrink:0;padding-right:14px;border-right:1px solid rgba(255,255,255,.15)">
+        <div style="font-size:9px;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">Registered</div>
+        <div style="width:46px;height:46px;border-radius:50%;border:2px solid rgba(184,150,12,.6);display:flex;align-items:center;justify-content:center;margin:0 auto">
+          <div style="text-align:center">
+            <div style="font-size:8px;font-weight:800;color:#f5e642;letter-spacing:.5px;line-height:1.2">JMB</div>
+            <div style="font-size:7px;color:rgba(255,255,255,.4);letter-spacing:.3px">2026</div>
+          </div>
+        </div>
+      </div>
+      <div class="rdoc-hd-text" style="flex:1;padding:0 4px">
+        <div style="font-size:11px;color:rgba(255,255,255,.45);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+        <div class="rdoc-hd-name">Jama Masjid Bhagwanpur</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.55);font-family:'DM Serif Display',serif;direction:rtl;margin-top:1px">جامع مسجد بھگوانپور</div>
+        <div class="rdoc-hd-addr">Bhagwanpur, Muzaffarpur, Bihar — 842001</div>
+      </div>
+      <div class="rdoc-hd-mgf" style="text-align:right;flex-shrink:0;padding-left:14px;border-left:1px solid rgba(255,255,255,.15)">
+        <div style="font-size:8px;color:rgba(255,255,255,.35);letter-spacing:1px;text-transform:uppercase">Managed by</div>
+        <div style="font-size:15px;font-weight:800;color:#f5e642;letter-spacing:1.5px;font-family:'DM Serif Display',serif">MGF</div>
+        <div style="font-size:8px;color:rgba(255,255,255,.3);margin-top:1px">Mosque Governance</div>
+        <div style="font-size:8px;color:rgba(255,255,255,.3)">Framework v1.0</div>
+      </div>
+    </div>
+    <div class="rdoc-gold"></div>
+  </div>`;
+}
+
+function docFooter(){
+  const now=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  return`<div class="rdoc-ft">
+    <div class="rdoc-ft-l">Mosque Governance Framework (MGF) v1.0 — Jama Masjid Bhagwanpur, Muzaffarpur</div>
+    <div class="rdoc-ft-r">Generated: ${now} | Computer Generated Document</div>
+  </div>`;
+}
+
+// Official circular stamp — clean, professional (no cartoon icons)
+function stampSVG(size=80){
+  const id='st'+Math.random().toString(36).substr(2,5);
+  return`<svg width="${size}" height="${size}" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="60" cy="60" r="57" fill="none" stroke="#0f3d25" stroke-width="3.5"/>
+    <circle cx="60" cy="60" r="51" fill="none" stroke="#0f3d25" stroke-width="1.2"/>
+    <circle cx="60" cy="60" r="48" fill="none" stroke="#b8960c" stroke-width="0.8" stroke-dasharray="2,2"/>
+    <circle cx="60" cy="60" r="44" fill="none" stroke="#0f3d25" stroke-width="0.5"/>
+    <text x="60" y="52" text-anchor="middle" font-size="9" fill="#0f3d25" font-family="Arial,sans-serif" font-weight="700" letter-spacing="0.5">JAMA MASJID</text>
+    <line x1="30" y1="56" x2="90" y2="56" stroke="#b8960c" stroke-width="0.8"/>
+    <text x="60" y="65" text-anchor="middle" font-size="8" fill="#0f3d25" font-family="Arial,sans-serif" font-weight="600">BHAGWANPUR</text>
+    <line x1="30" y1="69" x2="90" y2="69" stroke="#b8960c" stroke-width="0.8"/>
+    <text x="60" y="78" text-anchor="middle" font-size="7.5" fill="#b8960c" font-family="Arial,sans-serif" font-weight="700">MUZAFFARPUR</text>
+    <defs>
+      <path id="${id}tc" d="M60,60 m-45,0 a45,45 0 1,1 90,0"/>
+      <path id="${id}bc" d="M60,60 m-40,0 a40,40 0 0,0 80,0"/>
+    </defs>
+    <text font-size="8.5" fill="#0f3d25" font-family="Arial,sans-serif" font-weight="700" letter-spacing="2">
+      <textPath href="#${id}tc" startOffset="8%">بِسْمِ اللهِ &nbsp;&nbsp; OFFICIAL SEAL</textPath>
+    </text>
+    <text font-size="7.5" fill="#b8960c" font-family="Arial,sans-serif" font-weight="600" letter-spacing="1.2">
+      <textPath href="#${id}bc" startOffset="12%">MGF v1.0 &nbsp;•&nbsp; 2026 &nbsp;•&nbsp; BIHAR</textPath>
+    </text>
+    <circle cx="15" cy="60" r="2.5" fill="#b8960c"/>
+    <circle cx="105" cy="60" r="2.5" fill="#b8960c"/>
+    <circle cx="60" cy="15" r="2" fill="#b8960c"/>
+    <circle cx="60" cy="105" r="2" fill="#b8960c"/>
+  </svg>`;
+}
 
 function buildReceiptDoc(r){
   if(!r)return'';
