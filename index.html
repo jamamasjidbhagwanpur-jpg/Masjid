@@ -1295,7 +1295,10 @@ tbody tr:hover td{background:#fafafa}
     <div id="reg-income">
       <div class="card">
         <div class="ch"><span class="ct">📈 Income Register</span>
-          <button class="btn btn-gh btn-sm" onclick="printRegister('income')">🖨️ Print</button></div>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-pr btn-sm" onclick="openManualRegEntry('income')">+ Manual Entry</button>
+            <button class="btn btn-gh btn-sm" onclick="printRegister('income')">🖨️ Print</button>
+          </div></div>
         <div class="twrap"><table><thead><tr><th>Receipt #</th><th>Tarikh</th><th>Naam</th><th>Purpose</th><th>Dept</th><th>Mode</th><th>Amount</th></tr></thead>
         <tbody id="reg-income-tb"></tbody></table></div>
         <div id="reg-income-total" style="padding:10px 14px;text-align:right;font-weight:700;font-size:13px;color:var(--g1);border-top:1px solid #f0f0f0"></div>
@@ -1306,7 +1309,10 @@ tbody tr:hover td{background:#fafafa}
     <div id="reg-expense" style="display:none">
       <div class="card">
         <div class="ch"><span class="ct">📉 Expense Register</span>
-          <button class="btn btn-gh btn-sm" onclick="printRegister('expense')">🖨️ Print</button></div>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-pr btn-sm" onclick="openManualRegEntry('expense')">+ Manual Entry</button>
+            <button class="btn btn-gh btn-sm" onclick="printRegister('expense')">🖨️ Print</button>
+          </div></div>
         <div class="twrap"><table><thead><tr><th>Voucher #</th><th>Tarikh</th><th>Payee</th><th>Purpose</th><th>Dept</th><th>Category</th><th>Amount</th></tr></thead>
         <tbody id="reg-expense-tb"></tbody></table></div>
         <div id="reg-expense-total" style="padding:10px 14px;text-align:right;font-weight:700;font-size:13px;color:var(--red);border-top:1px solid #f0f0f0"></div>
@@ -1317,7 +1323,10 @@ tbody tr:hover td{background:#fafafa}
     <div id="reg-donation" style="display:none">
       <div class="card">
         <div class="ch"><span class="ct">🤲 Donation Register</span>
-          <button class="btn btn-gh btn-sm" onclick="printRegister('donation')">🖨️ Print</button></div>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-pr btn-sm" onclick="openManualRegEntry('donation')">+ Manual Entry</button>
+            <button class="btn btn-gh btn-sm" onclick="printRegister('donation')">🖨️ Print</button>
+          </div></div>
         <div class="twrap"><table><thead><tr><th>Receipt #</th><th>Tarikh</th><th>Donor Naam</th><th>Purpose</th><th>Mode</th><th>Amount</th></tr></thead>
         <tbody id="reg-donation-tb"></tbody></table></div>
         <div id="reg-donation-total" style="padding:10px 14px;text-align:right;font-weight:700;font-size:13px;color:var(--g1);border-top:1px solid #f0f0f0"></div>
@@ -1328,7 +1337,10 @@ tbody tr:hover td{background:#fafafa}
     <div id="reg-rent" style="display:none">
       <div class="card">
         <div class="ch"><span class="ct">🏠 Rent Register</span>
-          <button class="btn btn-gh btn-sm" onclick="printRegister('rent')">🖨️ Print</button></div>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-pr btn-sm" onclick="openManualRegEntry('rent')">+ Manual Entry</button>
+            <button class="btn btn-gh btn-sm" onclick="printRegister('rent')">🖨️ Print</button>
+          </div></div>
         <div class="twrap"><table><thead><tr><th>Receipt #</th><th>Tarikh</th><th>Tenant</th><th>Purpose</th><th>Mode</th><th>Amount</th></tr></thead>
         <tbody id="reg-rent-tb"></tbody></table></div>
         <div id="reg-rent-total" style="padding:10px 14px;text-align:right;font-weight:700;font-size:13px;color:var(--g1);border-top:1px solid #f0f0f0"></div>
@@ -1741,6 +1753,34 @@ function createSheet() {
     <button class="btn btn-gh" onclick="closeM('m-wr-update')">Cancel</button>
     <button class="btn btn-pr" onclick="updateWRStatus()">✅ Update</button>
   </div>
+</div></div>
+
+<!-- Manual Register Entry Modal -->
+<div class="mo" id="m-manual-reg"><div class="mbox">
+  <div class="mhd"><span class="mtl" id="mre-title">+ Manual Entry</span><button class="mcl" onclick="closeM('m-manual-reg')">×</button></div>
+  <div class="mbd">
+    <div style="background:#fef9c3;border:1px solid #fde047;border-radius:var(--r);padding:9px 12px;margin-bottom:14px;font-size:12px;color:#713f12">
+      ℹ️ Yeh entry sirf Register mein dikhegi — koi Receipt/Voucher print nahi hoga. Purane/backfill records ke liye use karen.
+    </div>
+    <input type="hidden" id="mre-regtype"/>
+    <div class="fg2">
+      <div class="fg"><label class="lbl" id="mre-name-lbl">Naam *</label><input class="inp" id="mre-name" placeholder="Naam/Payee"/></div>
+      <div class="fg"><label class="lbl">Tarikh *</label><input type="date" class="inp" id="mre-date"/></div>
+      <div class="fg"><label class="lbl">Purpose</label><input class="inp" id="mre-purpose" placeholder="Kis liye..."/></div>
+      <div class="fg"><label class="lbl">Department</label>
+        <select class="inp" id="mre-dept">
+          <option value="">— General —</option>
+          <option>Administration</option><option>Finance</option>
+          <option>Construction & Maintenance</option><option>Safai</option>
+          <option>Ibadat & Deeni Taleem</option><option>Khidmat</option>
+        </select></div>
+      <div class="fg"><label class="lbl">Amount (₹) *</label><input class="inp" type="number" id="mre-amount" placeholder="0"/></div>
+      <div class="fg"><label class="lbl">Mode</label>
+        <select class="inp" id="mre-mode"><option>Cash</option><option>Bank Transfer</option><option>UPI/GPay</option><option>Cheque</option></select></div>
+      <div class="fg full"><label class="lbl">Notes</label><input class="inp" id="mre-notes" placeholder="Koi khaas baat..."/></div>
+    </div>
+  </div>
+  <div class="mft"><button class="btn btn-gh" onclick="closeM('m-manual-reg')">Cancel</button><button class="btn btn-pr" onclick="saveManualRegEntry()">💾 Save Entry</button></div>
 </div></div>
 
 <!-- Asset Modal -->
@@ -2168,6 +2208,13 @@ async function pushAllToGS() {
     wrs.map(w=>[w.id,w.num,w.dept,w.title,w.desc||'',w.priority,w.by||'',w.date,w.due||'',w.cost||0,w.assigned||'',w.status])
   ));
 
+  // Manual Register Entries (backfilled records not tied to a Receipt/Voucher)
+  const manRegs = S.get('jm_manual_reg');
+  if (manRegs.length) tasks.push(GS.writeAll('Manual_Register_Entries',
+    ['id','regType','date','name','purpose','dept','mode','amount','notes'],
+    manRegs.map(m=>[m.id,m.regType,m.date,m.name,m.purpose||'',m.dept||'',m.mode||'',m.amount,m.notes||''])
+  ));
+
   // Announcements
   if (announces.length) tasks.push(GS.writeAll('Announcements',
     ['id','title','body','date','type'],
@@ -2305,6 +2352,20 @@ async function refreshVouchersFromGS() {
   }
 }
 
+// Refresh manual register entries from GS
+async function refreshManualRegFromGS() {
+  const data = await fetchFromGS('Manual_Register_Entries');
+  if (data && data.length) {
+    manualRegEntries = data.map(m => ({
+      id: parseInt(m.id) || Date.now(),
+      regType: m.regType, date: m.date, name: m.name,
+      purpose: m.purpose||'', dept: m.dept||'', mode: m.mode||'',
+      amount: parseFloat(m.amount)||0, notes: m.notes||''
+    }));
+    S.set('jm_manual_reg', manualRegEntries);
+  }
+}
+
 
 // ===== AUTH =====
 function doLogin(){
@@ -2362,7 +2423,15 @@ function goPage(id,el){
   if(id==='receipts'){renderReceipts();document.getElementById('r-date').value=new Date().toISOString().split('T')[0];refreshReceiptsFromGS();}
   if(id==='vouchers'){renderVouchers();document.getElementById('v-date').value=new Date().toISOString().split('T')[0];refreshVouchersFromGS();}
   if(id==='departments'){renderDepartments();if(document.getElementById('wr-date'))document.getElementById('wr-date').value=new Date().toISOString().split('T')[0];}
-  if(id==='registers'){renderAllRegisters();showRegTab('income',document.querySelector('#pg-registers .tab'));}
+  if(id==='registers'){
+    renderAllRegisters();showRegTab('income',document.querySelector('#pg-registers .tab'));
+    // Registers derive from receipts+vouchers, so pull the latest from
+    // Sheets here too (covers the case where the user jumps straight to
+    // Registers without visiting Receipts/Vouchers first).
+    Promise.allSettled([refreshReceiptsFromGS(),refreshVouchersFromGS(),refreshManualRegFromGS()]).then(()=>{
+      renderRegister(currentRegTab);
+    });
+  }
   if(id==='activitylog')renderActivityLog();
   if(id==='settings'){initSettingsGS();}
 }
@@ -3406,12 +3475,12 @@ function resetAll(){
     'taraweeh_members','taraweeh_paid','qb_tx','qb_members','qb_paid',
     'jm_receipts','jm_vouchers','jm_income_reg','jm_expense_reg','jm_donation_reg','jm_rent_reg',
     'jm_activity_log','jm_asset_reg','jm_meeting_reg2','jm_work_requests',
-    'jm_ms_families','jm_ms_contributions','jm_signatures'];
+    'jm_ms_families','jm_ms_contributions','jm_signatures','jm_manual_reg'];
   allKeys.forEach(k=>localStorage.removeItem(K+k));
   logActivity('SYSTEM RESET','All data cleared by admin');
   loadData();initDataStores();
   msFamilies=[];msContributions={};receipts=[];vouchers=[];workRequests=[];assetReg=[];meetingReg2=[];activityLog=[];
-  incomeReg=[];expenseReg=[];donationReg=[];rentReg=[];
+  incomeReg=[];expenseReg=[];donationReg=[];rentReg=[];manualRegEntries=[];
   renderDash();renderMembers();renderCommittee();renderTx();renderMasjidSupport();
   renderNamazEdit();renderStudents();renderTeachers();renderAtt();renderFees();renderAnn();
   alert('✅ Sab data reset ho gaya! Google Sheets mein manually clear karna hoga alag se.');
@@ -3827,7 +3896,9 @@ function viewWRDetail(id){
 let assetReg=S.get('jm_asset_reg');
 let meetingReg2=S.get('jm_meeting_reg2');
 
+let currentRegTab='income';
 function showRegTab(id,el){
+  currentRegTab=id;
   ['income','expense','donation','rent','asset','meeting'].forEach(t=>{const e=document.getElementById('reg-'+t);if(e)e.style.display='none';});
   document.querySelectorAll('#pg-registers .tab').forEach(t=>t.classList.remove('active'));
   const e=document.getElementById('reg-'+id);if(e)e.style.display='block';
@@ -3836,32 +3907,71 @@ function showRegTab(id,el){
 }
 function renderAllRegisters(){renderRegister('income');}
 
+// Registers are now DERIVED LIVE from the `receipts` and `vouchers` arrays
+// (which are properly synced via Google Sheets — see refreshReceiptsFromGS /
+// refreshVouchersFromGS) rather than tracked as separate parallel arrays.
+// This is what makes a register show entries made on ANY device: as soon
+// as receipts/vouchers refresh from Sheets, the register reflects them
+// automatically — no separate register-sync step needed.
+//
+// `manualRegEntries` supplements this for register-only rows that don't
+// go through the formal Receipt/Voucher flow (e.g. backfilling very old
+// paper records). These ARE synced to Sheets independently.
+let manualRegEntries=S.get('jm_manual_reg');
+
 function renderRegister(type){
   const fmt=(n)=>n?'₹'+n.toLocaleString('en-IN'):'₹0';
-  if(type==='income'){
-    const total=incomeReg.reduce((s,r)=>s+(r.amount||0),0);
-    document.getElementById('reg-income-tb').innerHTML=incomeReg.length?
-      incomeReg.map(r=>`<tr><td style="font-family:monospace;font-size:11px;color:var(--g1)">${r.receiptNum||'—'}</td><td style="font-size:11.5px">${r.date}</td><td style="font-weight:600">${r.name}</td><td style="font-size:11.5px">${r.purpose||'—'}</td><td style="font-size:11px;color:#aaa">${r.dept||'General'}</td><td style="font-size:11px;color:#aaa">${r.mode||'—'}</td><td style="font-weight:700;color:var(--g1)">${fmt(r.amount)}</td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:20px;color:#bbb">Koi income record nahi</td></tr>';
-    document.getElementById('reg-income-total').textContent='Kul Amdani: '+fmt(total);
+
+  if(type==='income'||type==='donation'||type==='rent'){
+    const receiptTypeMap={income:['acknowledgement','cash'],donation:['donation'],rent:['rent']};
+    const wanted=receiptTypeMap[type];
+    const fromReceipts=receipts.filter(r=>wanted.includes(r.type)&&r.status==='active').map(r=>({
+      num:r.num,date:r.date,name:r.name,purpose:r.purpose,dept:r.dept,mode:r.mode,amount:r.amount,source:'receipt'
+    }));
+    const fromManual=manualRegEntries.filter(m=>m.regType===type).map(m=>({
+      num:m.num||'MANUAL',date:m.date,name:m.name,purpose:m.purpose,dept:m.dept,mode:m.mode,amount:m.amount,source:'manual',id:m.id
+    }));
+    const combined=[...fromReceipts,...fromManual].sort((a,b)=>new Date(b.date)-new Date(a.date));
+    const total=combined.reduce((s,r)=>s+(r.amount||0),0);
+
+    document.getElementById('reg-'+type+'-tb').innerHTML=combined.length?
+      combined.map(r=>`<tr>
+        <td style="font-family:monospace;font-size:11px;color:var(--g1)">${r.num||'—'}${r.source==='manual'?' <span class="badge ba" style="font-size:9px;margin-left:3px">Manual</span>':''}</td>
+        <td style="font-size:11.5px">${r.date}</td>
+        <td style="font-weight:600">${r.name}</td>
+        <td style="font-size:11.5px">${r.purpose||'—'}</td>
+        ${type==='income'?`<td style="font-size:11px;color:#aaa">${r.dept||'General'}</td>`:''}
+        <td style="font-size:11px;color:#aaa">${r.mode||'—'}</td>
+        <td style="font-weight:700;color:var(--g1)">${fmt(r.amount)}</td>
+      </tr>`).join(''):
+      `<tr><td colspan="${type==='income'?7:6}" style="text-align:center;padding:20px;color:#bbb">Koi record nahi</td></tr>`;
+    const label={income:'Kul Amdani',donation:'Kul Donation',rent:'Kul Rent'}[type];
+    document.getElementById('reg-'+type+'-total').textContent=label+': '+fmt(total);
   }
+
   if(type==='expense'){
-    const total=expenseReg.reduce((s,r)=>s+(r.amount||0),0);
-    document.getElementById('reg-expense-tb').innerHTML=expenseReg.length?
-      expenseReg.map(r=>`<tr><td style="font-family:monospace;font-size:11px;color:var(--blue)">${r.voucherNum||'—'}</td><td style="font-size:11.5px">${r.date}</td><td style="font-weight:600">${r.payee}</td><td style="font-size:11.5px">${r.purpose||'—'}</td><td style="font-size:11px;color:#aaa">${r.dept||'—'}</td><td style="font-size:11px;color:#aaa">${r.cat||'—'}</td><td style="font-weight:700;color:var(--red)">${fmt(r.amount)}</td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:20px;color:#bbb">Koi expense record nahi</td></tr>';
+    const fromVouchers=vouchers.filter(v=>v.status==='active').map(v=>({
+      num:v.num,date:v.date,payee:v.payee,purpose:v.purpose,dept:v.dept,cat:v.cat,amount:v.amount,source:'voucher'
+    }));
+    const fromManual=manualRegEntries.filter(m=>m.regType==='expense').map(m=>({
+      num:m.num||'MANUAL',date:m.date,payee:m.name,purpose:m.purpose,dept:m.dept,cat:m.mode,amount:m.amount,source:'manual',id:m.id
+    }));
+    const combined=[...fromVouchers,...fromManual].sort((a,b)=>new Date(b.date)-new Date(a.date));
+    const total=combined.reduce((s,r)=>s+(r.amount||0),0);
+
+    document.getElementById('reg-expense-tb').innerHTML=combined.length?
+      combined.map(r=>`<tr>
+        <td style="font-family:monospace;font-size:11px;color:var(--blue)">${r.num||'—'}${r.source==='manual'?' <span class="badge ba" style="font-size:9px;margin-left:3px">Manual</span>':''}</td>
+        <td style="font-size:11.5px">${r.date}</td>
+        <td style="font-weight:600">${r.payee}</td>
+        <td style="font-size:11.5px">${r.purpose||'—'}</td>
+        <td style="font-size:11px;color:#aaa">${r.dept||'—'}</td>
+        <td style="font-size:11px;color:#aaa">${r.cat||'—'}</td>
+        <td style="font-weight:700;color:var(--red)">${fmt(r.amount)}</td>
+      </tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:20px;color:#bbb">Koi expense record nahi</td></tr>';
     document.getElementById('reg-expense-total').textContent='Kul Kharch: '+fmt(total);
   }
-  if(type==='donation'){
-    const total=donationReg.reduce((s,r)=>s+(r.amount||0),0);
-    document.getElementById('reg-donation-tb').innerHTML=donationReg.length?
-      donationReg.map(r=>`<tr><td style="font-family:monospace;font-size:11px;color:var(--g1)">${r.receiptNum||'—'}</td><td style="font-size:11.5px">${r.date}</td><td style="font-weight:600">${r.name}</td><td style="font-size:11.5px">${r.purpose||'—'}</td><td style="font-size:11px;color:#aaa">${r.mode||'—'}</td><td style="font-weight:700;color:var(--g1)">${fmt(r.amount)}</td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;padding:20px;color:#bbb">Koi donation nahi</td></tr>';
-    document.getElementById('reg-donation-total').textContent='Kul Donation: '+fmt(total);
-  }
-  if(type==='rent'){
-    const total=rentReg.reduce((s,r)=>s+(r.amount||0),0);
-    document.getElementById('reg-rent-tb').innerHTML=rentReg.length?
-      rentReg.map(r=>`<tr><td style="font-family:monospace;font-size:11px;color:var(--g1)">${r.receiptNum||'—'}</td><td style="font-size:11.5px">${r.date}</td><td style="font-weight:600">${r.name}</td><td style="font-size:11.5px">${r.purpose||'—'}</td><td style="font-size:11px;color:#aaa">${r.mode||'—'}</td><td style="font-weight:700;color:var(--g1)">${fmt(r.amount)}</td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;padding:20px;color:#bbb">Koi rent nahi</td></tr>';
-    document.getElementById('reg-rent-total').textContent='Kul Rent: '+fmt(total);
-  }
+
   if(type==='asset'){
     const ar=assetReg||[];
     document.getElementById('reg-asset-tb').innerHTML=ar.length?
@@ -3873,6 +3983,39 @@ function renderRegister(type){
       mr.map((m,i)=>`<tr><td>${i+1}</td><td style="font-size:11.5px">${m.date}</td><td><span class="badge bb" style="font-size:10px">${m.type}</span></td><td style="font-size:12px">${m.agenda}</td><td style="text-align:center">${m.att||'—'}</td><td style="font-size:11px;color:#555">${m.decisions||'—'}</td><td style="font-size:11px;color:#aaa">${m.next||'—'}</td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:20px;color:#bbb">Koi meeting record nahi</td></tr>';
   }
 }
+
+// ── Manual Register Entry ──
+function openManualRegEntry(regType){
+  document.getElementById('mre-regtype').value=regType;
+  const labels={income:'Income',expense:'Expense',donation:'Donation',rent:'Rent'};
+  document.getElementById('mre-title').textContent='+ Manual '+labels[regType]+' Entry';
+  document.getElementById('mre-name-lbl').textContent=regType==='expense'?'Payee *':'Naam *';
+  document.getElementById('mre-date').value=new Date().toISOString().split('T')[0];
+  openM('m-manual-reg');
+}
+function saveManualRegEntry(){
+  const regType=document.getElementById('mre-regtype').value;
+  const name=document.getElementById('mre-name').value.trim();
+  const amount=parseFloat(document.getElementById('mre-amount').value)||0;
+  if(!name||!amount){alert('Naam/Payee aur raqam zaroor darj karen!');return;}
+  const entry={
+    id:Date.now(),regType,
+    date:document.getElementById('mre-date').value||new Date().toISOString().split('T')[0],
+    name,purpose:document.getElementById('mre-purpose').value,
+    dept:document.getElementById('mre-dept').value,
+    mode:document.getElementById('mre-mode').value,
+    amount,notes:document.getElementById('mre-notes').value
+  };
+  manualRegEntries.push(entry);
+  S.set('jm_manual_reg',manualRegEntries);
+  logActivity('Manual Register Entry',regType+' — '+name+' — ₹'+amount);
+  saveRV();
+  renderRegister(regType);
+  closeM('m-manual-reg');
+  ['mre-name','mre-purpose','mre-amount','mre-notes'].forEach(id=>document.getElementById(id).value='');
+}
+
+
 
 function saveAsset(){
   const name=document.getElementById('ast-name').value.trim();
@@ -3958,6 +4101,7 @@ function initDataStores(){
   if(!workRequests)workRequests=[];
   if(!msFamilies)msFamilies=[];
   if(!msContributions)msContributions={};
+  if(!manualRegEntries)manualRegEntries=[];
 }
 
 // ===== PWA =====
@@ -3996,6 +4140,7 @@ function saveRV(){
   S.set('jm_income_reg',incomeReg);S.set('jm_expense_reg',expenseReg);
   S.set('jm_donation_reg',donationReg);S.set('jm_rent_reg',rentReg);
   S.set('jm_activity_log',activityLog);
+  S.set('jm_manual_reg',manualRegEntries);
   scheduleGSSync();
 }
 function logActivity(action,details){
@@ -4048,10 +4193,10 @@ function saveReceipt(){
     status:'active',createdAt:new Date().toISOString()
   };
   receipts.unshift(rec);
-  const regEntry={id:Date.now()+1,date,name,purpose,amount,mode:rec.mode,receiptNum:rec.num,dept,status:'active'};
-  if(rtype==='donation')donationReg.unshift({...regEntry,type:'Donation'});
-  else if(rtype==='rent')rentReg.unshift({...regEntry,type:'Rent'});
-  else incomeReg.unshift({...regEntry,type:rtype});
+  // NOTE: Registers (Income/Donation/Rent) are now derived LIVE from the
+  // `receipts` array in renderRegister() — no separate register array
+  // needs to be maintained here. This is what makes registers correctly
+  // show entries synced in from any device (mobile/laptop) via Sheets.
   const catMap={acknowledgement:'Chanda',donation:'Donation',rent:'Rent',cash:'Cash Receipt'};
   transactions.unshift({id:Date.now()+2,type:'in',cat:catMap[rtype]||'Income',amount,date,note:name+' — '+rec.num});
   saveData();
@@ -4080,7 +4225,8 @@ function saveVoucher(){
     status:'active',createdAt:new Date().toISOString()
   };
   vouchers.unshift(vch);
-  expenseReg.unshift({id:Date.now()+1,date,payee,purpose:vch.purpose,dept,cat:vch.cat,amount,mode:vch.mode,voucherNum:vch.num,approved:vch.approved,desc,status:'active'});
+  // NOTE: Expense Register is now derived LIVE from the `vouchers` array
+  // in renderRegister() — no separate register array needed here.
   transactions.unshift({id:Date.now()+2,type:'out',cat:vch.cat,amount,date,note:payee+' — '+vch.num});
   saveData();
   logActivity('Voucher Generated',vch.num+' — '+payee+' — ₹'+amount+' — '+dept);
